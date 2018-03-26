@@ -1,0 +1,19 @@
+Lite guidelines för projektet
+
+* Använd camelCase för namngivning i js-filer
+* HTML + CSS = BEM
+* Skriv commit-meddelanden i presens så de kan avsluta meningen "This commit will..."
+* Har du ett långt commit-meddelande, dela upp det i title/summary och description
+
+* När vi kommenterar:
+
+// Enkel kommentar
+
+/******************
+ * SEKTION AV KOD *
+ ******************/
+
+/*
+* Om du behöver skriva längre kommentarer,
+* på flera rader. Gör såhär.
+*/
