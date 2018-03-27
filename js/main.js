@@ -5,7 +5,6 @@ const artistsUrl = `https://folksa.ga/api/artists${apiKey}`;
 function fetchAllArtists(){
     fetch(artistsUrl)
         .then((response) => response.json())
-
         .then((artists) => {
             for (var i = 0; i < artists.length; i++) {
                 /* Maybe here we should have a function like "excludeMaleArtists()";   
@@ -13,6 +12,10 @@ function fetchAllArtists(){
                 
                 logInfo(artists[i]); //Shows info about each fetched artists in console
             }
+        })
+        .catch(error => { 
+            // Some reuasble function here that displays a generic error-msg to the user
+            console.log(error);
         });
 }
 
