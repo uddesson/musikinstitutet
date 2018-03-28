@@ -39,3 +39,23 @@ const Model = {
         console.groupEnd();
     }
 } // Closing Model
+
+
+
+/******************
+ ***** View? *****
+ ******************/
+
+ const View = {
+    testList: document.getElementById('test-list'),
+
+     //Testing: Displaying some output
+     displayArtistNames(artistname){
+        let listItem = document
+            .createElement('li');
+        listItem.innerText = artistname;
+        View.testList.appendChild(listItem);
+     }
+ }
+
+ Model.fetchArtistsThatArentMale();
