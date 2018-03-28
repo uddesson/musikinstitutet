@@ -14,8 +14,9 @@ const Model = {
             .then((artists) => {
                 // Loop through all the artists
                 for (var i = 0; i < artists.length; i++) {
-                    
-                    Model.checkIfNotMale(artists[i]);     
+                    if(Model.artistIsNotMale(artists[i]) == true){
+                        View.displayArtistName(artists[i].name); 
+                    };     
                 }
             })
 
@@ -27,8 +28,11 @@ const Model = {
 
     artistIsNotMale(artist){
         if(artist.gender !== 'male'){
-            Model.logInfo(artist);
-            View.displayArtistNames(artist.name); 
+            Model.logInfo(artist); // Just for seeing what's in there
+            return true;   
+        }
+        else{
+            return false;
         }
     },
 
@@ -54,7 +58,7 @@ const View = {
     testList: document.getElementById('test-list'),
 
      //Testing: Displaying some output
-     displayArtistNames(artistname){
+     displayArtistName(artistname){
         let listItem = document
             .createElement('li');
         listItem.innerText = artistname;
