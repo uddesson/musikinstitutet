@@ -25,7 +25,7 @@ const Model = {
             });
     },
 
-    checkIfNotMale(artist){
+    artistIsNotMale(artist){
         if(artist.gender !== 'male'){
             Model.logInfo(artist);
             View.displayArtistNames(artist.name); 
