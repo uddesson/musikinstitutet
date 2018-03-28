@@ -13,12 +13,20 @@ const Model = {
             .then((artists) => {
                 for (var i = 0; i < artists.length; i++) {
                     
+                    Model.checkIfNotMale(artists[i]);     
                 }
             })
             .catch(error => { 
                 // Some reuasble function here that displays a generic error-msg to the user
                 console.log(error);
             });
+    },
+
+    checkIfNotMale(artist){
+        if(artist.gender !== 'male'){
+            Model.logInfo(artist);
+            View.displayArtistNames(artist.name); 
+        }
     },
 
     /* This logInfo-function could be used as a helper function to console.log several things at once,
