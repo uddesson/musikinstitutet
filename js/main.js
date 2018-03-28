@@ -1,23 +1,26 @@
-// WIP (Work in progress, currently just testing to fetch from API)
+// WIP
 const apiKey = `?key=flat_eric`;
 const artistsUrl = `https://folksa.ga/api/artists${apiKey}`; 
+
 
 /******************
  ***** Model? *****
  ******************/
 const Model = {
-    
+
     fetchArtistsThatArentMale(){
         fetch(artistsUrl)
             .then((response) => response.json())
             .then((artists) => {
+                // Loop through all the artists
                 for (var i = 0; i < artists.length; i++) {
                     
                     Model.checkIfNotMale(artists[i]);     
                 }
             })
+
             .catch(error => { 
-                // Some reuasble function here that displays a generic error-msg to the user
+                // Some reusable function here that displays a generic error-msg to the user
                 console.log(error);
             });
     },
@@ -29,8 +32,8 @@ const Model = {
         }
     },
 
-    /* This logInfo-function could be used as a helper function to console.log several things at once,
-    can be further developed so we can use it for several things later! */
+    /* This logInfo-function can be used to console.log several things at once,
+    and be further developed so we can use it for several things later! */
     logInfo(element){ 
         console.group("Console Log shows:");
         console.log('id:', element._id)
@@ -42,11 +45,12 @@ const Model = {
 
 
 
+
+
 /******************
  ***** View? *****
  ******************/
-
- const View = {
+const View = {
     testList: document.getElementById('test-list'),
 
      //Testing: Displaying some output
@@ -56,6 +60,6 @@ const Model = {
         listItem.innerText = artistname;
         View.testList.appendChild(listItem);
      }
- }
+}
 
- Model.fetchArtistsThatArentMale();
+Model.fetchArtistsThatArentMale();
