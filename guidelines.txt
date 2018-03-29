@@ -1,7 +1,8 @@
 Lite guidelines för projektet
 
 * Använd camelCase för namngivning i js-filer
-* HTML + CSS = BEM
+* Classes + CSS = BEM (OBS vi stylar enbart genom klasser, inte id)
+* Id:n i HTML-markup = camelCase
 * Skriv commit-meddelanden i presens så de kan avsluta meningen "This commit will..."
 * Har du ett långt commit-meddelande, dela upp det i title/summary och description
 
