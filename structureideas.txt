@@ -1,0 +1,175 @@
+/******************
+ *** Controller ***
+ ******************/
+
+GenderController: Kollar om artister INTE har gender 'male'
+        * Loopa igenom varje hämtad artist
+        * Kolla if artist.gender !== 'male'
+
+
+/******************
+ ***** MODEL ******
+ ******************/
+
+ExploreModel: Funktioner/objekt som används för allmänna hämtningar från API
+
+    Scenario: Användaren vill se top rated
+        * Kör GenderController
+        * sortera sedan efter rating 
+        * Skicka vidare till funktionalitet i PlaylistView
+	
+    Scenario: Användaren vill utforska artister
+        * Kör GenderController, sedan funktionalitet i AritstView
+
+	Scenario: Användaren vill utforska tracks
+		* Kör GenderController, sedan ... TracksView
+
+    Scenario: Användaren vill utforska album
+        * Kör GenderController, sedan ... TracksView
+
+    Scenario: Användaren vill utforska spellistor
+        * Kör GenderController, sedan ... PlaylistView
+
+
+
+SearchModel: Hämtningar från API utifrån en query/sökord
+
+    Scenario: Användaren har sökt på en artist
+        * Kolla efter namnträff
+        * GenderController
+        * Hämta utifrån id
+        * Skicka vidare till AritstView
+
+    Scenario: Användaren har sökt på ett track
+        * Kolla efter namnträff
+        * Kolla artist id
+        * GenderController på aristen
+        * Ev. ErrorView
+        * Skicka vidare till TracksView
+
+    Scenario: Användaren har sökt på ett album
+        * Kolla efter namnträff
+        * Hämta album
+        * Kolla artist id
+        * GenderController på aristen
+        * Ev. ErrorView
+        * Skicka vidare till albumView
+
+    Scenario: Användaren har sökt på en spellista
+        * Kolla efter namnträff
+        * Hämta album
+        * Kolla artist id
+        * GenderController på aristen
+        * Ev. ErrorView
+        * Skicka vidare till playlistView
+
+    Scenario: Användaren har sökt på en genre
+        * Kolla efter namnträff
+        * Hämta artister/playlists/album/tracks i genren
+        * Skicka vidare till genreView
+    
+
+
+EditModel: Kör PATCH/DELETE mot specifik API-endpoint
+    
+    Scenario: Användaren vill ta bort track ur en spellista
+        * ?
+
+    Scenario: Användaren vill ta bort en hel spellista
+        * ?
+
+    Scenario: Användaren vill ta bort en låt
+        * ?
+
+    Scenario: Användaren vill ta bort en artist
+        * ?
+
+    Scenario: Användaren vill ta bort en kommentar på en spellista
+        * ?
+
+
+
+AddModel: Lägga till grejor med POST till API
+
+    Scenario: Användaren vill lägga till en artist
+        * Input måste gå igenom GenderController
+
+    Scenario: Användaren vill lägga till ett track
+        * Input måste gå igenom GenderController
+
+    Scenario: Användaren vill lägga till spellista
+        * Input måste gå igenom GenderController
+
+    Scenario: Användaren vill lägga till en KOMMENTAR på spellista
+        * ?
+
+    Scenario: Användaren vill ge betyg (1-0) på en spellista
+        * ?
+
+
+
+/******************
+ ***** Views ******
+ ******************/
+
+AritstView: Visar upp artister på sajten
+    Scenario: Användaren har sökt på en art,
+        * Visa upp endast detta
+
+
+
+PlaylistView: Visar upp playlists på sajten. Ska visa kommentarer, möjlighet att kommentera, 
+    röstning, edit-möjligheter.
+
+    Scenario: Top rated (startsidan?)
+        * Visa indikatorer på vilka som är top rated
+    
+    Scenario: Användaren har sökt på en playlist
+        * Visa upp endast detta
+
+
+
+TracksView: Visar upp tracks på sajten
+
+    Scenario: Användaren har sökt på en art,
+        * Visa upp endast detta
+
+
+
+AlbumView: Visar upp album på sajten
+
+    Scenario: Användaren har sökt på ett visst album,
+        * Visa upp endast denna
+
+
+
+GenreView: Visar upp artister/playlists/album/tracks i genren
+
+    Scenario: Användaren har sökt på en viss genre
+        * Visa upp begränsat antal artister/playlists/album/tracks
+
+    Scenario: Användaren har sökt på en viss genre som inte finns
+        * Kör funktionalitet i ErrorView 
+
+
+
+ErrorView: Visar olika typer av felmeddelanden för användaren
+
+    Scenario: Användaren söker på något som inte finns
+        * Visa specifikt felmeddelande
+
+    Scenario: Användaren försöker lägga till något i en spellista som inte finns
+        * Visa specifikt felmeddelande
+
+    Scenario: Användaren söker på tom sträng
+        * Visa specifikt felmeddelanden
+
+
+
+StatusView: Guidar användaren genom styling
+
+    Scenario: Något håller på att hämtas från API:t
+        * Visa en laddningsikon för användaren
+
+    Scenario: En länk är oklickbar
+        * Styla den så det syns
