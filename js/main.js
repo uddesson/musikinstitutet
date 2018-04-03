@@ -55,7 +55,7 @@ const FetchModel = {
 				console.log(response);
 				for (let album of response){
 					console.log(album.title);
-					view.displayResponse(album.title);
+					AlbumView.displayAlbum(album.title);
 				}
 			})
 			.catch(error => console.log(error));
@@ -110,13 +110,13 @@ const ArtistView = {
     }
 }
 
-const view = {
+const AlbumView = {
 	grid: document.getElementById('grid'),
 	
-	displayResponse(response){
-		let item = document.createElement('div');
-		item.innerHTML = `<h3>${response}</h3>`;
-		view.grid.appendChild(item);
+	displayAlbum(album){
+		let albumDiv = document.createElement('div');
+		albumDiv.innerHTML = `<h3>${album}</h3>`;
+		AlbumView.grid.appendChild(albumDiv);
 	}
 }
 
