@@ -1,5 +1,5 @@
 const apiKey = `?key=flat_eric`;
-const url = `https://folksa.ga/api/artists${apiKey}`; // Obs! Currently just category 'artists'
+const baseUrl = `https://folksa.ga/api`; 
 
 /******************
  ** Controllers ***
@@ -16,26 +16,52 @@ const GenderController = {
 /******************
  ***** Models *****
  ******************/
+//const FetchModel = {
+//
+//    fetchArtists(){
+//        fetch(url)
+//            .then((response) => response.json())
+//            .then((artists) => {
+//                    sortedArtists = GenderController.excludeMaleArtists(artists);
+//                    for (var artist of sortedArtists){
+//                        TestModel.logInfo(artist);
+//                        ArtistView.displayArtistName(artist.name);
+//                    };     
+//                }
+//            )       
+//
+//            .catch(error => { 
+//                // Some reusable function here that displays a generic error-msg to the user
+//                console.log(error);
+//            });
+//    }
+//}
+
+//TEMPORARY CONSTS FOR FETCH URL
+const id = '5aae2dd4b9791d0344d8f719';
+const category = 'albums';
+const searchQuery = 'shakira';
+
 const FetchModel = {
-
-    fetchArtists(){
-        fetch(url)
-            .then((response) => response.json())
-            .then((artists) => {
-                    sortedArtists = GenderController.excludeMaleArtists(artists);
-                    for (var artist of sortedArtists){
-                        TestModel.logInfo(artist);
-                        ArtistView.displayArtistName(artist.name);
-                    };     
-                }
-            )       
-
-            .catch(error => { 
-                // Some reusable function here that displays a generic error-msg to the user
-                console.log(error);
-            });
-    }
+	fetchAll(category){
+		return fetch(`${baseUrl}/${category}/${apiKey}`)
+			.then(response => response.json())
+			.catch(error => console.log(error));
+	},
+	fetchOne(category, id){
+		return fetch(`${baseUrl}/${category}/${id}/${apiKey}`)
+			.then(response => response.json())
+			.then(response => console.log(response))
+			.catch(error => console.log(error));
+	},
+	fetchSearched(category, searchQuery){
+		return fetch(`${baseUrl}/${category}/?title=${searchQuery}/${apiKey}`)
+		.then(response => response.json())
+		.catch(error => console.log(error));
+	}
 }
+
+FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
 
 
 // TestModel can be removed when project is finished
