@@ -43,7 +43,7 @@ const FetchModel = {
 }
 
 
-// LogModel can be removed when project is finished
+// TestModel can be removed when project is finished
 const TestModel = {
     
     /* Used to console.log several things at once - for testing purposes */
