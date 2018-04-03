@@ -47,6 +47,8 @@ const TestModel = {
         console.log('id:', element._id);
         console.log('Name:', element.name);
         console.log('Gender:', element.gender);
+        console.log('Genres:', element.genres);
+        console.log('Albums:', element.albums);
         console.groupEnd();
     }
 }
