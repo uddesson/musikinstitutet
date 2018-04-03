@@ -46,6 +46,7 @@ const FetchModel = {
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}/${apiKey}`)
 			.then(response => response.json())
+			.then(response => console.log(response))
 			.catch(error => console.log(error));
 	},
 	fetchOne(category, id){
@@ -55,13 +56,19 @@ const FetchModel = {
 			.catch(error => console.log(error));
 	},
 	fetchSearched(category, searchQuery){
-		return fetch(`${baseUrl}/${category}/?title=${searchQuery}/${apiKey}`)
+		let title = 'title';
+		if(category == 'artists'){
+			title = 'name';
+		}
+		
+		return fetch(`${baseUrl}/${category}/?${title}=${searchQuery}/${apiKey}`)
 		.then(response => response.json())
 		.catch(error => console.log(error));
 	}
 }
 
-FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+FetchModel.fetchAll('albums');
 
 
 // TestModel can be removed when project is finished
@@ -101,4 +108,4 @@ const ArtistView = {
  *** Run functions! ***
  **********************/
 
-FetchModel.fetchArtists();
+//FetchModel.fetchArtists();
