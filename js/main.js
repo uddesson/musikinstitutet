@@ -6,14 +6,9 @@ const url = `https://folksa.ga/api/artists${apiKey}`; // Obs! Currently just cat
  ******************/
 
 const GenderController = {
-    artistIsNotMale(artist){
-        if(artist.gender !== 'male'){
-            TestModel.logInfo(artist); // Just for seeing what's in there
-            return true;   
-        }
-        else{
-            return false;
-        }
+    excludeMaleArtists(artist){
+        let artists = artist.filter(artist => artist.gender !== 'male');
+        return artists;
     }
 }
 
@@ -27,13 +22,13 @@ const FetchModel = {
         fetch(url)
             .then((response) => response.json())
             .then((artists) => {
-                // Loop through all the artists
-                for (var i = 0; i < artists.length; i++) {
-                    if(GenderController.artistIsNotMale(artists[i]) == true){
-                        ArtistView.displayArtistName(artists[i].name); 
+                    sortedArtists = GenderController.excludeMaleArtists(artists);
+                    for (var artist of sortedArtists){
+                        TestModel.logInfo(artist);
+                        ArtistView.displayArtistName(artist.name);
                     };     
                 }
-            })
+            )       
 
             .catch(error => { 
                 // Some reusable function here that displays a generic error-msg to the user
