@@ -16,10 +16,9 @@ const GenderController = {
 /******************
  ***** Models *****
  ******************/
-//const FetchModel = {
-//
+//const FetchModel1 = {
 //    fetchArtists(){
-//        fetch(url)
+//        fetch(`https://folksa.ga/api/artists/${apiKey}`)
 //            .then((response) => response.json())
 //            .then((artists) => {
 //                    sortedArtists = GenderController.excludeMaleArtists(artists);
@@ -46,7 +45,19 @@ const FetchModel = {
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}/${apiKey}`)
 			.then(response => response.json())
-			.then(response => console.log(response))
+//		    .then(response => {
+//				for (var artist of response){
+//					TestModel.logInfo(artist);
+//					view.displayResponse(artist.name);
+//				};     
+//			})
+			.then(response => {
+				console.log(response);
+				for (let album of response){
+					console.log(album.title);
+					view.displayResponse(album.title);
+				}
+			})
 			.catch(error => console.log(error));
 	},
 	fetchOne(category, id){
@@ -66,9 +77,6 @@ const FetchModel = {
 		.catch(error => console.log(error));
 	}
 }
-
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-FetchModel.fetchAll('albums');
 
 
 // TestModel can be removed when project is finished
@@ -102,10 +110,22 @@ const ArtistView = {
     }
 }
 
+const view = {
+	grid: document.getElementById('grid'),
+	
+	displayResponse(response){
+		let item = document.createElement('div');
+		item.innerHTML = `<h3>${response}</h3>`;
+		view.grid.appendChild(item);
+	}
+}
+
 
 
 /**********************
  *** Run functions! ***
  **********************/
+//FetchModel1.fetchArtists();
 
-//FetchModel.fetchArtists();
+//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+FetchModel.fetchAll('albums');

@@ -1,0 +1,35 @@
+/******************************
+ *********** RESET ************
+ ******************************/
+	html, body, div {
+		margin:0;
+		padding:0;
+		box-sizing: border-box;
+	}
+
+
+/******************************
+ ************ GRID ************
+ ******************************/
+
+body {
+	margin:10px;
+}
+
+.wrapper {
+	height:100vh;
+	width:100%;
+	display: grid;
+}
+
+.grid {
+	height:100vh;
+	width:100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+}
+.grid div {
+	background: #ff2881;
+	margin:10px;
+}
