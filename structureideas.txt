@@ -11,7 +11,7 @@ GenderController: Kollar om artister INTE har gender 'male'
  ***** MODEL ******
  ******************/
 
-ExploreModel: Funktioner/objekt som används för allmänna hämtningar från API
+FetchModel: Funktioner/objekt som används för allmänna hämtningar från API
 
     Scenario: Användaren vill se top rated
         * Kör GenderController
@@ -29,10 +29,6 @@ ExploreModel: Funktioner/objekt som används för allmänna hämtningar från AP
 
     Scenario: Användaren vill utforska spellistor
         * Kör GenderController, sedan ... PlaylistView
-
-
-
-SearchModel: Hämtningar från API utifrån en query/sökord
 
     Scenario: Användaren har sökt på en artist
         * Kolla efter namnträff
