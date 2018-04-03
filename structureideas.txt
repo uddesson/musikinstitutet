@@ -104,10 +104,10 @@ AddModel: Lägga till grejor med POST till API
 
 
 
-LogModel: Hjälpfunktioner för att testa grejer under utveckling
+TestModel: Hjälpfunktioner för att testa grejer under utveckling, kan tas bort när proj. är klart
     
     Scenario: Du testar att hämta en lista av artister och vill console.logga både id, namn, gender osv...
-        * Gör en funktion som grupperar flera console logs med console.group .... console.groupEnd
+        * Funktion som grupperar flera console logs
 
 
 

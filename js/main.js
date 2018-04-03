@@ -8,7 +8,7 @@ const url = `https://folksa.ga/api/artists${apiKey}`; // Obs! Currently just cat
 const GenderController = {
     artistIsNotMale(artist){
         if(artist.gender !== 'male'){
-            FetchModel.logInfo(artist); // Just for seeing what's in there
+            TestModel.logInfo(artist); // Just for seeing what's in there
             return true;   
         }
         else{
@@ -39,10 +39,14 @@ const FetchModel = {
                 // Some reusable function here that displays a generic error-msg to the user
                 console.log(error);
             });
-    },
+    }
+}
 
-    /* This logInfo-function can be used to console.log several things at once,
-    and be further developed so we can use it for several things later! */
+
+// TestModel can be removed when project is finished
+const TestModel = {
+    
+    /* Used to console.log several things at once - for testing purposes */
     logInfo(element){ 
         console.group("Console Log shows:");
         console.log('id:', element._id);
@@ -50,9 +54,7 @@ const FetchModel = {
         console.log('Gender:', element.gender);
         console.groupEnd();
     }
-} // Closing Model
-
-
+}
 
 
 /******************
