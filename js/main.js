@@ -1,4 +1,4 @@
-const apiKey = `?key=flat_eric`;
+const apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 /******************
@@ -43,25 +43,30 @@ const searchQuery = 'shakira';
 
 const FetchModel = {
 	fetchAll(category){
-		return fetch(`${baseUrl}/${category}/${apiKey}`)
-			.then(response => response.json())
-//		    .then(response => {
-//				for (var artist of response){
-//					TestModel.logInfo(artist);
-//					view.displayResponse(artist.name);
-//				};     
-//			})
-			.then(response => {
+		return fetch(`${baseUrl}/${category}/?${apiKey}`)
+			.then((response) => response.json())
+			.then((response) => {
 				console.log(response);
 				for (let album of response){
-					console.log(album.title);
-					AlbumView.displayAlbum(album.title);
+					console.log(album);
+					AlbumView.displayAlbum(album);
 				}
+				
+				let promiseArray = [];
+				for(let artistID of artists) {
+					const artistPromise = fetch(artistID)
+					.then((response) => response.json());
+					promiseArray.push(artistPromise);
+				}
+				Promise.all(promiseArray)
+					.then((allArtists) => {
+						console.log(allArtists);
+				})
 			})
 			.catch(error => console.log(error));
 	},
 	fetchOne(category, id){
-		return fetch(`${baseUrl}/${category}/${id}/${apiKey}`)
+		return fetch(`${baseUrl}/${category}/${id}/?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
 			.catch(error => console.log(error));
@@ -115,7 +120,10 @@ const AlbumView = {
 	
 	displayAlbum(album){
 		let albumDiv = document.createElement('div');
-		albumDiv.innerHTML = `<h3>${album}</h3>`;
+		albumDiv.innerHTML = `
+			<h3>${album.title}</h3> 
+			by <h4>${album.artists}</h4>
+			<p>Genres: ${album.genres}</p>`;
 		AlbumView.grid.appendChild(albumDiv);
 	}
 }
