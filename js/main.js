@@ -47,6 +47,15 @@ const GenderController = {
             .then(response => Controller.excludeMaleArtists(response))
             .catch(error => console.log(error));
     })(),
+    filterFetchByGender(sortedArtists, fetchedArray){
+        console.log('albums:', fetchedArray)
+        
+        //TO DO: 
+        // * Filter them by gender
+        // * Return filtered results
+       
+        // let filtered = fetchedArray.filter(filtered => sortedArtists._id == fetchedArray.artists);    
+
     }
 }
 
@@ -90,6 +99,7 @@ const FetchModel = {
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
+			.then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.catch(error => console.log(error));
 	},
 	fetchOne(category, id){
