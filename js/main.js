@@ -114,6 +114,9 @@ const FetchModel = {
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
+				if(category == 'albums'){
+					ResponseController.fetchAlbumArtist(response);
+				}
 			})
 			.catch(error => console.log(error));
         },
