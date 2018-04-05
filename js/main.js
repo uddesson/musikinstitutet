@@ -69,6 +69,7 @@ let category = 'albums';
 let searchQuery = 'shakira';
 
 const FetchModel = {
+
     async fetchSortedArtists(){
         await fetch(`${baseUrl}/artists?${apiKey}&limit=1000&sort=desc&`)
             .then(response => response.json())
@@ -82,12 +83,13 @@ const FetchModel = {
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
         }
+
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
-			.then(response => response.json())
-			.then(response => console.log(response))
+            .then(response => response.json())
 			.then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.catch(error => console.log(error));
-	},
+    },
+
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
@@ -107,10 +109,7 @@ const FetchModel = {
             .then(response => console.log(category, response))
             .catch(error => console.log(error));
 	}
-}
-
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-FetchModel.fetchAll('albums');
+};
 
 // TestModel can be removed when project is finished
 const TestModel = {
@@ -203,4 +202,5 @@ const SearchView = {
  **********************/
 
 let sortedArtists = FetchModel.fetchSortedArtists();
+
 setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
