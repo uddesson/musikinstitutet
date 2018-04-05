@@ -74,42 +74,40 @@ const id = '5aba3e997396550e47352c92';
 const category = 'albums';
 const searchQuery = 'shakira';
 
-function displayResponse(category){
-	switch (category) {
-		case 'artists':
-			for (let artist of response) {
-				ArtistView.displayArtist(artist);
-			}
-		break;
-		case 'albums': 
-			for (let album of response){
-				console.log(album.artists);
-				AlbumView.displayAlbum(album);
-			}
-		case 'tracks':
-			for (let track of response){
-				TrackView.displayTrack(track);
-			}
-		break;
-		default:
-			console.log('Nothing to show!');
-	}
-}
-
 
 
 const FetchModel = {
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
 			.then((response) => response.json())
-			.then(response => console.log(response))
 			.then((response) => {
-				console.log(response);
-				displayResponse(category);
-//				for (let album of response){
-//					console.log(album.artists);
-//					AlbumView.displayAlbum(album);
+				const albums = response;
+				for (let album of albums){
+					console.log(album);
+					AlbumView.displayAlbum(album);
+				}
+			
+			//function displayResponse(category){
+//				switch (category) {
+//					case 'artists':
+//						for (let artist of response) {
+//							ArtistView.displayArtist(artist);
+//						}
+//					break;
+//					case 'albums': 
+//						for (let album of response){
+//							console.log(album.artists);
+//							AlbumView.displayAlbum(album);
+//						}
+//					case 'tracks':
+//						for (let track of response){
+//							TrackView.displayTrack(track);
+//						}
+//					break;
+//					default:
+//						console.log('Nothing to show!');
 //				}
+			//}
 			
 			})
 			.catch(error => console.log(error));
@@ -168,15 +166,26 @@ const TestModel = {
  ***** Views *****
  ******************/
 
+//const ArtistView = {
+//    testList: document.getElementById('test-list'),
+//
+//     //Testing: Displaying some output
+//     displayArtistName(artistname){
+//        let listItem = document.createElement('li');
+//        listItem.innerText = artistname;
+//        ArtistView.testList.appendChild(listItem);
+//    }
+//}
 const ArtistView = {
-    testList: document.getElementById('test-list'),
-
-     //Testing: Displaying some output
-     displayArtistName(artistname){
-        let listItem = document.createElement('li');
-        listItem.innerText = artistname;
-        ArtistView.testList.appendChild(listItem);
-    }
+	grid: document.getElementById('grid'),
+	
+	displayArtist(artist){
+		let albumDiv = document.createElement('div');
+		artistDiv.innerHTML = `
+			<h3>${artist.name}</h3>
+			<p>Genres: ${artist.genres}</p>`;
+		ArtistView.grid.appendChild(artistDiv);
+	}
 }
 
 const AlbumView = {
@@ -192,6 +201,17 @@ const AlbumView = {
 	}
 }
 
+const TrackView = {
+	grid: document.getElementById('grid'),
+	
+	displayTrack(track){
+		let trackDiv = document.createElement('div');
+		trackDiv.innerHTML = `
+			<h3>${track.title}</h3> 
+			by <h4>${track.artists}</h4>;`
+			TrackView.grid.appendChild(trackDiv);
+	}
+}
 
 
 const SearchView = {
@@ -254,5 +274,3 @@ const SearchView = {
 
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
 FetchModel.fetchAll('albums');
-
-FetchModel.fetchAlbumArtist();
