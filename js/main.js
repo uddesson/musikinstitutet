@@ -12,6 +12,7 @@ const baseUrl = `https://folksa.ga/api`;
     //The "general search"
     createEventListener (){
         searchButton.addEventListener('click', function(){
+            ArtistView.grid.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
