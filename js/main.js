@@ -4,9 +4,9 @@ const baseUrl = `https://folksa.ga/api`;
 
 
 
-/******************
- ** Controllers ***
- ******************/
+/******************************************************
+ ******************** CONTROLLERS *********************
+ ******************************************************/
 
  const SearchController = {
     searchButton: document.getElementById('searchButton'),
@@ -45,28 +45,9 @@ const GenderController = {
 }
 
 
-/******************
- ***** Models *****
- ******************/
-//const FetchModel1 = {
-//    fetchArtists(){
-//        fetch(`https://folksa.ga/api/artists/${apiKey}`)
-//            .then((response) => response.json())
-//            .then((artists) => {
-//                    sortedArtists = GenderController.excludeMaleArtists(artists);
-//                    for (var artist of sortedArtists){
-//                        TestModel.logInfo(artist);
-//                        ArtistView.displayArtistName(artist.name);
-//                    };     
-//                }
-//            )       
-//
-//            .catch(error => { 
-//                // Some reusable function here that displays a generic error-msg to the user
-//                console.log(error);
-//            });
-//    }
-//}
+/*******************************************************
+ *********************** MODELS ************************
+ *******************************************************/
 
 //TEMPORARY CONSTS FOR FETCH URL
 const id = '5aae2dd4b9791d0344d8f719';
@@ -117,9 +98,9 @@ const TestModel = {
 }
 
 
-/******************
- ***** Views *****
- ******************/
+/******************************************************
+ *********************** VIEWS ************************
+ ******************************************************/
 
 const ArtistView = {
     testList: document.getElementById('test-list'),
@@ -200,10 +181,10 @@ const SearchView = {
     }
 }
 
-/**********************
- *** Run functions! ***
- **********************/
-//FetchModel1.fetchArtists();
+/********************************************************
+ ******************** RUN FUNCTIONS *********************
+ *******************************************************/
+
+FetchModel.fetchAll('albums');
 
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-FetchModel.fetchAll('albums');
