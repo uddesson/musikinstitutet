@@ -45,28 +45,30 @@ const GenderController = {
 }
 
 
+function sortResponseByCategory(category, response) {
+	switch (category) {
+		case 'artists':
+			for (let artist of response) {
+				ArtistView.displayArtist(artist);
+			}
+		break;
+		case 'albums': 
+			for (let album of response){
+				AlbumView.displayAlbum(album);
+			}
+		case 'tracks':
+			for (let track of response){
+				TrackView.displayTrack(track);
+			}
+		break;
+	}
+}
+
+
+
 /******************
  ***** Models *****
  ******************/
-//const FetchModel1 = {
-//    fetchArtists(){
-//        fetch(`https://folksa.ga/api/artists/${apiKey}`)
-//            .then((response) => response.json())
-//            .then((artists) => {
-//                    sortedArtists = GenderController.excludeMaleArtists(artists);
-//                    for (var artist of sortedArtists){
-//                        TestModel.logInfo(artist);
-//                        ArtistView.displayArtistName(artist.name);
-//                    };     
-//                }
-//            )       
-//
-//            .catch(error => { 
-//                // Some reusable function here that displays a generic error-msg to the user
-//                console.log(error);
-//            });
-//    }
-//}
 
 //TEMPORARY CONSTS FOR FETCH URL
 const id = '5aba3e997396550e47352c92';
@@ -76,11 +78,12 @@ const searchQuery = 'shakira';
 
 
 const FetchModel = {
+	
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
 			.then((response) => response.json())
 			.then((response) => {
-				displayResponse(category, response);
+				sortResponseByCategory(category, response);
 			})
 			.catch(error => console.log(error));
 		},
@@ -89,8 +92,7 @@ const FetchModel = {
 			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
 			.then((response) => response.json())
 			.then((response) => {
-				let artists = response.name
-				console.log(artists);
+				let artists = response.name;
 				for (let artist of artists){
 					console.log(artist);
 				}
@@ -140,33 +142,11 @@ const TestModel = {
  ***** Views *****
  ******************/
 
-function displayResponse(category, response){
-	switch (category) {
-		case 'artists':
-			for (let artist of response) {
-				ArtistView.displayArtist(artist);
-			}
-		break;
-		case 'albums': 
-			for (let album of response){
-				console.log(album);
-				AlbumView.displayAlbum(album);
-			}
-		case 'tracks':
-			for (let track of response){
-				console.log(track);
-				TrackView.displayTrack(track);
-			}
-		break;
-	}
-}
-
-
 const ArtistView = {
 	grid: document.getElementById('grid'),
 	
 	displayArtist(artist){
-		let albumDiv = document.createElement('div');
+		let artistDiv = document.createElement('div');
 		artistDiv.innerHTML = `
 			<h3>${artist.name}</h3>
 			<p>Genres: ${artist.genres}</p>`;
@@ -257,7 +237,9 @@ const SearchView = {
 /**********************
  *** Run functions! ***
  **********************/
-//FetchModel1.fetchArtists();
+
+FetchModel.fetchAll('albums');
+//FetchModel.fetchAll('artists');
+//FetchModel.fetchAll('tracks');
 
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-FetchModel.fetchAll('albums');
