@@ -64,9 +64,9 @@ const GenderController = {
  ******************/
 
 //TEMPORARY CONSTS FOR FETCH URL
-const id = '5aae2dd4b9791d0344d8f719';
-const category = 'albums';
-const searchQuery = 'shakira';
+let id = '5aae2dd4b9791d0344d8f719';
+let category = 'albums';
+let searchQuery = 'shakira';
 
 const FetchModel = {
     async fetchSortedArtists(){
