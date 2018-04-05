@@ -2,8 +2,6 @@ const apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
-
-
 /******************************************************
  ******************** CONTROLLERS *********************
  ******************************************************/
@@ -36,6 +34,26 @@ const baseUrl = `https://folksa.ga/api`;
 SearchController.createEventListener();
 
 
+// Loop out content (artists, albums or tracks) from response object
+function sortResponseByCategory(category, response) {
+	switch (category) {
+		case 'artists':
+			for (let artist of response) {
+				ArtistView.displayArtist(artist);
+			}
+		break;
+		case 'albums': 
+			for (let album of response){
+				AlbumView.displayAlbum(album);
+			}
+		case 'tracks':
+			for (let track of response){
+				TrackView.displayTrack(track);
+			}
+		break;
+	}
+}
+
 
 const GenderController = {
     excludeMaleArtists(artist){
@@ -49,18 +67,34 @@ const GenderController = {
  *********************** MODELS ************************
  *******************************************************/
 
+
 //TEMPORARY CONSTS FOR FETCH URL
-const id = '5aae2dd4b9791d0344d8f719';
+const id = '5aba3e997396550e47352c92';
+	  //'5aae2dd4b9791d0344d8f719';
 const category = 'albums';
 const searchQuery = 'shakira';
 
+
 const FetchModel = {
+	
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
-			.then(response => response.json())
-			.then(response => console.log(response))
+			.then((response) => response.json())
+			.then((response) => {
+				sortResponseByCategory(category, response);
+			})
 			.catch(error => console.log(error));
-	},
+		},
+	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
+			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
+			.then((response) => response.json())
+			.then((response) => {
+				let artists = response.name;
+				for (let artist of artists){
+					console.log(artist);
+				}
+			})
+		},
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
@@ -81,6 +115,7 @@ const FetchModel = {
             .catch(error => console.log(error));
 	}
 }
+
 
 // TestModel can be removed when project is finished
 const TestModel = {
@@ -103,14 +138,15 @@ const TestModel = {
  ******************************************************/
 
 const ArtistView = {
-    testList: document.getElementById('test-list'),
-
-     //Testing: Displaying some output
-     displayArtistName(artistname){
-        let listItem = document.createElement('li');
-        listItem.innerText = artistname;
-        ArtistView.testList.appendChild(listItem);
-    }
+	grid: document.getElementById('grid'),
+	
+	displayArtist(artist){
+		let artistDiv = document.createElement('div');
+		artistDiv.innerHTML = `
+			<h3>${artist.name}</h3>
+			<p>Genres: ${artist.genres}</p>`;
+		ArtistView.grid.appendChild(artistDiv);
+	}
 }
 
 const AlbumView = {
@@ -126,6 +162,17 @@ const AlbumView = {
 	}
 }
 
+const TrackView = {
+	grid: document.getElementById('grid'),
+	
+	displayTrack(track){
+		let trackDiv = document.createElement('div');
+		trackDiv.innerHTML = `
+			<h3>${track.title}</h3> 
+			by <h4>${track.artists}</h4>;`
+			TrackView.grid.appendChild(trackDiv);
+	}
+}
 
 
 const SearchView = {
