@@ -42,7 +42,7 @@ const GenderController = {
         let artists = artist.filter(artist => artist.gender !== 'male');
         return artists;
     sortedArtists: (async function(category = 'artists'){
-        await fetch(`${baseUrl}/${category}/${apiKey}`)
+        await fetch(`${baseUrl}/${category}?${apiKey}`)
             .then(response => response.json())
             .then(response => Controller.excludeMaleArtists(response))
             .catch(error => console.log(error));
