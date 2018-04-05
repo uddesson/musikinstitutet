@@ -35,22 +35,24 @@ SearchController.createEventListener();
 
 
 // Loop out content (artists, albums or tracks) from response object
-function sortResponseByCategory(category, response) {
-	switch (category) {
-		case 'artists':
-			for (let artist of response) {
-				ArtistView.displayArtist(artist);
-			}
-		break;
-		case 'albums': 
-			for (let album of response){
-				AlbumView.displayAlbum(album);
-			}
-		case 'tracks':
-			for (let track of response){
-				TrackView.displayTrack(track);
-			}
-		break;
+const ResponseController = {
+	sortResponseByCategory(category, response) {
+		switch (category) {
+			case 'artists':
+				for (let artist of response) {
+					ArtistView.displayArtist(artist);
+				}
+			break;
+			case 'albums': 
+				for (let album of response){
+					AlbumView.displayAlbum(album);
+				}
+			case 'tracks':
+				for (let track of response){
+					TrackView.displayTrack(track);
+				}
+			break;
+		}
 	}
 }
 
@@ -110,7 +112,7 @@ const FetchModel = {
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
-				sortResponseByCategory(category, response);
+				ResponseController.sortResponseByCategory(category, response);
 			})
 			.catch(error => console.log(error));
         },
