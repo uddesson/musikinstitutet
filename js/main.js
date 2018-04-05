@@ -75,43 +75,16 @@ const category = 'albums';
 const searchQuery = 'shakira';
 
 
-
 const FetchModel = {
 	fetchAll(category){
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
 			.then((response) => response.json())
 			.then((response) => {
-				const albums = response;
-				for (let album of albums){
-					console.log(album);
-					AlbumView.displayAlbum(album);
-				}
-			
-			//function displayResponse(category){
-//				switch (category) {
-//					case 'artists':
-//						for (let artist of response) {
-//							ArtistView.displayArtist(artist);
-//						}
-//					break;
-//					case 'albums': 
-//						for (let album of response){
-//							console.log(album.artists);
-//							AlbumView.displayAlbum(album);
-//						}
-//					case 'tracks':
-//						for (let track of response){
-//							TrackView.displayTrack(track);
-//						}
-//					break;
-//					default:
-//						console.log('Nothing to show!');
-//				}
-			//}
-			
+				displayResponse(category, response);
 			})
 			.catch(error => console.log(error));
 		},
+	
 	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
 			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
 			.then((response) => response.json())
@@ -123,6 +96,7 @@ const FetchModel = {
 				}
 			})
 		},
+	
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
@@ -166,16 +140,28 @@ const TestModel = {
  ***** Views *****
  ******************/
 
-//const ArtistView = {
-//    testList: document.getElementById('test-list'),
-//
-//     //Testing: Displaying some output
-//     displayArtistName(artistname){
-//        let listItem = document.createElement('li');
-//        listItem.innerText = artistname;
-//        ArtistView.testList.appendChild(listItem);
-//    }
-//}
+function displayResponse(category, response){
+	switch (category) {
+		case 'artists':
+			for (let artist of response) {
+				ArtistView.displayArtist(artist);
+			}
+		break;
+		case 'albums': 
+			for (let album of response){
+				console.log(album);
+				AlbumView.displayAlbum(album);
+			}
+		case 'tracks':
+			for (let track of response){
+				console.log(track);
+				TrackView.displayTrack(track);
+			}
+		break;
+	}
+}
+
+
 const ArtistView = {
 	grid: document.getElementById('grid'),
 	
@@ -200,6 +186,7 @@ const AlbumView = {
 		AlbumView.grid.appendChild(albumDiv);
 	}
 }
+
 
 const TrackView = {
 	grid: document.getElementById('grid'),
