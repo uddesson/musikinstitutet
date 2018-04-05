@@ -48,10 +48,9 @@ const GenderController = {
 /******************
  ***** Models *****
  ******************/
-//const FetchModel = {
-//
+//const FetchModel1 = {
 //    fetchArtists(){
-//        fetch(url)
+//        fetch(`https://folksa.ga/api/artists/${apiKey}`)
 //            .then((response) => response.json())
 //            .then((artists) => {
 //                    sortedArtists = GenderController.excludeMaleArtists(artists);
@@ -102,9 +101,6 @@ const FetchModel = {
 	}
 }
 
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-FetchModel.fetchAll('albums');
-
 // TestModel can be removed when project is finished
 const TestModel = {
     
@@ -134,6 +130,19 @@ const ArtistView = {
         listItem.innerText = artistname;
         ArtistView.testList.appendChild(listItem);
     }
+}
+
+const AlbumView = {
+	grid: document.getElementById('grid'),
+	
+	displayAlbum(album){
+		let albumDiv = document.createElement('div');
+		albumDiv.innerHTML = `
+			<h3>${album.title}</h3> 
+			by <h4>${album.artists}</h4>
+			<p>Genres: ${album.genres}</p>`;
+		AlbumView.grid.appendChild(albumDiv);
+	}
 }
 
 
@@ -194,5 +203,7 @@ const SearchView = {
 /**********************
  *** Run functions! ***
  **********************/
+//FetchModel1.fetchArtists();
 
-//FetchModel.fetchArtists();
+//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+FetchModel.fetchAll('albums');
