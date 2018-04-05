@@ -47,6 +47,7 @@ const ResponseController = {
 				for (let album of response){
 					AlbumView.displayAlbum(album);
 				}
+			break;
 			case 'tracks':
 				for (let track of response){
 					TrackView.displayTrack(track);
