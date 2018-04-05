@@ -1,4 +1,4 @@
-const apiKey = `key=flat_eric`;
+let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
@@ -56,11 +56,32 @@ function sortResponseByCategory(category, response) {
 
 
 const GenderController = {
-    excludeMaleArtists(artist){
-        let artists = artist.filter(artist => artist.gender !== 'male');
-        return artists;
+
+    excludeMaleArtists(artists){
+        // console.log(artists)
+        let sorted = artists.filter(artist => artist.gender !== 'male');
+        // console.log(sorted)
+        return sorted;
+    },
+
+    filterFetchByGender(sortedArtists, fetchedArray){
+        console.log('albums:', fetchedArray)
+        
+        //TO DO: 
+        // * Filter them by gender
+        // * Return filtered results
+       
+        // let filtered = fetchedArray.filter(filtered => sortedArtists._id == fetchedArray.artists);    
+
     }
 }
+
+
+
+//TEMPORARY VARIABLES FOR FETCH URL
+let id = '5aae2dd4b9791d0344d8f719';
+let category = 'albums';
+let searchQuery = 'shakira';
 
 
 /*******************************************************
@@ -68,23 +89,32 @@ const GenderController = {
  *******************************************************/
 
 
-//TEMPORARY CONSTS FOR FETCH URL
-const id = '5aba3e997396550e47352c92';
-	  //'5aae2dd4b9791d0344d8f719';
-const category = 'albums';
-const searchQuery = 'shakira';
-
-
 const FetchModel = {
+
+    async fetchSortedArtists(){
+        await fetch(`${baseUrl}/artists?${apiKey}&limit=1000&sort=desc&`)
+            .then(response => response.json())
+            .then(response => {
+                return sortedArtists = GenderController.excludeMaleArtists(response)})     
+            .catch(error => console.log(error));      
+            
+    },
 	
 	fetchAll(category){
+        if(category == 'albums'){
+            apiKey += '&populateArtists=true';
+        }
+        
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
-			.then((response) => response.json())
+            .then(response => response.json())
+            // TODO: Get filterFetchByGender-function to work!!
+			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
 				sortResponseByCategory(category, response);
 			})
 			.catch(error => console.log(error));
-		},
+        },
+        
 	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
 			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
 			.then((response) => response.json())
@@ -94,13 +124,15 @@ const FetchModel = {
 					console.log(artist);
 				}
 			})
-		},
+        },
+        
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
 			.catch(error => console.log(error));
-	},
+    },
+    
 	fetchSearched(category, searchQuery){
 		let title = 'title';
         
@@ -116,7 +148,7 @@ const FetchModel = {
             })
             .catch(error => console.log(error));
 	}
-}
+};
 
 
 // TestModel can be removed when project is finished
@@ -228,4 +260,7 @@ const SearchView = {
 FetchModel.fetchAll('albums');
 //FetchModel.fetchAll('artists');
 
+let sortedArtists = FetchModel.fetchSortedArtists();
+
+setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
