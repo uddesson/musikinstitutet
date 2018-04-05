@@ -38,15 +38,14 @@ SearchController.createEventListener();
 
 
 const GenderController = {
-    excludeMaleArtists(artist){
-        let artists = artist.filter(artist => artist.gender !== 'male');
-        return artists;
-    sortedArtists: (async function(category = 'artists'){
-        await fetch(`${baseUrl}/${category}?${apiKey}`)
-            .then(response => response.json())
-            .then(response => Controller.excludeMaleArtists(response))
-            .catch(error => console.log(error));
-    })(),
+
+    excludeMaleArtists(artists){
+        // console.log(artists)
+        let sorted = artists.filter(artist => artist.gender !== 'male');
+        // console.log(sorted)
+        return sorted;
+    },
+
     filterFetchByGender(sortedArtists, fetchedArray){
         console.log('albums:', fetchedArray)
         
@@ -92,6 +91,13 @@ const searchQuery = 'shakira';
 const FetchModel = {
     async fetchSortedArtists(){
         await fetch(`${baseUrl}/artists?${apiKey}&limit=1000&sort=desc&`)
+            .then(response => response.json())
+            .then(response => {
+                return sortedArtists = GenderController.excludeMaleArtists(response)})     
+            .catch(error => console.log(error));      
+            
+    },
+
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -216,4 +222,4 @@ const SearchView = {
  *** Run functions! ***
  **********************/
 
-//FetchModel.fetchArtists();
+let sortedArtists = FetchModel.fetchSortedArtists();
