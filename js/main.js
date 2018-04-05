@@ -233,5 +233,6 @@ const SearchView = {
  *******************************************************/
 
 FetchModel.fetchAll('albums');
+//FetchModel.fetchAll('artists');
 
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
