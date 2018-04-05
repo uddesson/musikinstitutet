@@ -36,22 +36,31 @@ SearchController.createEventListener();
 
 
 // Loop out content (artists, albums or tracks) from response object
-function sortResponseByCategory(category, response) {
-	switch (category) {
-		case 'artists':
-			for (let artist of response) {
-				ArtistView.displayArtist(artist);
-			}
-		break;
-		case 'albums': 
-			for (let album of response){
-				AlbumView.displayAlbum(album);
-			}
-		case 'tracks':
-			for (let track of response){
-				TrackView.displayTrack(track);
-			}
-		break;
+const ResponseController = {
+	sortResponseByCategory(category, response) {
+		switch (category) {
+			case 'artists':
+				for (let artist of response) {
+					ArtistView.displayArtist(artist);
+				}
+			break;
+			case 'albums': 
+				for (let album of response){
+					AlbumView.displayAlbum(album);
+				}
+			break;
+			case 'tracks':
+				for (let track of response){
+					TrackView.displayTrack(track);
+				}
+			break;
+		}
+	},
+	fetchAlbumArtist(response) {
+		for (albums of response){
+			let i = 0;
+			console.log(albums.artists[i].name);  //FORTSÄTT JOBBA HÄR
+		}
 	}
 }
 
@@ -111,21 +120,24 @@ const FetchModel = {
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
-				sortResponseByCategory(category, response);
+				ResponseController.sortResponseByCategory(category, response);
+				if(category == 'albums'){
+					ResponseController.fetchAlbumArtist(response);
+				}
 			})
 			.catch(error => console.log(error));
         },
         
-	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
-			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
-			.then((response) => response.json())
-			.then((response) => {
-				let artists = response.name;
-				for (let artist of artists){
-					console.log(artist);
-				}
-			})
-        },
+//	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
+//			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
+//			.then((response) => response.json())
+//			.then((response) => {
+//				let artists = response.name;
+//				for (let artist of artists){
+//					console.log(artist);
+//				}
+//			})
+//        },
         
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
