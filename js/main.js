@@ -7,11 +7,11 @@ const baseUrl = `https://folksa.ga/api`;
  ******************************************************/
 
  const SearchController = {
-    searchButton: document.getElementById('searchButton'),
+    searchInput: document.getElementById('searchInput'),
 
     //The "general search"
     createEventListener (){
-        searchButton.addEventListener('click', function(){
+        searchInput.addEventListener('keyup', function(){
             ArtistView.grid.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
