@@ -117,16 +117,16 @@ const FetchModel = {
 			.catch(error => console.log(error));
         },
         
-	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
-			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
-			.then((response) => response.json())
-			.then((response) => {
-				let artists = response.name;
-				for (let artist of artists){
-					console.log(artist);
-				}
-			})
-        },
+//	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
+//			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
+//			.then((response) => response.json())
+//			.then((response) => {
+//				let artists = response.name;
+//				for (let artist of artists){
+//					console.log(artist);
+//				}
+//			})
+//        },
         
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
