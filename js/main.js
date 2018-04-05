@@ -37,9 +37,34 @@ const GenderController = {
 //}
 
 //TEMPORARY CONSTS FOR FETCH URL
-const id = '5aae2dd4b9791d0344d8f719';
+const id = '5aba3e997396550e47352c92';
+	  //'5aae2dd4b9791d0344d8f719';
 const category = 'albums';
 const searchQuery = 'shakira';
+
+function displayResponse(category){
+	switch (category) {
+		case 'artists':
+			for (let artist of response) {
+				ArtistView.displayArtist(artist);
+			}
+		break;
+		case 'albums': 
+			for (let album of response){
+				console.log(album.artists);
+				AlbumView.displayAlbum(album);
+			}
+		case 'tracks':
+			for (let track of response){
+				TrackView.displayTrack(track);
+			}
+		break;
+		default:
+			console.log('Nothing to show!');
+	}
+}
+
+
 
 const FetchModel = {
 	fetchAll(category){
@@ -47,24 +72,26 @@ const FetchModel = {
 			.then((response) => response.json())
 			.then((response) => {
 				console.log(response);
-				for (let album of response){
-					console.log(album);
-					AlbumView.displayAlbum(album);
-				}
-				
-				let promiseArray = [];
-				for(let artistID of artists) {
-					const artistPromise = fetch(artistID)
-					.then((response) => response.json());
-					promiseArray.push(artistPromise);
-				}
-				Promise.all(promiseArray)
-					.then((allArtists) => {
-						console.log(allArtists);
-				})
+				displayResponse(category);
+//				for (let album of response){
+//					console.log(album.artists);
+//					AlbumView.displayAlbum(album);
+//				}
+			
 			})
 			.catch(error => console.log(error));
-	},
+		},
+	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
+			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
+			.then((response) => response.json())
+			.then((response) => {
+				let artists = response.name
+				console.log(artists);
+				for (let artist of artists){
+					console.log(artist);
+				}
+			})
+		},
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}/?${apiKey}`)
 			.then(response => response.json())
@@ -82,6 +109,8 @@ const FetchModel = {
 		.catch(error => console.log(error));
 	}
 }
+
+
 
 
 // TestModel can be removed when project is finished
@@ -137,3 +166,5 @@ const AlbumView = {
 
 //FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
 FetchModel.fetchAll('albums');
+
+FetchModel.fetchAlbumArtist();
