@@ -12,6 +12,7 @@ const baseUrl = `https://folksa.ga/api`;
     //The "general search"
     createEventListener (){
         searchButton.addEventListener('click', function(){
+            ArtistView.grid.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
@@ -143,7 +144,9 @@ const FetchModel = {
         
         return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
             .then(response => response.json())
-            .then(response => console.log(category, response))
+            .then((response) => {
+                sortResponseByCategory(category, response);
+            })
             .catch(error => console.log(error));
 	}
 };
@@ -228,20 +231,11 @@ const SearchView = {
     },
 
     displayArtists(artists){
-        const ul = document.createElement('ul');
-
         for (let artist of artists){
-            let listItem = document.createElement('li');
-
-            listItem.innerText = artist.name;
-            //+ display image
-
+            ArtistView.displayArtist(artist);
             //make link/eventlistener with artist.id around both name and image
 
-            ul.appendChild(listItem);
         }
-
-        SearchView.output.appendChild(ul);
     },
 
     //TO DO: displayAlbums()
