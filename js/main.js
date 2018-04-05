@@ -104,9 +104,10 @@ const FetchModel = {
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
         }
-
+        
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
             .then(response => response.json())
+            // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
 				sortResponseByCategory(category, response);
