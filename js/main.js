@@ -54,6 +54,12 @@ const ResponseController = {
 				}
 			break;
 		}
+	},
+	fetchAlbumArtist(response) {
+		for (albums of response){
+			let i = 0;
+			console.log(albums.artists[i].name);  //FORTSÄTT JOBBA HÄR
+		}
 	}
 }
 
