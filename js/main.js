@@ -2,11 +2,9 @@ let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
-
-
-/******************
- ** Controllers ***
- ******************/
+/******************************************************
+ ******************** CONTROLLERS *********************
+ ******************************************************/
 
  const SearchController = {
     searchButton: document.getElementById('searchButton'),
@@ -36,6 +34,26 @@ const baseUrl = `https://folksa.ga/api`;
 SearchController.createEventListener();
 
 
+// Loop out content (artists, albums or tracks) from response object
+function sortResponseByCategory(category, response) {
+	switch (category) {
+		case 'artists':
+			for (let artist of response) {
+				ArtistView.displayArtist(artist);
+			}
+		break;
+		case 'albums': 
+			for (let album of response){
+				AlbumView.displayAlbum(album);
+			}
+		case 'tracks':
+			for (let track of response){
+				TrackView.displayTrack(track);
+			}
+		break;
+	}
+}
+
 
 const GenderController = {
 
@@ -59,14 +77,17 @@ const GenderController = {
 }
 
 
-/******************
- ***** Models *****
- ******************/
 
-//TEMPORARY CONSTS FOR FETCH URL
+//TEMPORARY VARIABLES FOR FETCH URL
 let id = '5aae2dd4b9791d0344d8f719';
 let category = 'albums';
 let searchQuery = 'shakira';
+
+
+/*******************************************************
+ *********************** MODELS ************************
+ *******************************************************/
+
 
 const FetchModel = {
 
@@ -78,7 +99,7 @@ const FetchModel = {
             .catch(error => console.log(error));      
             
     },
-
+	
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -86,16 +107,31 @@ const FetchModel = {
 
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
             .then(response => response.json())
-			.then(response => GenderController.filterFetchByGender(sortedArtists, response))
+			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
+			.then((response) => {
+				sortResponseByCategory(category, response);
+			})
 			.catch(error => console.log(error));
-    },
-
+        },
+        
+	fetchAlbumArtist(){ //THIS ONE ONLY FETCHES SHAKIRA ATM = D
+			return fetch(`${baseUrl}/artists/${id}/?${apiKey}`)
+			.then((response) => response.json())
+			.then((response) => {
+				let artists = response.name;
+				for (let artist of artists){
+					console.log(artist);
+				}
+			})
+        },
+        
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
 			.catch(error => console.log(error));
-	},
+    },
+    
 	fetchSearched(category, searchQuery){
 		let title = 'title';
         
@@ -110,6 +146,7 @@ const FetchModel = {
             .catch(error => console.log(error));
 	}
 };
+
 
 // TestModel can be removed when project is finished
 const TestModel = {
@@ -127,21 +164,46 @@ const TestModel = {
 }
 
 
-/******************
- ***** Views *****
- ******************/
+/******************************************************
+ *********************** VIEWS ************************
+ ******************************************************/
 
 const ArtistView = {
-    testList: document.getElementById('test-list'),
-
-     //Testing: Displaying some output
-     displayArtistName(artistname){
-        let listItem = document.createElement('li');
-        listItem.innerText = artistname;
-        ArtistView.testList.appendChild(listItem);
-    }
+	grid: document.getElementById('grid'),
+	
+	displayArtist(artist){
+		let artistDiv = document.createElement('div');
+		artistDiv.innerHTML = `
+			<h3>${artist.name}</h3>
+			<p>Genres: ${artist.genres}</p>`;
+		ArtistView.grid.appendChild(artistDiv);
+	}
 }
 
+const AlbumView = {
+	grid: document.getElementById('grid'),
+	
+	displayAlbum(album){
+		let albumDiv = document.createElement('div');
+		albumDiv.innerHTML = `
+			<h3>${album.title}</h3> 
+			by <h4>${album.artists}</h4>
+			<p>Genres: ${album.genres}</p>`;
+		AlbumView.grid.appendChild(albumDiv);
+	}
+}
+
+const TrackView = {
+	grid: document.getElementById('grid'),
+	
+	displayTrack(track){
+		let trackDiv = document.createElement('div');
+		trackDiv.innerHTML = `
+			<h3>${track.title}</h3> 
+			by <h4>${track.artists}</h4>;`
+			TrackView.grid.appendChild(trackDiv);
+	}
+}
 
 
 const SearchView = {
@@ -197,10 +259,14 @@ const SearchView = {
     }
 }
 
-/**********************
- *** Run functions! ***
- **********************/
+/********************************************************
+ ******************** RUN FUNCTIONS *********************
+ *******************************************************/
+
+FetchModel.fetchAll('albums');
+//FetchModel.fetchAll('artists');
 
 let sortedArtists = FetchModel.fetchSortedArtists();
 
 setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
+//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
