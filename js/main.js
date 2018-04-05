@@ -62,26 +62,6 @@ const GenderController = {
 /******************
  ***** Models *****
  ******************/
-//const FetchModel = {
-//
-//    fetchArtists(){
-//        fetch(url)
-//            .then((response) => response.json())
-//            .then((artists) => {
-//                    sortedArtists = GenderController.excludeMaleArtists(artists);
-//                    for (var artist of sortedArtists){
-//                        TestModel.logInfo(artist);
-//                        ArtistView.displayArtistName(artist.name);
-//                    };     
-//                }
-//            )       
-//
-//            .catch(error => { 
-//                // Some reusable function here that displays a generic error-msg to the user
-//                console.log(error);
-//            });
-//    }
-//}
 
 //TEMPORARY CONSTS FOR FETCH URL
 const id = '5aae2dd4b9791d0344d8f719';
