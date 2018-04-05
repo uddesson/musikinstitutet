@@ -1,4 +1,4 @@
-const apiKey = `key=flat_eric`;
+let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
@@ -81,7 +81,12 @@ const category = 'albums';
 const searchQuery = 'shakira';
 
 const FetchModel = {
+    async fetchSortedArtists(){
+        await fetch(`${baseUrl}/artists?${apiKey}&limit=1000&sort=desc&`)
 	fetchAll(category){
+        if(category == 'albums'){
+            apiKey += '&populateArtists=true';
+        }
 		return fetch(`${baseUrl}/${category}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
