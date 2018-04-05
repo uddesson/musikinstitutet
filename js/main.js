@@ -203,3 +203,4 @@ const SearchView = {
  **********************/
 
 let sortedArtists = FetchModel.fetchSortedArtists();
+setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
