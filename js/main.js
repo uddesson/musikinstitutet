@@ -170,7 +170,7 @@ const FetchModel = {
         return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
-                sortResponseByCategory(category, response);
+                ResponseController.sortResponseByCategory(category, response);
             })
             .catch(error => console.log(error));
 	}
