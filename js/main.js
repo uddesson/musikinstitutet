@@ -281,6 +281,22 @@ const SearchView = {
     }
 }
 
+const PostView = {
+    actions: [
+        addArtistAction = document.getElementById('addArtistAction'),
+        addTrackAction = document.getElementById('addTrackAction'),
+        addAlbumAction = document.getElementById('addAlbumAction')
+    ],
+
+    createEventListener(){
+        for (var action of PostView.actions){
+            action.addEventListener('click', function(){
+                this.nextElementSibling.classList.toggle('hidden'); 
+            });
+        }
+    }
+}
+
 /********************************************************
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
