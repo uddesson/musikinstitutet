@@ -74,7 +74,7 @@ const ResponseController = {
 			let i = 0;
 			console.log(albums.artists[i].name);  //FORTSÄTT JOBBA HÄR
 		}
-	}
+    }    
 }
 
 
@@ -190,6 +190,16 @@ const TestModel = {
         console.log('Albums:', element.albums);
         console.groupEnd();
     }
+}
+
+
+const PostModel = {
+    
+    // TO DO:
+    // * Add artists
+    // * Add tracks
+    // * Add albums
+    // * Add playlists
 }
 
 
