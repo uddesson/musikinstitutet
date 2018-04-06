@@ -32,8 +32,6 @@ const baseUrl = `https://folksa.ga/api`;
     //TO DO: the user should also be able to specify their search with specific genre
 }
 
-SearchController.createEventListener();
-
 
 const InputController = {
     
