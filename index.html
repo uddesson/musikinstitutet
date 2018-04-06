@@ -23,6 +23,94 @@
 		</div>
 	</div>
 
+
+    <!-- Forms below are hidden by default -->
+    <h1>CONTRIBUTE</h1>
+    <h2>Obs funkar inte än försök inte lägga in</h2>
+
+    <h2 id="addArtistAction" style="text-decoration: underline; color: pink;">Add Artist</h2>
+
+    <form id="addArtist" class="hidden" style="border: 2px dashed pink";>
+        <h3>Name</h3>
+        <input id="artistName" type="text" placeholder="Name">
+
+        <h3>Born</h3>
+        <input id="artistBorn" type="text" placeholder="1985-12-01">
+
+        <h3>Gender</h3>
+        <input type="radio" name="gender" value="male">Male ... ?<br>
+        <input type="radio" name="gender" value="female">Female<br>
+        <input type="radio" name="gender" value="other">Other
+        
+        <h3>Genre</h3>
+        <input id="artistGenre" type="text" placeholder="Neo soul, R&B, Funk, Art rock, Dance-punk">
+
+        <h3>Country born</h3>
+        <input id="countryBorn" type="text" placeholder="USA">
+
+        <h3>Spotify Artist-link</h3>
+        <input id="artistSpotifyUrl" type="text" placeholder="https://open.spotify.com/artist/6ueGR6SWhUJfvEhqkvMsVs?si=WeP6uqT5SIaLV4rZpuIBuA">
+        
+        <h3>Link to image of artist</h3>
+        <input id="artistImage" type="text" placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Janelle_Mon%C3%A1e_2016.jpg/1024px-Janelle_Mon%C3%A1e_2016.jpg">
+    </form>
+
+
+    <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen;">Add Track</h2>
+
+    <form id="addTrack" class="hidden" style="border: 2px dashed lightgreen";>
+        <h3>Title</h3>
+        <input id="trackTitle" type="text" placeholder="Title of track">
+
+        <h3>Artist</h3>
+        <h4>Obs namn måste få ett ID, så vi behöver kolla om artisten finns + hämta id</h4>
+        <input id="trackArtist" type="text" placeholder="Artist">
+
+        <h3>Album</h3>
+        <input id="trackArtist" type="text" placeholder="Albumtitle">
+
+        <h3>Genres</h3>
+        <input id="trackGenre" type="text" placeholder="RnB, Pop">
+
+        <h3>Link to coverimage</h3>
+        <input id="trackCover" type="text" placeholder="url to img">
+
+        <h3>Link to Spotify</h3>
+        <input id="trackSpotifyUrl" type="text" placeholder="link spotify">
+
+        <h3>Link to YouTube</h3>
+        <input id="trackYoutubeUrl" type="text" placeholder="link youtube">
+
+        <h3>Link to SoundCloud</h3>
+        <input id="trackSoundCloudUrl" type="text" placeholder="link url">
+
+        <h3>Add to existing playlist</h3>        
+        <input id="playlistSearchInput" type="text" placeholder="User starts typing (searches) and playlists will appear.. ?">
+        <button id="addToPlaylistButton">Add album to playlist</button> 
+    </form>
+
+    
+    <h2 id="addAlbumAction" style="text-decoration: underline; color: lightblue;">Add Album</h2>
+
+    <form id="addAlbum" class="hidden" style="border: 2px dashed lightblue";>
+        <h3>Title</h3>
+        <input id="albumTitle" type="text" placeholder="Album-title">
+
+        <h3>Artist</h3>
+        <input id="albumArtist" type="text" placeholder="Name (check)">
+        
+        <h3>Tracks</h3>
+        <input id="albumTracks" type="text" placeholder="Title of one track, Title of another track">
+
+        <h3>Genres</h3>
+        <input id="albumGenre" type="text" placeholder="Indie, RnB">
+
+        <h3>Releaseyear</h3>
+        <input id="releaseDate" type="text" placeholder="2012">
+    </form>
+
+    <h2 id="addPlaylistAction" style="text-decoration: line-through; color: grey;">Add Playlist</h2>
+
     <script src="js/main.js"></script>
 </body>
 </html>
