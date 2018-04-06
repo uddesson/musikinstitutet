@@ -35,6 +35,21 @@ const baseUrl = `https://folksa.ga/api`;
 SearchController.createEventListener();
 
 
+const InputController = {
+    
+    // Run to check if user tried so input empty string
+    checkIfValidUserInput(input){
+        if (input.trim() == ''){
+            return true;
+    
+        } else {
+            // Run some error-view
+            console.log('user tried to input empty space')
+        }
+    }
+}
+
+
 // Loop out content (artists, albums or tracks) from response object
 const ResponseController = {
 	sortResponseByCategory(category, response) {
