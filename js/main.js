@@ -302,9 +302,9 @@ const PostView = {
  *******************************************************/
 
 FetchModel.fetchAll('albums');
-//FetchModel.fetchAll('artists');
 
-let sortedArtists = FetchModel.fetchSortedArtists();
+// let sortedArtists = FetchModel.fetchSortedArtists();
 
-setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+// TO DO: Maybe make creating eventlisteners self-invoked?
+PostView.createEventListener(); 
+SearchController.createEventListener();
