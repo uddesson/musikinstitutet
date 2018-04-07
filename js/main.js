@@ -289,7 +289,35 @@ const SearchView = {
     }
 }
 
-const PostView = {
+
+const NavigationView = {
+
+    homeMenuAction: document.getElementById('home'),
+    contributeMenuAction: document.getElementById('contribute'),
+    postActionsWrapper: document.getElementById('postActionsWrapper'),
+
+    enableHomeView(){
+        NavigationView.homeMenuAction.addEventListener('click', function(){
+            ArtistView.grid.classList.remove('hidden');
+    
+            // Hide views ("page") that should not be active
+            NavigationView.postActionsWrapper.classList.add('hidden');
+        });
+    },  
+    
+    enablePostView(){
+        NavigationView.contributeMenuAction.addEventListener('click', function(){
+            NavigationView.postActionsWrapper.classList.remove('hidden');
+
+            // Hide views ("page") that should not be active
+            AlbumView.grid.classList.add('hidden');
+        });
+    },
+}
+
+
+const PostView = { 
+    
     actions: [
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
@@ -312,6 +340,9 @@ const PostView = {
 FetchModel.fetchAll('albums');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
+
+NavigationView.enablePostView();
+NavigationView.enableHomeView();
 
 // TO DO: Maybe make creating eventlisteners self-invoked?
 PostView.createEventListener(); 
