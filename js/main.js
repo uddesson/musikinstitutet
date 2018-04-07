@@ -32,7 +32,20 @@ const baseUrl = `https://folksa.ga/api`;
     //TO DO: the user should also be able to specify their search with specific genre
 }
 
-SearchController.createEventListener();
+
+const InputController = {
+    
+    // Run to check if user tried so input empty string
+    checkIfValidUserInput(input){
+        if (input.trim() == ''){
+            return true;
+    
+        } else {
+            // Run some error-view
+            console.log('user tried to input empty space')
+        }
+    }
+}
 
 
 // Loop out content (artists, albums or tracks) from response object
@@ -61,7 +74,7 @@ const ResponseController = {
 			let i = 0;
 			console.log(albums.artists[i].name);  //FORTSÄTT JOBBA HÄR
 		}
-	}
+    }    
 }
 
 
@@ -157,7 +170,7 @@ const FetchModel = {
         return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
-                sortResponseByCategory(category, response);
+                ResponseController.sortResponseByCategory(category, response);
             })
             .catch(error => console.log(error));
 	}
@@ -177,6 +190,16 @@ const TestModel = {
         console.log('Albums:', element.albums);
         console.groupEnd();
     }
+}
+
+
+const PostModel = {
+    
+    // TO DO:
+    // * Add artists
+    // * Add tracks
+    // * Add albums
+    // * Add playlists
 }
 
 
@@ -266,14 +289,61 @@ const SearchView = {
     }
 }
 
+
+const NavigationView = {
+
+    homeMenuAction: document.getElementById('home'),
+    contributeMenuAction: document.getElementById('contribute'),
+    postActionsWrapper: document.getElementById('postActionsWrapper'),
+
+    enableHomeView(){
+        NavigationView.homeMenuAction.addEventListener('click', function(){
+            ArtistView.grid.classList.remove('hidden');
+    
+            // Hide views ("page") that should not be active
+            NavigationView.postActionsWrapper.classList.add('hidden');
+        });
+    },  
+    
+    enablePostView(){
+        NavigationView.contributeMenuAction.addEventListener('click', function(){
+            NavigationView.postActionsWrapper.classList.remove('hidden');
+
+            // Hide views ("page") that should not be active
+            AlbumView.grid.classList.add('hidden');
+        });
+    },
+}
+
+
+const PostView = { 
+    
+    actions: [
+        addArtistAction = document.getElementById('addArtistAction'),
+        addTrackAction = document.getElementById('addTrackAction'),
+        addAlbumAction = document.getElementById('addAlbumAction')
+    ],
+
+    createEventListener(){
+        for (var action of PostView.actions){
+            action.addEventListener('click', function(){
+                this.nextElementSibling.classList.toggle('hidden'); 
+            });
+        }
+    }
+}
+
 /********************************************************
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
 FetchModel.fetchAll('albums');
-//FetchModel.fetchAll('artists');
 
-let sortedArtists = FetchModel.fetchSortedArtists();
+// let sortedArtists = FetchModel.fetchSortedArtists();
 
-setTimeout(function(){ FetchModel.fetchAll('albums'); }, 1000);
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
+NavigationView.enablePostView();
+NavigationView.enableHomeView();
+
+// TO DO: Maybe make creating eventlisteners self-invoked?
+PostView.createEventListener(); 
+SearchController.createEventListener();
