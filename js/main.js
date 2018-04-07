@@ -322,6 +322,18 @@ const NavigationView = {
             // Hide views ("page") or elements that should not be active
             AlbumView.grid.classList.add('hidden');
         });
+
+        /* If the user tries to search while on the contribute "page",
+        we still allow them to do so, and hide the post-view */
+        SearchView.searchInput.addEventListener('keyup', function(){
+            ArtistView.grid.classList.remove('hidden');
+            NavigationView.postActionsWrapper.classList.add('hidden');
+        });
+
+        SearchView.searchButton.addEventListener('click', function(){
+            ArtistView.grid.classList.remove('hidden');
+            NavigationView.postActionsWrapper.classList.add('hidden');
+        });
     },
 }
 
