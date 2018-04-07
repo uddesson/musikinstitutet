@@ -293,6 +293,11 @@ const SearchView = {
 
 
 const NavigationView = {
+    /* TO DO:
+    * - Look over these functions and see if the can be ONE instead
+    * - While on the "contribute page" you can click the search button 
+    * even if the input field has no value
+    */
 
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
@@ -300,9 +305,12 @@ const NavigationView = {
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
+            /* When we REMOVE the class hidden, we show views
+             and elements that should be active */
             ArtistView.grid.classList.remove('hidden');
     
-            // Hide views ("page") that should not be active
+            /* When we ADD the class hidden, we hide views
+             or elements that should not be active */
             NavigationView.postActionsWrapper.classList.add('hidden');
         });
     },  
@@ -311,7 +319,7 @@ const NavigationView = {
         NavigationView.contributeMenuAction.addEventListener('click', function(){
             NavigationView.postActionsWrapper.classList.remove('hidden');
 
-            // Hide views ("page") that should not be active
+            // Hide views ("page") or elements that should not be active
             AlbumView.grid.classList.add('hidden');
         });
     },
