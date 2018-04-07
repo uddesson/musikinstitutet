@@ -1,12 +1,28 @@
 /******************************
  *********** RESET ************
  ******************************/
-	html, body, div {
-		margin:0;
-		padding:0;
-		box-sizing: border-box;
-	}
+html, body, div, {
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
+}
 
+h1, h2, h3, h4, h5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+ul{
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+li{
+	vertical-align: middle;
+	margin: 0 20px 0 0;
+	float: left;
+}
 
 /******************************
  ************ GRID ************
