@@ -246,6 +246,8 @@ const TrackView = {
 
 
 const SearchView = {
+    searchButton: document.getElementById('searchButton'),
+    searchInput: document.getElementById('searchInput'),
     output: document.getElementById('searchOutput'),
 
     displayTracks(tracks){
