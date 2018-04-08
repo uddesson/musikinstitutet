@@ -198,7 +198,6 @@ const PostModel = {
     // TO DO:
     // * Add validation/check-functions so user sends correct stuff
     // * Add tracks
-    // * Add albums
     // * Add playlists
 
     addArtist(){
@@ -224,6 +223,31 @@ const PostModel = {
           .then((artist) => {
             console.log(artist);
           });
+
+    addAlbum(){
+        
+        let album = {
+            title: PostView.albumForm.title.value,
+            artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
+            releaseDate: PostView.albumForm.year.value,
+            genres: PostView.albumForm.genres.value.replace(" ", ""),
+            spotifyURL: PostView.albumForm.spotify.value,
+            coverImage: PostView.albumForm.image.value
+        }
+
+        fetch(`${baseUrl}/albums?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(album),
+          })
+          .then((response) => response.json())
+          .then((album) => {
+            console.log(album);
+          });
+    },
     }
 }
 
@@ -386,6 +410,7 @@ const PostView = {
             event.preventDefault(); // Stop page from refreshing on click
             PostModel.addArtist();
         })
+        addAlbumButton: document.getElementById('addAlbumButton'),
     },
 
     artistForm: {
@@ -396,6 +421,21 @@ const PostView = {
         country: document.getElementById('artistBorn'),
         spotify: document.getElementById('artistSpotifyUrl'),
         image: document.getElementById('artistImage')
+    },
+
+    albumForm: {
+        title: document.getElementById('albumTitle'),
+        artists: document.getElementById('albumArtist'),
+        genres: document.getElementById('albumGenre'),
+        year: document.getElementById('albumReleaseYear'),
+        spotify: document.getElementById('albumSpotifyUrl'),
+        image: document.getElementById('artistImage')
+    },
+        // Eventlistener that triggers add ALBUM
+        PostView.buttons.addAlbumButton.addEventListener('click', function(event){
+            event.preventDefault();
+            PostModel.addAlbum();
+        })
     }
 }
 
