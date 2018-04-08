@@ -194,12 +194,35 @@ const TestModel = {
 
 
 const PostModel = {
-    
     // TO DO:
-    // * Add artists
     // * Add tracks
     // * Add albums
     // * Add playlists
+
+    addArtist(){
+
+        let artist = {
+            name: PostView.artistForm.name.value,
+            born: PostView.artistForm.born.value,
+            gender: PostView.artistForm.gender.value.toLowerCase(),
+            genres: PostView.artistForm.genres.value.replace(" ", ""),
+            spotifyURL: PostView.artistForm.spotify.value,
+            coverImage: PostView.artistForm.image.value
+        }
+        
+        fetch(`${baseUrl}/artists?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(artist)
+          })
+          .then((response) => response.json())
+          .then((artist) => {
+            console.log(artist);
+          });
+    }
 }
 
 
@@ -344,6 +367,8 @@ const PostView = {
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
         addAlbumAction = document.getElementById('addAlbumAction')
+    buttons: [
+        addArtistButton = document.getElementById('addArtistButton')
     ],
 
     createEventListener(){
@@ -352,6 +377,21 @@ const PostView = {
                 this.nextElementSibling.classList.toggle('hidden'); 
             });
         }
+
+        PostView.buttons[0].addEventListener('click', function(event){
+            event.preventDefault(); // Stop page from refreshing on click
+            PostModel.addArtist();
+        })
+    },
+
+    artistForm: {
+        name: document.getElementById('artistName'),
+        born: document.getElementById('artistBorn'),
+        gender: document.getElementById('artistGender'),
+        genres: document.getElementById('artistGenre'),
+        country: document.getElementById('artistBorn'),
+        spotify: document.getElementById('artistSpotifyUrl'),
+        image: document.getElementById('artistImage')
     }
 }
 
