@@ -43,6 +43,7 @@ const InputController = {
         } else {
             // Run some error-view
             console.log('user tried to input empty space')
+            return;
         }
     }
 }
@@ -210,6 +211,11 @@ const PostModel = {
             coverImage: PostView.artistForm.image.value
         }
         
+        for(var input in artist){
+            // Currently only checks if input is empty
+            InputController.checkIfValidUserInput(input);
+        }
+
         fetch(`${baseUrl}/artists?${apiKey}`,{
             method: 'POST',
             headers: {
