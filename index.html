@@ -73,40 +73,6 @@
         </form>
 
         <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen; cursor: pointer;">Add Track</h2>
-
-        <form id="addTrack" class="hidden" style="border: 2px dashed lightgreen";>
-            <h3>Title</h3>
-            <input id="trackTitle" type="text" placeholder="Title of track">
-
-            <h3>Artist</h3>
-            <h4>Obs namn måste få ett ID, så vi behöver kolla om artisten finns + hämta id</h4>
-            <input id="trackArtist" type="text" placeholder="Artist">
-
-            <h3>Album</h3>
-            <input id="trackArtist" type="text" placeholder="Albumtitle">
-
-            <h3>Genres</h3>
-            <input id="trackGenre" type="text" placeholder="RnB, Pop">
-
-            <h3>Link to coverimage</h3>
-            <input id="trackCover" type="text" placeholder="url to img">
-
-            <h3>Link to Spotify</h3>
-            <input id="trackSpotifyUrl" type="text" placeholder="link spotify">
-
-            <h3>Link to YouTube</h3>
-            <input id="trackYoutubeUrl" type="text" placeholder="link youtube">
-
-            <h3>Link to SoundCloud</h3>
-            <input id="trackSoundCloudUrl" type="text" placeholder="link url">
-
-            <h3>Add to existing playlist</h3>        
-            <input id="playlistSearchInput" type="text" placeholder="User starts typing (searches) and playlists will appear.. ?">
-            <button id="addToPlaylistButton">Add album to playlist</button> 
-        </form>
-
-        <!-- Temporary inline-styles here should be REMOVED later -->
         <h2 id="addAlbumAction" style="text-decoration: underline; color: lightblue; cursor: pointer;">Add Album</h2>
 
         <form id="addAlbum" class="hidden" style="border: 2px dashed lightblue";>
@@ -115,22 +81,39 @@
 
             <h3>Artist</h3>
             <input id="albumArtist" type="text" placeholder="Name (check)">
-            
-            <h3>Tracks</h3>
-            <input id="albumTracks" type="text" placeholder="Title of one track, Title of another track">
 
             <h3>Genres</h3>
             <input id="albumGenre" type="text" placeholder="Indie, RnB">
 
             <h3>Releaseyear</h3>
-            <input id="releaseDate" type="text" placeholder="2012">
+            <input id="albumReleaseYear" type="text" placeholder="2012">
+
+            <h3>Spotify-link</h3>
+            <input id="albumSpotifyUrl" type="text" placeholder="url">
+
+            <h3>Album Cover</h3>
+            <input id="albumCoverUrl" type="text" placeholder="img-url">
+            
+            <button id="addAlbumButton">Add album</button>
         </form>
 
         <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addPlaylistAction" style="text-decoration: line-through; color: lightgrey;">Add Playlist</h2>
-        
-        <!-- Nothing here yet -->
-        
+        <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen; cursor: pointer;">Add Track</h2>
+
+        <form id="addTrack" class="hidden" style="border: 2px dashed lightgreen";>
+            <h3>Title</h3>
+            <input id="trackTitle" type="text" placeholder="Title of track">
+
+            <h3>Artist</h3>
+            <h4>Obs namn måste få ett ID?</h4>
+            <input id="trackArtist" type="text" placeholder="Artist">
+
+            <h3>Album</h3>
+            <input id="trackAlbum" type="text" placeholder="Albumtitle">
+
+            <br>
+            <button id="addTrackButton">Add track</button>
+        </form>
     </div> 
     
     <script src="js/main.js"></script>
