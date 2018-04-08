@@ -43,6 +43,7 @@ const InputController = {
         } else {
             // Run some error-view
             console.log('user tried to input empty space')
+            return;
         }
     }
 }
@@ -194,12 +195,36 @@ const TestModel = {
 
 
 const PostModel = {
-    
     // TO DO:
-    // * Add artists
+    // * Add validation/check-functions so user sends correct stuff
     // * Add tracks
     // * Add albums
     // * Add playlists
+
+    addArtist(){
+
+        let artist = {
+            name: PostView.artistForm.name.value,
+            born: PostView.artistForm.born.value,
+            gender: PostView.artistForm.gender.value.toLowerCase(),
+            genres: PostView.artistForm.genres.value.replace(" ", ""),
+            spotifyURL: PostView.artistForm.spotify.value,
+            coverImage: PostView.artistForm.image.value
+        }
+
+        fetch(`${baseUrl}/artists?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(artist)
+          })
+          .then((response) => response.json())
+          .then((artist) => {
+            console.log(artist);
+          });
+    }
 }
 
 
@@ -346,12 +371,31 @@ const PostView = {
         addAlbumAction = document.getElementById('addAlbumAction')
     ],
 
+    buttons: [
+        addArtistButton = document.getElementById('addArtistButton')
+    ],
+
     createEventListener(){
         for (var action of PostView.actions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
             });
         }
+
+        PostView.buttons[0].addEventListener('click', function(event){
+            event.preventDefault(); // Stop page from refreshing on click
+            PostModel.addArtist();
+        })
+    },
+
+    artistForm: {
+        name: document.getElementById('artistName'),
+        born: document.getElementById('artistBorn'),
+        gender: document.getElementById('artistGender'),
+        genres: document.getElementById('artistGenre'),
+        country: document.getElementById('artistBorn'),
+        spotify: document.getElementById('artistSpotifyUrl'),
+        image: document.getElementById('artistImage')
     }
 }
 
@@ -359,7 +403,7 @@ const PostView = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
-FetchModel.fetchAll('albums');
+FetchModel.fetchAll('artists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
