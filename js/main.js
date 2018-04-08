@@ -416,7 +416,6 @@ const PostView = {
         addAlbumAction = document.getElementById('addAlbumAction')
     ],
 
-    createEventListener(){
     buttons: {
         addArtistButton: document.getElementById('addArtistButton'),
         addAlbumButton: document.getElementById('addAlbumButton'),
@@ -448,6 +447,7 @@ const PostView = {
         albums: document.getElementById('trackAlbum'),
     },
 
+    createEventListeners(){
         for (var action of PostView.actions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
@@ -486,5 +486,5 @@ NavigationView.enablePostView();
 NavigationView.enableHomeView();
 
 // TO DO: Maybe make creating eventlisteners self-invoked?
-PostView.createEventListener(); 
+PostView.createEventListeners(); 
 SearchController.createEventListener();
