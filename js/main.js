@@ -196,6 +196,7 @@ const TestModel = {
 
 const PostModel = {
     // TO DO:
+    // * Add validation/check-functions so user sends correct stuff
     // * Add tracks
     // * Add albums
     // * Add playlists
@@ -212,7 +213,8 @@ const PostModel = {
         }
         
         for(var input in artist){
-            // Currently only checks if input is empty
+            /* Currently only checks if input is empty
+            But doesn't stop the user from sending empty stuff yet */
             InputController.checkIfValidUserInput(input);
         }
 
