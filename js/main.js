@@ -371,7 +371,7 @@ const NavigationView = {
 
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
-    postActionsWrapper: document.getElementById('postActionsWrapper'),
+    postFormsWrapper: document.getElementById('postFormsWrapper'),
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
@@ -381,13 +381,13 @@ const NavigationView = {
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
-            NavigationView.postActionsWrapper.classList.add('hidden');
+            NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },  
     
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
-            NavigationView.postActionsWrapper.classList.remove('hidden');
+            NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
             AlbumView.grid.classList.add('hidden');
@@ -397,12 +397,12 @@ const NavigationView = {
         we still allow them to do so, and hide the post-view */
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.grid.classList.remove('hidden');
-            NavigationView.postActionsWrapper.classList.add('hidden');
+            NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
         SearchView.searchButton.addEventListener('click', function(){
             ArtistView.grid.classList.remove('hidden');
-            NavigationView.postActionsWrapper.classList.add('hidden');
+            NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
 }
