@@ -211,12 +211,6 @@ const PostModel = {
             spotifyURL: PostView.artistForm.spotify.value,
             coverImage: PostView.artistForm.image.value
         }
-        
-        for(var input in artist){
-            /* Currently only checks if input is empty
-            But doesn't stop the user from sending empty stuff yet */
-            InputController.checkIfValidUserInput(input);
-        }
 
         fetch(`${baseUrl}/artists?${apiKey}`,{
             method: 'POST',
