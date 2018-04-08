@@ -405,7 +405,7 @@ const PostView = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
-FetchModel.fetchAll('albums');
+FetchModel.fetchAll('artists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
