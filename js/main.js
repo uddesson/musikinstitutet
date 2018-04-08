@@ -373,6 +373,8 @@ const PostView = {
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
         addAlbumAction = document.getElementById('addAlbumAction')
+    ],
+
     buttons: [
         addArtistButton = document.getElementById('addArtistButton')
     ],
