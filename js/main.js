@@ -197,7 +197,6 @@ const TestModel = {
 const PostModel = {
     // TO DO:
     // * Add validation/check-functions so user sends correct stuff
-    // * Add tracks
     // * Add playlists
 
     addArtist(){
@@ -223,6 +222,7 @@ const PostModel = {
           .then((artist) => {
             console.log(artist);
           });
+    },
 
     addAlbum(){
         
@@ -248,6 +248,27 @@ const PostModel = {
             console.log(album);
           });
     },
+
+    addTrack(){
+
+        let track = {
+            title: PostView.trackForm.title.value,
+            artists: PostView.trackForm.artists.value,
+            album: PostView.trackForm.albums.value
+        }
+
+        fetch(`${baseUrl}/tracks?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(track),
+          })
+          .then((response) => response.json())
+          .then((postedTrack) => {
+            console.log(postedTrack);
+          });
     }
 }
 
@@ -411,6 +432,7 @@ const PostView = {
             PostModel.addArtist();
         })
         addAlbumButton: document.getElementById('addAlbumButton'),
+        addTrackButton: document.getElementById('addTrackButton')
     },
 
     artistForm: {
@@ -431,10 +453,21 @@ const PostView = {
         spotify: document.getElementById('albumSpotifyUrl'),
         image: document.getElementById('artistImage')
     },
+    trackForm: {
+        title: document.getElementById('trackTitle'),
+        artists: document.getElementById('trackArtist'),
+        albums: document.getElementById('trackAlbum'),
+    },
         // Eventlistener that triggers add ALBUM
         PostView.buttons.addAlbumButton.addEventListener('click', function(event){
             event.preventDefault();
             PostModel.addAlbum();
+        })
+        
+        // Eventlistener that triggers add TRACK
+        PostView.buttons.addTrackButton.addEventListener('click', function(event){
+            event.preventDefault();
+            PostModel.addTrack();
         })
     }
 }
