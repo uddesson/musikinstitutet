@@ -197,8 +197,6 @@ const TestModel = {
 const PostModel = {
     // TO DO:
     // * Add validation/check-functions so user sends correct stuff
-    // * Add tracks
-    // * Add albums
     // * Add playlists
 
     addArtist(){
@@ -223,6 +221,53 @@ const PostModel = {
           .then((response) => response.json())
           .then((artist) => {
             console.log(artist);
+          });
+    },
+
+    addAlbum(){
+        
+        let album = {
+            title: PostView.albumForm.title.value,
+            artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
+            releaseDate: PostView.albumForm.year.value,
+            genres: PostView.albumForm.genres.value.replace(" ", ""),
+            spotifyURL: PostView.albumForm.spotify.value,
+            coverImage: PostView.albumForm.image.value
+        }
+
+        fetch(`${baseUrl}/albums?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(album),
+          })
+          .then((response) => response.json())
+          .then((album) => {
+            console.log(album);
+          });
+    },
+
+    addTrack(){
+
+        let track = {
+            title: PostView.trackForm.title.value,
+            artists: PostView.trackForm.artists.value,
+            album: PostView.trackForm.albums.value
+        }
+
+        fetch(`${baseUrl}/tracks?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(track),
+          })
+          .then((response) => response.json())
+          .then((postedTrack) => {
+            console.log(postedTrack);
           });
     }
 }
@@ -371,21 +416,10 @@ const PostView = {
         addAlbumAction = document.getElementById('addAlbumAction')
     ],
 
-    buttons: [
-        addArtistButton = document.getElementById('addArtistButton')
-    ],
-
-    createEventListener(){
-        for (var action of PostView.actions){
-            action.addEventListener('click', function(){
-                this.nextElementSibling.classList.toggle('hidden'); 
-            });
-        }
-
-        PostView.buttons[0].addEventListener('click', function(event){
-            event.preventDefault(); // Stop page from refreshing on click
-            PostModel.addArtist();
-        })
+    buttons: {
+        addArtistButton: document.getElementById('addArtistButton'),
+        addAlbumButton: document.getElementById('addAlbumButton'),
+        addTrackButton: document.getElementById('addTrackButton')
     },
 
     artistForm: {
@@ -396,6 +430,47 @@ const PostView = {
         country: document.getElementById('artistBorn'),
         spotify: document.getElementById('artistSpotifyUrl'),
         image: document.getElementById('artistImage')
+    },
+
+    albumForm: {
+        title: document.getElementById('albumTitle'),
+        artists: document.getElementById('albumArtist'),
+        genres: document.getElementById('albumGenre'),
+        year: document.getElementById('albumReleaseYear'),
+        spotify: document.getElementById('albumSpotifyUrl'),
+        image: document.getElementById('artistImage')
+    },
+
+    trackForm: {
+        title: document.getElementById('trackTitle'),
+        artists: document.getElementById('trackArtist'),
+        albums: document.getElementById('trackAlbum'),
+    },
+
+    createEventListeners(){
+        for (var action of PostView.actions){
+            action.addEventListener('click', function(){
+                this.nextElementSibling.classList.toggle('hidden'); 
+            });
+        }
+
+        // Eventlistener that triggers add ARTIST
+        PostView.buttons.addArtistButton.addEventListener('click', function(event){
+            event.preventDefault(); // Stop page from refreshing on click
+            PostModel.addArtist();
+        })
+        
+        // Eventlistener that triggers add ALBUM
+        PostView.buttons.addAlbumButton.addEventListener('click', function(event){
+            event.preventDefault();
+            PostModel.addAlbum();
+        })
+        
+        // Eventlistener that triggers add TRACK
+        PostView.buttons.addTrackButton.addEventListener('click', function(event){
+            event.preventDefault();
+            PostModel.addTrack();
+        })
     }
 }
 
@@ -404,6 +479,8 @@ const PostView = {
  *******************************************************/
 
 FetchModel.fetchAll('artists');
+FetchModel.fetchAll('albums');
+FetchModel.fetchAll('tracks');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
@@ -411,5 +488,5 @@ NavigationView.enablePostView();
 NavigationView.enableHomeView();
 
 // TO DO: Maybe make creating eventlisteners self-invoked?
-PostView.createEventListener(); 
+PostView.createEventListeners(); 
 SearchController.createEventListener();
