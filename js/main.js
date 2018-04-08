@@ -416,21 +416,9 @@ const PostView = {
         addAlbumAction = document.getElementById('addAlbumAction')
     ],
 
-    buttons: [
-        addArtistButton = document.getElementById('addArtistButton')
-    ],
-
     createEventListener(){
-        for (var action of PostView.actions){
-            action.addEventListener('click', function(){
-                this.nextElementSibling.classList.toggle('hidden'); 
-            });
-        }
-
-        PostView.buttons[0].addEventListener('click', function(event){
-            event.preventDefault(); // Stop page from refreshing on click
-            PostModel.addArtist();
-        })
+    buttons: {
+        addArtistButton: document.getElementById('addArtistButton'),
         addAlbumButton: document.getElementById('addAlbumButton'),
         addTrackButton: document.getElementById('addTrackButton')
     },
@@ -453,11 +441,25 @@ const PostView = {
         spotify: document.getElementById('albumSpotifyUrl'),
         image: document.getElementById('artistImage')
     },
+
     trackForm: {
         title: document.getElementById('trackTitle'),
         artists: document.getElementById('trackArtist'),
         albums: document.getElementById('trackAlbum'),
     },
+
+        for (var action of PostView.actions){
+            action.addEventListener('click', function(){
+                this.nextElementSibling.classList.toggle('hidden'); 
+            });
+        }
+
+        // Eventlistener that triggers add ARTIST
+        PostView.buttons.addArtistButton.addEventListener('click', function(event){
+            event.preventDefault(); // Stop page from refreshing on click
+            PostModel.addArtist();
+        })
+        
         // Eventlistener that triggers add ALBUM
         PostView.buttons.addAlbumButton.addEventListener('click', function(event){
             event.preventDefault();
