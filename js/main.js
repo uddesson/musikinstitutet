@@ -282,7 +282,7 @@ const PostModel = {
                 console.log(postedTrack);
             });
 
-            StatusView.showStatusMessage(location, "Success")
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
     }
 }
