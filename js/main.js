@@ -467,10 +467,6 @@ FetchModel.fetchAll('tracks');
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
 
-<<<<<<< HEAD
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-=======
 // TO DO: Maybe make creating eventlisteners self-invoked?
 PostView.createEventListeners(); 
 SearchController.createEventListener();
->>>>>>> master
