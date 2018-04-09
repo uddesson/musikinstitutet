@@ -458,19 +458,15 @@ const PostView = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
-FetchModel.fetchAll('artists');
+//FetchModel.fetchAll('artists');
 FetchModel.fetchAll('albums');
-FetchModel.fetchAll('tracks');
+//FetchModel.fetchAll('tracks');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
 
-<<<<<<< HEAD
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-=======
 // TO DO: Maybe make creating eventlisteners self-invoked?
 PostView.createEventListeners(); 
 SearchController.createEventListener();
->>>>>>> master
