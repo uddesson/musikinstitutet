@@ -299,16 +299,10 @@ const PostModel = {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 const SearchView = {
     searchButton: document.getElementById('searchButton'),
     searchInput: document.getElementById('searchInput'),
     output: document.getElementById('searchOutput'),
->>>>>>> master
-
-	const SearchView = {
-		output: document.getElementById('searchOutput'),
 
 		displayTracks(tracks){
 			const ul = document.createElement('ul');
@@ -474,10 +468,6 @@ FetchModel.fetchAll('tracks');
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
 
-<<<<<<< HEAD
-//FetchModel.fetchOne('albums', '5aae2dd4b9791d0344d8f719');
-=======
 // TO DO: Maybe make creating eventlisteners self-invoked?
 PostView.createEventListeners(); 
 SearchController.createEventListener();
->>>>>>> master
