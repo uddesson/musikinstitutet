@@ -304,18 +304,15 @@ const PostModel = {
 	const AlbumView = {
 		grid: document.getElementById('grid'),
 		displayAlbum(album){
+			
+		let albumArtists = album.artists.map((artist) => artist.name);
 
-			let albumArtists = '';
-			for (artists of album.artists){
-				albumArtists += artists.name;
-			}
-
-			let albumDiv = document.createElement('div');
-			albumDiv.innerHTML = `
-				<h3>${album.title}</h3> 
-				by <h4>${albumArtists}</h4>
-				<p>Genres: ${album.genres}</p>`;
-			AlbumView.grid.appendChild(albumDiv);
+		let albumDiv = document.createElement('div');
+		albumDiv.innerHTML = `
+			<h3>${album.title}</h3><br>
+			<h4>${albumArtists}</h4>
+			<p>Genres: ${album.genres}</p>`;
+		AlbumView.grid.appendChild(albumDiv);
 		}
 	}
 	
@@ -331,7 +328,9 @@ const PostModel = {
 		}
 	}
 
+	
 const SearchView = {
+	
     searchButton: document.getElementById('searchButton'),
     searchInput: document.getElementById('searchInput'),
     output: document.getElementById('searchOutput'),
@@ -423,7 +422,7 @@ const NavigationView = {
 
 const PostView = { 
     
-    menuActions: [
+    actions: [
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
         addAlbumAction = document.getElementById('addAlbumAction')
@@ -461,7 +460,7 @@ const PostView = {
     },
 
     createEventListeners(){
-        for (var action of PostView.menuActions){
+        for (var action of PostView.actions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
             });
