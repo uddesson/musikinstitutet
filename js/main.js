@@ -95,13 +95,6 @@ const GenderController = {
 }
 
 
-
-//TEMPORARY VARIABLES FOR FETCH URL
-let id = '5aae2dd4b9791d0344d8f719';
-let category = 'albums';
-let searchQuery = 'shakira';
-
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
@@ -123,7 +116,7 @@ const FetchModel = {
             apiKey += '&populateArtists=true';
         }
         
-		return fetch(`${baseUrl}/${category}?${apiKey}`)
+		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}`)
             .then(response => response.json())
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
@@ -272,15 +265,14 @@ const PostModel = {
 	const AlbumView = {
 		grid: document.getElementById('grid'),
 		displayAlbum(album){
-			
-		let albumArtists = album.artists.map((artist) => artist.name);
+			let albumArtists = album.artists.map((artist) => artist.name);
 
-		let albumDiv = document.createElement('div');
-		albumDiv.innerHTML = `
-			<h3>${album.title}</h3><br>
-			<h4>${albumArtists}</h4>
-			<p>Genres: ${album.genres}</p>`;
-		AlbumView.grid.appendChild(albumDiv);
+			let albumDiv = document.createElement('div');
+			albumDiv.innerHTML = `
+				<h3>${album.title}</h3><br>
+				<h4>${albumArtists}</h4>
+				<p>Genres: ${album.genres}</p>`;
+			AlbumView.grid.appendChild(albumDiv);
 		}
 	}
 	
@@ -288,10 +280,12 @@ const PostModel = {
 		grid: document.getElementById('grid'),
 
 		displayTrack(track){
+			let trackArtists = track.artists.map((artist) => artist.name);
+			
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
-				<h3>${track.title}</h3> 
-				by <h4>${track.artists}</h4>;`
+				<h3>${track.title}</h3><br>
+				<h4>by ${trackArtists}</h4>`;
 				TrackView.grid.appendChild(trackDiv);
 		}
 	}
