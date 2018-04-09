@@ -21,7 +21,7 @@
             </li>
             <li>
                 <!-- Temporary inline-styles. Remove later -->
-                <h2 style="text-decoration: underline; cursor: pointer;">Playlists</h2>
+                <h2 id="playlists" style="text-decoration: underline; cursor: pointer;">Playlists</h2>
             </li>
             <li>
                 <!-- Temporary inline-styles. Remove later -->
@@ -35,103 +35,126 @@
         <!--Generated with JS-->
     </div>
         
-    
-    <div class="grid" id="grid">
-        <!--Generated with JS-->
+    <div class="container" id="container">
+       <div class="container__inner" id="containerInner">
+        	<!--Generated with JS-->
+        </div>
     </div>
 
     
-    <div id="postActionsWrapper" class="wrapper hidden">
-
+    <div id="postFormsWrapper" class="wrapper hidden">
+        
         <!-- Temporary inline-styles here should be REMOVED later -->
         <h2 id="addArtistAction" style="text-decoration: underline; color: pink; cursor: pointer;">Add Artist</h2>
         
+        <!-- Add artist-form -->
+        <form class="hidden" style="border: 2px dashed pink";>
+            <h3>Full Artist Name</h3>
+            <label for="artistName" class="hidden">Full Artist Name</label>
+            <input id="artistName" type="text" placeholder="Janelle Monáe">
 
-        <form id="addArtist" class="hidden" style="border: 2px dashed pink";>
-            <h3>Name</h3>
-            <input id="artistName" type="text" placeholder="Name">
-
-            <h3>Born</h3>
+            <h3>Born (YYYY-MM-DD)</h3>
+            <label for="artistBorn" class="hidden">Born (YYYY-MM-DD)</label>
             <input id="artistBorn" type="text" placeholder="1985-12-01">
 
-            <h3>Gender</h3>
-            <input type="radio" name="gender" value="male">Male ... ?<br>
-            <input type="radio" name="gender" value="female">Female<br>
-            <input type="radio" name="gender" value="other">Other
+            <h3>Gender (Female, Male or Other)</h3>
+            <label for="artistGender" class="hidden">Gender</label>
+            <input id="artistGender" type="text" placeholder="Female">
             
-            <h3>Genre</h3>
-            <input id="artistGenre" type="text" placeholder="Neo soul, R&B, Funk, Art rock, Dance-punk">
+            <h3>Genres</h3>
+            <label for="artistGenre" class="hidden">Genres</label>
+            <input id="artistGenre" type="text" placeholder="Funk, Soul, Dance Punk">
 
             <h3>Country born</h3>
-            <input id="countryBorn" type="text" placeholder="USA">
+            <label for="artistBorn" class="hidden">Country</label>
+            <input id="artistBorn" type="text" placeholder="USA">
 
-            <h3>Spotify Artist-link</h3>
+            <h3>Spotify-link to artist</h3>
+            <label for="artistSpotifyUrl" class="hidden">Spotify-link to artist</label>
             <input id="artistSpotifyUrl" type="text" placeholder="https://open.spotify.com/artist/6ueGR6SWhUJfvEhqkvMsVs?si=WeP6uqT5SIaLV4rZpuIBuA">
             
             <h3>Link to image of artist</h3>
+            <label for="artistImage" class="hidden">Link to image of artist</label>
             <input id="artistImage" type="text" placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Janelle_Mon%C3%A1e_2016.jpg/1024px-Janelle_Mon%C3%A1e_2016.jpg">
-        </form>
+            <br>
+            <input type="submit" id="addArtistButton" value="Add Artist">
 
-        <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen; cursor: pointer;">Add Track</h2>
-
-        <form id="addTrack" class="hidden" style="border: 2px dashed lightgreen";>
-            <h3>Title</h3>
-            <input id="trackTitle" type="text" placeholder="Title of track">
-
-            <h3>Artist</h3>
-            <h4>Obs namn måste få ett ID, så vi behöver kolla om artisten finns + hämta id</h4>
-            <input id="trackArtist" type="text" placeholder="Artist">
-
-            <h3>Album</h3>
-            <input id="trackArtist" type="text" placeholder="Albumtitle">
-
-            <h3>Genres</h3>
-            <input id="trackGenre" type="text" placeholder="RnB, Pop">
-
-            <h3>Link to coverimage</h3>
-            <input id="trackCover" type="text" placeholder="url to img">
-
-            <h3>Link to Spotify</h3>
-            <input id="trackSpotifyUrl" type="text" placeholder="link spotify">
-
-            <h3>Link to YouTube</h3>
-            <input id="trackYoutubeUrl" type="text" placeholder="link youtube">
-
-            <h3>Link to SoundCloud</h3>
-            <input id="trackSoundCloudUrl" type="text" placeholder="link url">
-
-            <h3>Add to existing playlist</h3>        
-            <input id="playlistSearchInput" type="text" placeholder="User starts typing (searches) and playlists will appear.. ?">
-            <button id="addToPlaylistButton">Add album to playlist</button> 
+            <div id="addedArtistStatus" class="status hidden">
+                <p id="statusMessage">
+                    <!-- Generated by js -->
+                </p>
+            </div>
         </form>
 
         <!-- Temporary inline-styles here should be REMOVED later -->
         <h2 id="addAlbumAction" style="text-decoration: underline; color: lightblue; cursor: pointer;">Add Album</h2>
 
-        <form id="addAlbum" class="hidden" style="border: 2px dashed lightblue";>
-            <h3>Title</h3>
-            <input id="albumTitle" type="text" placeholder="Album-title">
+        <!-- Add album-form -->
+        <form class="hidden" style="border: 2px dashed lightblue";>
+            <h3>Album Title</h3>
+            <label for="albumTitle" class="hidden">Album Title</label>
+            <input id="albumTitle" type="text" placeholder="The Electric Lady" >
 
-            <h3>Artist</h3>
-            <input id="albumArtist" type="text" placeholder="Name (check)">
-            
-            <h3>Tracks</h3>
-            <input id="albumTracks" type="text" placeholder="Title of one track, Title of another track">
+            <h3>Album Artist</h3>
+            <label for="albumArtist" class="hidden">Album Artist</label>
+            <input id="albumArtist" type="text" placeholder="Janelle Monáe">
 
             <h3>Genres</h3>
-            <input id="albumGenre" type="text" placeholder="Indie, RnB">
+            <label for="albumGenre" class="hidden">Genres</label>
+            <input id="albumGenre" type="text" placeholder="Funk, Dance, Soul">
 
             <h3>Releaseyear</h3>
-            <input id="releaseDate" type="text" placeholder="2012">
+            <label for="albumReleaseYear" class="hidden">Releaseyear</label>
+            <input id="albumReleaseYear" type="text" placeholder="2013">
+
+            <h3>Spotify-link to album</h3>
+            <label for="albumSpotifyUrl" class="hidden">Spotify-link to album</label>
+            <input id="albumSpotifyUrl" type="text" placeholder="https://open.spotify.com/album/3bnHtSmmsgJiG82hGCmsq9?si=c3Pa0Ut7TaOvk8VXV16BOw">
+
+            <h3>Link to Album Cover</h3>
+            <label for="albumCoverUrl" class="hidden">Link to Album Cover</label>
+            <input id="albumCoverUrl" type="text" placeholder="https://images.genius.com/bcf7f8beab6a3819dd4017f0c25ef27e.750x750x1.jpg">
+            <br>
+            <input type="submit" id="addAlbumButton" value="Add Album">
+
+            <div id="addedAlbumStatus" class="status hidden">
+                <p id="statusMessage">
+                    <!-- Generated by js -->
+                </p>
+            </div>
         </form>
 
         <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addPlaylistAction" style="text-decoration: line-through; color: lightgrey;">Add Playlist</h2>
-        
-        <!-- Nothing here yet -->
-        
-    </div> 
+        <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen; cursor: pointer;">Add Track</h2>
+
+        <!-- Add track-form -->
+        <form class="hidden" style="border: 2px dashed lightgreen";>
+            <h3>Track title</h3>
+            <label for="trackTitle" class="hidden">Track title</label>
+            <input id="trackTitle" type="text" placeholder="Dance Apocalyptic">
+
+            <h3>Artist</h3>
+            <label for="trackArtist" class="hidden">Artist</label>
+            <input id="trackArtist" type="text" placeholder="Janelle Monáe">
+
+            <h3>Album</h3>
+            <label for="trackAlbum" class="hidden">Album</label>
+            <input id="trackAlbum" type="text" placeholder="Electric Lady">
+            <br>
+            <input type="submit" id="addTrackButton" value="Add Track">
+            
+            <div id="addedTrackStatus" class="status hidden">
+                <p id="statusMessage">
+                    <!-- Generated by js -->
+                </p>
+            </div>
+        </form>
+    </div> <!-- Closes postFormsWrapper-->
+
+    <div id="playlistWrapper" class="wrapper hidden">
+        <h2>Massa playlists här wooow</h2>
+        <!-- Generated by js -->
+    </div>
     
     <script src="js/main.js"></script>
 </body>
