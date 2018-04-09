@@ -277,7 +277,8 @@ const PostModel = {
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
 					<h3>${artist.name}</h3>
-					<p>Genres: ${artist.genres}</p>`;
+					<p>Genres: ${artist.genres}</p>
+					<button id="delete">Delete</button>`;
 			ArtistView.containerInner.appendChild(artistDiv);
 		}
 	}
