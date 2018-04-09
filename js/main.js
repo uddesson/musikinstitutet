@@ -137,7 +137,6 @@ const FetchModel = {
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
-				console.log(response);
 				ResponseController.sortResponseByCategory(category, response);
 			})
 			.catch(error => console.log(error));
