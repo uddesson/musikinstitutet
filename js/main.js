@@ -122,10 +122,10 @@ const FetchModel = {
 	
 	fetchAll(category){
         if(category == 'albums'){
-            apiKey += '&populateArtists=true';
+            apiKey += '&populateArtists=true&sort=desc';
         }
         
-		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}`)
+		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}&sort=desc`)
             .then(response => response.json())
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
@@ -134,6 +134,7 @@ const FetchModel = {
 			})
 			.catch(error => console.log(error));
         },
+        
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
