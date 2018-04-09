@@ -199,7 +199,8 @@ const PostModel = {
         }
 
         if (InputController.formFieldsAreEmpty(artist)){
-            console.log('Have you filled out all the fields?')
+            let location = document.getElementById('addedArtistStatus');
+            StatusView.showStatusMessage(location, "Empty");
         }
 
         else {
@@ -215,6 +216,8 @@ const PostModel = {
             .then((artist) => {
                 console.log(artist);
             });
+            
+            StatusView.showStatusMessage("Success")
         }
     },
 
@@ -229,7 +232,8 @@ const PostModel = {
         }
 
         if (InputController.formFieldsAreEmpty(album)){
-            console.log('Have you filled out all the fields?')
+            let location = document.getElementById('addedAlbumStatus');
+            StatusView.showStatusMessage(location, "Empty")
         }
 
         else {
@@ -243,8 +247,10 @@ const PostModel = {
                 })
                 .then((response) => response.json())
                 .then((album) => {
-                    console.log('You sent in:', album);
-                });
+                    console.log(album);
+                })
+
+            StatusView.showStatusMessage("Success")
         }
     },
 
@@ -256,7 +262,8 @@ const PostModel = {
         }
 
         if (InputController.formFieldsAreEmpty(track)){
-            console.log('Have you filled out all the fields?')
+            let location = document.getElementById('addedTrackStatus');
+            StatusView.showStatusMessage(location, "Empty");
         }
 
         else {
@@ -272,6 +279,7 @@ const PostModel = {
             .then((postedTrack) => {
                 console.log(postedTrack);
             });
+
         }
     }
 }
@@ -476,6 +484,28 @@ const PostView = {
             event.preventDefault();
             PostModel.addTrack();
         })
+    }
+}
+
+
+const StatusView = {
+    statusMessage: document.getElementById('statusMessage'),
+
+    /* Takes to params, location should be the div where you want to put the error message
+    and status should be a string that fits one of the switch-cases */
+    showStatusMessage(location, status){
+        switch (status) {
+            case "Empty":
+            StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
+            break;
+
+            case "Success":
+            StatusView.statusMessage.innerText = "Nice, it worked!";
+            break;
+        }
+        
+        location.appendChild(StatusView.statusMessage);
+        location.classList.remove('hidden');
     }
 }
 
