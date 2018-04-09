@@ -35,15 +35,24 @@ const baseUrl = `https://folksa.ga/api`;
 
 const InputController = {
     
-    // Run to check if user tried so input empty string
-    checkIfValidUserInput(input){
-        if (input.trim() == ''){
-            return true;
-    
+    inputIsEmptySpace(singleInput){
+        if (singleInput.trim() == ''){
+            return true; // The input was just space :(
         } else {
-            // Run some error-view
-            console.log('user tried to input empty space')
             return;
+        }
+    },
+
+    formFieldsAreEmpty(form){
+        for (var field in form) {
+            if (form.hasOwnProperty(field)) {
+                if(form[field] === '' || undefined){
+                    return true;
+                }
+                else if(InputController.inputIsEmptySpace(form[field])){
+                    return true;
+                }
+            }
         }
     }
 }
@@ -128,7 +137,6 @@ const FetchModel = {
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
-				console.log(response);
 				ResponseController.sortResponseByCategory(category, response);
 			})
 			.catch(error => console.log(error));
@@ -157,30 +165,11 @@ const FetchModel = {
 	}
 };
 
-
-// TestModel can be removed when project is finished
-const TestModel = {
-    
-    /* Used to console.log several things at once - for testing purposes */
-    logInfo(element){ 
-        console.group("Console Log shows:");
-        console.log('id:', element._id);
-        console.log('Name:', element.name);
-        console.log('Gender:', element.gender);
-        console.log('Genres:', element.genres);
-        console.log('Albums:', element.albums);
-        console.groupEnd();
-    }
-}
-
-
 const PostModel = {
     // TO DO:
-    // * Add validation/check-functions so user sends correct stuff
     // * Add playlists
 
     addArtist(){
-
         let artist = {
             name: PostView.artistForm.name.value,
             born: PostView.artistForm.born.value,
@@ -190,22 +179,31 @@ const PostModel = {
             coverImage: PostView.artistForm.image.value
         }
 
-        fetch(`${baseUrl}/artists?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(artist)
-          })
-          .then((response) => response.json())
-          .then((artist) => {
-            console.log(artist);
-          });
+        let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
+
+        if (InputController.formFieldsAreEmpty(artist)){
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+        }
+
+        else {
+            fetch(`${baseUrl}/artists?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(artist)
+            })
+            .then((response) => response.json())
+            .then((artist) => {
+                console.log(artist);
+            });
+            
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+        }
     },
 
     addAlbum(){
-        
         let album = {
             title: PostView.albumForm.title.value,
             artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
@@ -215,40 +213,59 @@ const PostModel = {
             coverImage: PostView.albumForm.image.value
         }
 
-        fetch(`${baseUrl}/albums?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(album),
-          })
-          .then((response) => response.json())
-          .then((album) => {
-            console.log(album);
-          });
+        let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
+
+        if (InputController.formFieldsAreEmpty(album)){
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty")
+        }
+
+        else {
+            fetch(`${baseUrl}/albums?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(album),
+                })
+                .then((response) => response.json())
+                .then((album) => {
+                    console.log(album);
+                })
+
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+        }
     },
 
     addTrack(){
-
         let track = {
             title: PostView.trackForm.title.value,
             artists: PostView.trackForm.artists.value,
             album: PostView.trackForm.albums.value
         }
 
-        fetch(`${baseUrl}/tracks?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(track),
-          })
-          .then((response) => response.json())
-          .then((postedTrack) => {
-            console.log(postedTrack);
-          });
+        let locationForDisplayingStatus = document.getElementById('addedTrackStatus');
+
+        if (InputController.formFieldsAreEmpty(track)){
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+        }
+
+        else {
+            fetch(`${baseUrl}/tracks?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(track),
+            })
+            .then((response) => response.json())
+            .then((postedTrack) => {
+                console.log(postedTrack);
+            });
+
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+        }
     }
 }
 
@@ -418,7 +435,7 @@ const PostView = {
         genres: document.getElementById('albumGenre'),
         year: document.getElementById('albumReleaseYear'),
         spotify: document.getElementById('albumSpotifyUrl'),
-        image: document.getElementById('artistImage')
+        image: document.getElementById('albumCoverUrl')
     },
 
     trackForm: {
@@ -451,6 +468,28 @@ const PostView = {
             event.preventDefault();
             PostModel.addTrack();
         })
+    }
+}
+
+
+const StatusView = {
+    statusMessage: document.getElementById('statusMessage'),
+
+    /* Takes to params, location should be the div where you want to put the error message
+    and status should be a string that fits one of the switch-cases */
+    showStatusMessage(location, status){
+        switch (status) {
+            case "Empty":
+            StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
+            break;
+
+            case "Success":
+            StatusView.statusMessage.innerText = "Nice, it worked!";
+            break;
+        }
+        
+        location.appendChild(StatusView.statusMessage);
+        location.classList.remove('hidden');
     }
 }
 
