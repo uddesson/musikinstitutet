@@ -35,15 +35,24 @@ const baseUrl = `https://folksa.ga/api`;
 
 const InputController = {
     
-    // Run to check if user tried so input empty string
-    checkIfValidUserInput(input){
-        if (input.trim() == ''){
-            return true;
-    
+    inputIsEmptySpace(singleInput){
+        if (singleInput.trim() == ''){
+            return true; // The input was just space :(
         } else {
-            // Run some error-view
-            console.log('user tried to input empty space')
             return;
+        }
+    },
+
+    formFieldsAreEmpty(form){
+        for (var field in form) {
+            if (form.hasOwnProperty(field)) {
+                if(form[field] === '' || undefined){
+                    return true;
+                }
+                else if(InputController.inputIsEmptySpace(form[field])){
+                    return true;
+                }
+            }
         }
     }
 }
@@ -176,7 +185,6 @@ const TestModel = {
 
 const PostModel = {
     // TO DO:
-    // * Add validation/check-functions so user sends correct stuff
     // * Add playlists
 
     addArtist(){
@@ -190,22 +198,27 @@ const PostModel = {
             coverImage: PostView.artistForm.image.value
         }
 
-        fetch(`${baseUrl}/artists?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(artist)
-          })
-          .then((response) => response.json())
-          .then((artist) => {
-            console.log(artist);
-          });
+        if (InputController.formFieldsAreEmpty(artist)){
+            console.log('Have you filled out all the fields?')
+        }
+
+        else {
+            fetch(`${baseUrl}/artists?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(artist)
+            })
+            .then((response) => response.json())
+            .then((artist) => {
+                console.log(artist);
+            });
+        }
     },
 
     addAlbum(){
-        
         let album = {
             title: PostView.albumForm.title.value,
             artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
@@ -215,40 +228,51 @@ const PostModel = {
             coverImage: PostView.albumForm.image.value
         }
 
-        fetch(`${baseUrl}/albums?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(album),
-          })
-          .then((response) => response.json())
-          .then((album) => {
-            console.log(album);
-          });
+        if (InputController.formFieldsAreEmpty(album)){
+            console.log('Have you filled out all the fields?')
+        }
+
+        else {
+            fetch(`${baseUrl}/albums?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(album),
+                })
+                .then((response) => response.json())
+                .then((album) => {
+                    console.log('You sent in:', album);
+                });
+        }
     },
 
     addTrack(){
-
         let track = {
             title: PostView.trackForm.title.value,
             artists: PostView.trackForm.artists.value,
             album: PostView.trackForm.albums.value
         }
 
-        fetch(`${baseUrl}/tracks?${apiKey}`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(track),
-          })
-          .then((response) => response.json())
-          .then((postedTrack) => {
-            console.log(postedTrack);
-          });
+        if (InputController.formFieldsAreEmpty(track)){
+            console.log('Have you filled out all the fields?')
+        }
+
+        else {
+            fetch(`${baseUrl}/tracks?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(track),
+            })
+            .then((response) => response.json())
+            .then((postedTrack) => {
+                console.log(postedTrack);
+            });
+        }
     }
 }
 
