@@ -104,13 +104,6 @@ const GenderController = {
 }
 
 
-
-//TEMPORARY VARIABLES FOR FETCH URL
-let id = '5aae2dd4b9791d0344d8f719';
-let category = 'albums';
-let searchQuery = 'shakira';
-
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
@@ -132,7 +125,7 @@ const FetchModel = {
             apiKey += '&populateArtists=true';
         }
         
-		return fetch(`${baseUrl}/${category}?${apiKey}`)
+		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}`)
             .then(response => response.json())
             // TODO: Get filterFetchByGender-function to work!!
 			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
@@ -275,41 +268,50 @@ const PostModel = {
  ******************************************************/
 
 	const ArtistView = {
-		grid: document.getElementById('grid'),
-
+		containerInner: document.getElementById('containerInner'),
+		
 		displayArtist(artist){
+			containerInner.classList.add('container__artists', 'grid');
+			
 			let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
-				<h3>${artist.name}</h3>
-				<p>Genres: ${artist.genres}</p>`;
-			ArtistView.grid.appendChild(artistDiv);
+					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
+					<h3>${artist.name}</h3>
+					<p>Genres: ${artist.genres}</p>`;
+			ArtistView.containerInner.appendChild(artistDiv);
 		}
 	}
 
 	const AlbumView = {
-		grid: document.getElementById('grid'),
+		containerInner: document.getElementById('containerInner'),
+		
 		displayAlbum(album){
-			
-		let albumArtists = album.artists.map((artist) => artist.name);
+			let albumArtists = album.artists.map((artist) => artist.name);
 
-		let albumDiv = document.createElement('div');
-		albumDiv.innerHTML = `
-			<h3>${album.title}</h3><br>
-			<h4>${albumArtists}</h4>
-			<p>Genres: ${album.genres}</p>`;
-		AlbumView.grid.appendChild(albumDiv);
+			containerInner.classList.add('container__albums', 'grid');
+			
+			let albumDiv = document.createElement('div');
+			albumDiv.innerHTML = `
+					<h3>${album.title}</h3><br>
+					<h4>${albumArtists}</h4>
+					<p>Genres: ${album.genres}</p>`;
+			AlbumView.containerInner.appendChild(albumDiv);
 		}
 	}
 	
 	const TrackView = {
-		grid: document.getElementById('grid'),
+		containerInner: document.getElementById('containerInner'),
 
 		displayTrack(track){
+			let trackArtists = track.artists.map((artist) => artist.name);
+			
+			containerInner.classList.add('container__tracks', 'list');
+			
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
-				<h3>${track.title}</h3> 
-				by <h4>${track.artists}</h4>;`
-				TrackView.grid.appendChild(trackDiv);
+				<h3>${track.title}</h3><br>
+				<h4>by ${trackArtists}</h4>`;
+			TrackView.containerInner.appendChild(trackDiv);
 		}
 	}
 
@@ -498,8 +500,8 @@ const StatusView = {
  *******************************************************/
 
 FetchModel.fetchAll('artists');
-FetchModel.fetchAll('albums');
-FetchModel.fetchAll('tracks');
+//FetchModel.fetchAll('albums');
+//FetchModel.fetchAll('tracks');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
