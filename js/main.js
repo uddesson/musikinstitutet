@@ -443,7 +443,7 @@ const PostView = {
         genres: document.getElementById('albumGenre'),
         year: document.getElementById('albumReleaseYear'),
         spotify: document.getElementById('albumSpotifyUrl'),
-        image: document.getElementById('artistImage')
+        image: document.getElementById('albumCoverUrl')
     },
 
     trackForm: {
