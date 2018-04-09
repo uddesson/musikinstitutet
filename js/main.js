@@ -410,7 +410,7 @@ const NavigationView = {
 
 const PostView = { 
     
-    actions: [
+    menuActions: [
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
         addAlbumAction = document.getElementById('addAlbumAction')
@@ -448,7 +448,7 @@ const PostView = {
     },
 
     createEventListeners(){
-        for (var action of PostView.actions){
+        for (var action of PostView.menuActions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
             });
