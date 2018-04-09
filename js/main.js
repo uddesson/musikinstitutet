@@ -299,16 +299,12 @@ const PostModel = {
 		}
 	}
 
-<<<<<<< HEAD
-=======
+	
 const SearchView = {
+	
     searchButton: document.getElementById('searchButton'),
     searchInput: document.getElementById('searchInput'),
     output: document.getElementById('searchOutput'),
->>>>>>> master
-
-	const SearchView = {
-		output: document.getElementById('searchOutput'),
 
 		displayTracks(tracks){
 			const ul = document.createElement('ul');
