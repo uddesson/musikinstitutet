@@ -188,7 +188,6 @@ const PostModel = {
     // * Add playlists
 
     addArtist(){
-
         let artist = {
             name: PostView.artistForm.name.value,
             born: PostView.artistForm.born.value,
@@ -198,9 +197,10 @@ const PostModel = {
             coverImage: PostView.artistForm.image.value
         }
 
+        let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
+
         if (InputController.formFieldsAreEmpty(artist)){
-            let location = document.getElementById('addedArtistStatus');
-            StatusView.showStatusMessage(location, "Empty");
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
         }
 
         else {
@@ -217,7 +217,7 @@ const PostModel = {
                 console.log(artist);
             });
             
-            StatusView.showStatusMessage("Success")
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
     },
 
@@ -231,9 +231,10 @@ const PostModel = {
             coverImage: PostView.albumForm.image.value
         }
 
+        let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
+
         if (InputController.formFieldsAreEmpty(album)){
-            let location = document.getElementById('addedAlbumStatus');
-            StatusView.showStatusMessage(location, "Empty")
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty")
         }
 
         else {
@@ -250,7 +251,7 @@ const PostModel = {
                     console.log(album);
                 })
 
-            StatusView.showStatusMessage("Success")
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
     },
 
@@ -261,9 +262,10 @@ const PostModel = {
             album: PostView.trackForm.albums.value
         }
 
+        let locationForDisplayingStatus = document.getElementById('addedTrackStatus');
+
         if (InputController.formFieldsAreEmpty(track)){
-            let location = document.getElementById('addedTrackStatus');
-            StatusView.showStatusMessage(location, "Empty");
+            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
         }
 
         else {
@@ -280,6 +282,7 @@ const PostModel = {
                 console.log(postedTrack);
             });
 
+            StatusView.showStatusMessage(location, "Success")
         }
     }
 }
