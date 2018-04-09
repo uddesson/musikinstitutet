@@ -166,23 +166,6 @@ const FetchModel = {
 	}
 };
 
-
-// TestModel can be removed when project is finished
-const TestModel = {
-    
-    /* Used to console.log several things at once - for testing purposes */
-    logInfo(element){ 
-        console.group("Console Log shows:");
-        console.log('id:', element._id);
-        console.log('Name:', element.name);
-        console.log('Gender:', element.gender);
-        console.log('Genres:', element.genres);
-        console.log('Albums:', element.albums);
-        console.groupEnd();
-    }
-}
-
-
 const PostModel = {
     // TO DO:
     // * Add playlists
