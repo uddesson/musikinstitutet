@@ -12,7 +12,7 @@ const baseUrl = `https://folksa.ga/api`;
     //The "general search"
     createEventListener (){
         searchInput.addEventListener('keyup', function(){
-            ArtistView.grid.innerHTML = "";
+            ArtistView.containerInner.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
@@ -315,6 +315,9 @@ const PostModel = {
 		}
 	}
 
+const PlayListView = {
+
+}
 	
 const SearchView = {
 	
@@ -370,37 +373,50 @@ const NavigationView = {
 
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
+    playlistsMenuAction: document.getElementById('playlists'),
     postFormsWrapper: document.getElementById('postFormsWrapper'),
+    playlistWrapper: document.getElementById('playlistWrapper'),
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
-            ArtistView.grid.classList.remove('hidden');
+            ArtistView.containerInner.classList.remove('hidden');
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
             NavigationView.postFormsWrapper.classList.add('hidden');
+            NavigationView.playlistWrapper.classList.add('hidden');
         });
     },  
     
-    enablePostView(){
-        NavigationView.contributeMenuAction.addEventListener('click', function(){
-            NavigationView.postFormsWrapper.classList.remove('hidden');
-
-            // Hide views ("page") or elements that should not be active
-            AlbumView.grid.classList.add('hidden');
+    enablePlaylistView(){
+        NavigationView.playlistsMenuAction.addEventListener('click', function(){
+            NavigationView.playlistWrapper.classList.remove('hidden');
+            
+            ArtistView.containerInner.classList.add('hidden');
+            NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
         /* If the user tries to search while on the contribute "page",
         we still allow them to do so, and hide the post-view */
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.grid.classList.remove('hidden');
+            ArtistView.containerInner.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
+    },
 
-        SearchView.searchButton.addEventListener('click', function(){
-            ArtistView.grid.classList.remove('hidden');
+    enablePostView(){
+        NavigationView.contributeMenuAction.addEventListener('click', function(){
+            NavigationView.postFormsWrapper.classList.remove('hidden');
+
+            // Hide views ("page") or elements that should not be active
+            AlbumView.containerInner.classList.add('hidden');
+            NavigationView.playlistWrapper.classList.add('hidden');
+        });
+
+        SearchView.searchInput.addEventListener('keyup', function(){
+            ArtistView.containerInner.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
@@ -507,6 +523,7 @@ FetchModel.fetchAll('artists');
 
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
+NavigationView.enablePlaylistView();
 
 // TO DO: Maybe make creating eventlisteners self-invoked?
 PostView.createEventListeners(); 
