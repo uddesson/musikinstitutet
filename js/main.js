@@ -10,9 +10,9 @@ const baseUrl = `https://folksa.ga/api`;
     searchInput: document.getElementById('searchInput'),
 
     //The "general search"
-    createEventListener (){
+    createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.innerHTML = "";
+            ArtistView.container.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
@@ -27,7 +27,7 @@ const baseUrl = `https://folksa.ga/api`;
             f ex SearchView.displayTracks(tracks);
             */
         });
-    }
+    })()
 
     //TO DO: the user should also be able to specify their search with specific genre
 }
@@ -294,50 +294,56 @@ const RatingModel = {
  ******************************************************/
 
 	const ArtistView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 		
 		displayArtist(artist){
-			containerInner.classList.add('container__artists', 'grid');
-			
 			let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
-					<h3>${artist.name}</h3>
+					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<p>Genres: ${artist.genres}</p>
 					<button id="delete">Delete</button>`;
+			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
+			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
 		}
 	}
 
 	const AlbumView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 		
 		displayAlbum(album){
 			let albumArtists = album.artists.map((artist) => artist.name);
-
-			containerInner.classList.add('container__albums', 'grid');
 			
 			let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
-					<h3>${album.title}</h3><br>
+					<img src="${album.coverImage}" alt="${album.title}" class="image">
+					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
+			
+			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
 		}
 	}
 	
 	const TrackView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
 			
-			containerInner.classList.add('container__tracks', 'list');
-			
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
-				<h3>${track.title}</h3><br>
+				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
 				<h4>by ${trackArtists}</h4>`;
+			
+			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
+			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
 		}
 	}
@@ -432,7 +438,7 @@ const NavigationView = {
         NavigationView.homeMenuAction.addEventListener('click', function(){
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
@@ -445,14 +451,14 @@ const NavigationView = {
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
             NavigationView.playlistContainer.classList.remove('hidden');
             
-            ArtistView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
         /* If the user tries to search while on the contribute "page",
         we still allow them to do so, and hide the post-view */
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
@@ -462,12 +468,12 @@ const NavigationView = {
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
-            AlbumView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.playlistContainer.classList.add('hidden');
         });
 
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
@@ -513,7 +519,7 @@ const PostView = {
         albums: document.getElementById('trackAlbum'),
     },
 
-    createEventListeners(){
+    createEventListeners: () => {
         for (var action of PostView.actions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
@@ -567,8 +573,8 @@ const StatusView = {
  *******************************************************/
 
 FetchModel.fetchAll('artists');
-//FetchModel.fetchAll('albums');
-//FetchModel.fetchAll('tracks');
+FetchModel.fetchAll('albums');
+FetchModel.fetchAll('tracks');
 FetchModel.fetchAll('playlists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
@@ -577,6 +583,5 @@ NavigationView.enablePostView();
 NavigationView.enableHomeView();
 NavigationView.enablePlaylistView();
 
-// TO DO: Maybe make creating eventlisteners self-invoked?
+// TO DO: Self invoke
 PostView.createEventListeners(); 
-SearchController.createEventListener();
