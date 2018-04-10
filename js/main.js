@@ -127,7 +127,7 @@ const FetchModel = {
 	
 	fetchAll(category){
         if(category == 'albums'){
-            apiKey += '&populateArtists=true&sort=desc';
+            apiKey += '&populateArtists=true';
         }
         
 		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}&sort=desc`)
