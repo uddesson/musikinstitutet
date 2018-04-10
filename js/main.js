@@ -205,7 +205,7 @@ const PostModel = {
     addAlbum(){
         let album = {
             title: PostView.albumForm.title.value,
-            artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
+            artists: PostView.albumForm.artists.value,
             releaseDate: PostView.albumForm.year.value,
             genres: PostView.albumForm.genres.value.replace(" ", ""),
             spotifyURL: PostView.albumForm.spotify.value,
@@ -352,8 +352,6 @@ const PlaylistView = {
     
     displayPlaylist(playlist){
         /* TO DO: 
-        * - Loop out tracks
-        * - Loop out artists
         * - Loop out comments
         * - Send along comments to a post-function
         */
