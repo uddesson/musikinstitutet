@@ -139,7 +139,7 @@ const FetchModel = {
 			})
 			.catch(error => console.log(error));
         },
-        
+
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
@@ -322,8 +322,28 @@ const PostModel = {
 		}
 	}
 
-const PlayListView = {
-
+const PlaylistView = {
+    
+    displayPlaylist(playlist){
+        /* TO DO: 
+        * - Loop out tracks
+        * - Loop out artists
+        * - Loop out comments
+        * - Send along comments to a post-function
+        */
+        
+        playlistContainer: document.getElementById('playlistContainer'),
+        playlistContainer.classList.add('container__playlists', 'list');
+        
+        let playlistDiv = document.createElement('div');
+        playlistDiv.innerHTML = `
+            <h3>${playlist.title}</h3><br>
+            <h4>Created by: ${playlist.createdBy}</h4>
+            <h4>Rating: ${playlist.ratings}</h4>
+            <h4>Number of cmments: ${playlist.comments.length}</h4>
+            <input type="text" placeholder="Add comment (not working)">`;
+        playlistContainer.appendChild(playlistDiv);
+    }
 }
 	
 const SearchView = {
@@ -526,6 +546,7 @@ const StatusView = {
 FetchModel.fetchAll('artists');
 //FetchModel.fetchAll('albums');
 //FetchModel.fetchAll('tracks');
+FetchModel.fetchAll('playlists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
