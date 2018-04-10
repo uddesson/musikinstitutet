@@ -10,7 +10,7 @@ const baseUrl = `https://folksa.ga/api`;
     searchInput: document.getElementById('searchInput'),
 
     //The "general search"
-    createEventListener (){
+    createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
             ArtistView.containerInner.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
@@ -27,7 +27,7 @@ const baseUrl = `https://folksa.ga/api`;
             f ex SearchView.displayTracks(tracks);
             */
         });
-    }
+    })()
 
     //TO DO: the user should also be able to specify their search with specific genre
 }
@@ -496,7 +496,7 @@ const PostView = {
         albums: document.getElementById('trackAlbum'),
     },
 
-    createEventListeners(){
+    createEventListeners: () => {
         for (var action of PostView.actions){
             action.addEventListener('click', function(){
                 this.nextElementSibling.classList.toggle('hidden'); 
@@ -560,6 +560,5 @@ NavigationView.enablePostView();
 NavigationView.enableHomeView();
 NavigationView.enablePlaylistView();
 
-// TO DO: Maybe make creating eventlisteners self-invoked?
+// TO DO: Self invoke
 PostView.createEventListeners(); 
-SearchController.createEventListener();
