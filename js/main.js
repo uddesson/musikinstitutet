@@ -8,28 +8,29 @@ const baseUrl = `https://folksa.ga/api`;
 
  const SearchController = {
     searchInput: document.getElementById('searchInput'),
+    container: document.getElementById('container'),
 
-    //The "general search"
     createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
-            ArtistView.container.innerHTML = "";
+            ArtistView.containerInner.innerHTML = "";
+            AlbumView.containerInner.innerHTML = "";
+            TrackView.containerInner.innerHTML = "";
+            //PlaylistView.containerInner.innerHTML = "";
+
             const searchQuery = document.getElementById('searchInput').value;
-            
-            /* Model
-            TO DO: store fetched data*/
+        
             FetchModel.fetchSearched('artists', searchQuery);
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
             FetchModel.fetchSearched('playlists', searchQuery);
 
-            /* View
-            TO DO: send fetched data to SearchView so user can see it
-            f ex SearchView.displayTracks(tracks);
-            */
+            //kolla genrena
+            FetchModel.fetchSpecificGenre('artists', searchQuery);
+            FetchModel.fetchSpecificGenre('tracks', searchQuery);
+            FetchModel.fetchSpecificGenre('albums', searchQuery);
+            FetchModel.fetchSpecificGenre('playlists', searchQuery);
         });
     })()
-
-    //TO DO: the user should also be able to specify their search with specific genre
 }
 
 
@@ -86,29 +87,6 @@ const ResponseController = {
     }
 }
 
-
-const GenderController = {
-
-    excludeMaleArtists(artists){
-        // console.log(artists)
-        let sorted = artists.filter(artist => artist.gender !== 'male');
-        // console.log(sorted)
-        return sorted;
-    },
-
-    filterFetchByGender(sortedArtists, fetchedArray){
-        console.log('albums:', fetchedArray)
-        
-        //TO DO: 
-        // * Filter them by gender
-        // * Return filtered results
-       
-        // let filtered = fetchedArray.filter(filtered => sortedArtists._id == fetchedArray.artists);    
-
-    }
-}
-
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
@@ -116,15 +94,6 @@ const GenderController = {
 
 const FetchModel = {
 
-    async fetchSortedArtists(){
-        await fetch(`${baseUrl}/artists?${apiKey}&limit=1000&sort=desc&`)
-            .then(response => response.json())
-            .then(response => {
-                return sortedArtists = GenderController.excludeMaleArtists(response)})     
-            .catch(error => console.log(error));      
-            
-    },
-	
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -132,8 +101,6 @@ const FetchModel = {
         
 		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}&sort=desc`)
             .then(response => response.json())
-            // TODO: Get filterFetchByGender-function to work!!
-			// .then(response => GenderController.filterFetchByGender(sortedArtists, response))
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
 			})
@@ -154,8 +121,16 @@ const FetchModel = {
             {
 			    title = 'name';
             }
-        
         return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
+            .then(response => response.json())
+            .then((response) => {
+                ResponseController.sortResponseByCategory(category, response);
+            })
+            .catch(error => console.log(error));
+    },
+    
+	fetchSpecificGenre(category, genre){
+        return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
@@ -588,8 +563,6 @@ FetchModel.fetchAll('artists');
 FetchModel.fetchAll('albums');
 FetchModel.fetchAll('tracks');
 FetchModel.fetchAll('playlists');
-
-// let sortedArtists = FetchModel.fetchSortedArtists();
 
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
