@@ -15,21 +15,13 @@ const baseUrl = `https://folksa.ga/api`;
             ArtistView.container.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
-            /* Model
-            TO DO: store fetched data*/
+        
             FetchModel.fetchSearched('artists', searchQuery);
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
             FetchModel.fetchSearched('playlists', searchQuery);
-
-            /* View
-            TO DO: send fetched data to SearchView so user can see it
-            f ex SearchView.displayTracks(tracks);
-            */
         });
     })()
-
-    //TO DO: the user should also be able to specify their search with specific genre
 }
 
 
@@ -156,6 +148,15 @@ const FetchModel = {
             }
         
         return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
+            .then(response => response.json())
+            .then((response) => {
+                ResponseController.sortResponseByCategory(category, response);
+            })
+            .catch(error => console.log(error));
+    },
+    
+	fetchSpecificGenre(category, genre){
+        return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
