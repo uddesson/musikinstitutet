@@ -12,7 +12,7 @@ const baseUrl = `https://folksa.ga/api`;
     //The "general search"
     createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.innerHTML = "";
+            ArtistView.container.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
@@ -415,7 +415,7 @@ const NavigationView = {
         NavigationView.homeMenuAction.addEventListener('click', function(){
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
@@ -428,14 +428,14 @@ const NavigationView = {
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
             NavigationView.playlistContainer.classList.remove('hidden');
             
-            ArtistView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
         /* If the user tries to search while on the contribute "page",
         we still allow them to do so, and hide the post-view */
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
@@ -445,12 +445,12 @@ const NavigationView = {
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
-            AlbumView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.playlistContainer.classList.add('hidden');
         });
 
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
