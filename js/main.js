@@ -76,6 +76,11 @@ const ResponseController = {
 				for (let track of response){
 					TrackView.displayTrack(track);
 				}
+            break;
+            case 'playlists':
+				for (let playlist of response){
+					PlaylistView.displayPlaylist(playlist);
+				}
 			break;
 		}
     }
@@ -134,7 +139,7 @@ const FetchModel = {
 			})
 			.catch(error => console.log(error));
         },
-        
+
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
@@ -317,8 +322,28 @@ const PostModel = {
 		}
 	}
 
-const PlayListView = {
-
+const PlaylistView = {
+    
+    displayPlaylist(playlist){
+        /* TO DO: 
+        * - Loop out tracks
+        * - Loop out artists
+        * - Loop out comments
+        * - Send along comments to a post-function
+        */
+        
+        playlistContainer: document.getElementById('playlistContainer'),
+        playlistContainer.classList.add('container__playlists', 'list');
+        
+        let playlistDiv = document.createElement('div');
+        playlistDiv.innerHTML = `
+            <h3>${playlist.title}</h3><br>
+            <h4>Created by: ${playlist.createdBy}</h4>
+            <h4>Rating: ${playlist.ratings}</h4>
+            <h4>Number of cmments: ${playlist.comments.length}</h4>
+            <input type="text" placeholder="Add comment (not working)">`;
+        playlistContainer.appendChild(playlistDiv);
+    }
 }
 	
 const SearchView = {
@@ -368,7 +393,8 @@ const SearchView = {
 
 const NavigationView = {
     /* TO DO:
-    * - Look over these functions and see if the can be ONE instead
+    * - Look over these functions and see if the can be ONE instead,
+    * - Or if they all should be replaced by innerHTML somehow
     * - While on the "contribute page" you can click the search button 
     * even if the input field has no value
     */
@@ -377,7 +403,7 @@ const NavigationView = {
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
     postFormsWrapper: document.getElementById('postFormsWrapper'),
-    playlistWrapper: document.getElementById('playlistWrapper'),
+    playlistContainer: document.getElementById('playlistContainer'),
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
@@ -388,13 +414,13 @@ const NavigationView = {
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistWrapper.classList.add('hidden');
+            NavigationView.playlistContainer.classList.add('hidden');
         });
     },  
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
-            NavigationView.playlistWrapper.classList.remove('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
             
             ArtistView.containerInner.classList.add('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
@@ -414,7 +440,7 @@ const NavigationView = {
 
             // Hide views ("page") or elements that should not be active
             AlbumView.containerInner.classList.add('hidden');
-            NavigationView.playlistWrapper.classList.add('hidden');
+            NavigationView.playlistContainer.classList.add('hidden');
         });
 
         SearchView.searchInput.addEventListener('keyup', function(){
@@ -520,6 +546,7 @@ const StatusView = {
 FetchModel.fetchAll('artists');
 //FetchModel.fetchAll('albums');
 //FetchModel.fetchAll('tracks');
+FetchModel.fetchAll('playlists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
 
