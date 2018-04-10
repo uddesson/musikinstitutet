@@ -76,6 +76,11 @@ const ResponseController = {
 				for (let track of response){
 					TrackView.displayTrack(track);
 				}
+            break;
+            case 'playlists':
+				for (let playlist of response){
+					PlaylistView.displayPlaylist(playlist);
+				}
 			break;
 		}
     }
