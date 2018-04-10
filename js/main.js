@@ -299,6 +299,7 @@ const PostModel = {
 			
 			let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
+					<img src="${album.coverImage}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
@@ -543,8 +544,8 @@ const StatusView = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
-FetchModel.fetchAll('artists');
-//FetchModel.fetchAll('albums');
+//FetchModel.fetchAll('artists');
+FetchModel.fetchAll('albums');
 //FetchModel.fetchAll('tracks');
 FetchModel.fetchAll('playlists');
 
