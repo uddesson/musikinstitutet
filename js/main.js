@@ -275,15 +275,26 @@ const PostModel = {
 
 	const ArtistView = {
 		container: document.getElementById('container'),
-		containerInner: document.createElement('div'),
+		containerInner: document.createElement('section'),
 		
 		displayArtist(artist){
 			let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
-					<p>Genres: ${artist.genres}</p>
-					<button id="delete">Delete</button>`;
+					<button id="delete" class="clear">Delete</button>`;
+			
+			const genreDiv = document.createElement('div');
+			genreDiv.classList.add('genres');
+			
+			for(let genre of artist.genres){
+				const p = document.createElement('p');
+				const textNode = document.createTextNode(genre);
+				p.appendChild(textNode);
+				genreDiv.appendChild(p);
+			}
+			artistDiv.appendChild(genreDiv);
+			
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
@@ -292,17 +303,16 @@ const PostModel = {
 
 	const AlbumView = {
 		container: document.getElementById('container'),
-		containerInner: document.createElement('div'),
+		containerInner: document.createElement('section'),
 		
 		displayAlbum(album){
 			let albumArtists = album.artists.map((artist) => artist.name);
 			
 			let albumDiv = document.createElement('div');
+		
 			albumDiv.innerHTML = `
 					<img src="${album.coverImage}" alt="${album.title}" class="image">
-					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
-					<h4>${albumArtists}</h4>
-					<p>Genres: ${album.genres}</p>`;
+					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>`;
 			
 			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
@@ -312,7 +322,7 @@ const PostModel = {
 	
 	const TrackView = {
 		container: document.getElementById('container'),
-		containerInner: document.createElement('div'),
+		containerInner: document.createElement('section'),
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
