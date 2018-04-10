@@ -332,44 +332,6 @@ const RatingModel = {
 	}
 
 const PlaylistView = {
-    
-    displayPlaylist(playlist){
-        /* TO DO: 
-        * - Loop out comments
-        * - Send along comments to a post-function
-        */
-       
-        let rating = RatingModel.calculateRatingAverage(playlist);
-        let tracklist = PlaylistView.getTrackListFrom(playlist);
-
-        let showCommentsButton = document.createElement('button');
-        showCommentsButton.innerHTML = 'Show comments';
-        let commentsDiv = document.createElement('div');
-        
-        showCommentsButton.addEventListener('click', function(){
-            FetchModel.fetchComments(playlist._id);
-        });
-
-        playlistContainer: document.getElementById('playlistContainer');
-        playlistContainer.classList.add('container__playlists', 'list');
-        
-        let playlistDiv = document.createElement('div');
-        playlistDiv.innerHTML = `
-            <h3>${playlist.title}</h3><br>
-            <h4>Created by: ${playlist.createdBy}</h4>
-            <h4>Tracks: ${playlist.tracks.length}</h4>
-            <h4>Rating: ${rating}</h4>
-            <h4>Number of comments: ${playlist.comments.length}</h4>
-            ${tracklist}
-            <input type="text" placeholder="Add comment (not working)"><br>
-            <input type="number" placeholder="Add rating" min="1" max="10"><br>`;
-        playlistContainer.appendChild(playlistDiv);
-
-        // Show comment-button is displayed if there are (more than 0) comments
-        if(playlist.comments.length > 0){
-            playlistDiv.appendChild(showCommentsButton)
-        };
-    },
 
     getTrackListFrom(playlist){
         let tracklist = '';
@@ -382,9 +344,51 @@ const PlaylistView = {
     },
 
     showComments(comments){
-        for (var comment of comments){
-            console.log(comment.body)
+        for (var i = 0; i < comments.length; i++){
+            let comment = comments[i].body;
+            console.log(comment);
         }
+    },
+    
+    displayPlaylist(playlist){
+        /* TO DO: 
+        * - Loop out comments to user when "show comments" is clicked
+        * - Send along new comment-input to a post-comment-function
+        */
+        
+        let rating = RatingModel.calculateRatingAverage(playlist);
+        let tracklist = PlaylistView.getTrackListFrom(playlist);
+        
+        // Put the playlists in the right container and add classes
+        playlistContainer: document.getElementById('playlistContainer');
+        playlistContainer.classList.add('container__playlists', 'list');
+
+        // Create elements below
+        let showCommentsButton = document.createElement('button');
+        showCommentsButton.innerHTML = 'Show comments';
+
+        // This is where we output the content to the user
+        let playlistDiv = document.createElement('div');
+        playlistDiv.innerHTML = `
+            <h3>${playlist.title}</h3><br>
+            <h4>Created by: ${playlist.createdBy}</h4>
+            <h4>Tracks: ${playlist.tracks.length}</h4>
+            <h4>Rating: ${rating}</h4>
+            <h4>Number of comments: ${playlist.comments.length}</h4>
+            ${tracklist}
+            <input type="text" placeholder="Add comment (not working)"><br>
+            <input type="number" placeholder="Add rating" min="1" max="10"><br>`;
+        playlistContainer.appendChild(playlistDiv);
+
+        // A "Show comments"-button is displayed if the playlist has any ( > 0) comments
+        if(playlist.comments.length > 0){
+            playlistDiv.appendChild(showCommentsButton)
+        };
+
+        // Eventlistener for fetching comments is added to that button
+        showCommentsButton.addEventListener('click', function(){
+            FetchModel.fetchComments(playlist._id);
+        });
     }
 }
 	
