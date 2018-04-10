@@ -274,28 +274,28 @@ const PostModel = {
  ******************************************************/
 
 	const ArtistView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 		
 		displayArtist(artist){
-			containerInner.classList.add('container__artists', 'grid');
-			
 			let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<p>Genres: ${artist.genres}</p>
 					<button id="delete">Delete</button>`;
+			ArtistView.containerInner.classList.add('containerInner', 'container__artist', 'grid');
+			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
 		}
 	}
 
 	const AlbumView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 		
 		displayAlbum(album){
 			let albumArtists = album.artists.map((artist) => artist.name);
-
-			containerInner.classList.add('container__albums', 'grid');
 			
 			let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
@@ -303,22 +303,27 @@ const PostModel = {
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
+			
+			AlbumView.containerInner.classList.add('containerInner', 'container__albums', 'grid');
+			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
 		}
 	}
 	
 	const TrackView = {
-		containerInner: document.getElementById('containerInner'),
+		container: document.getElementById('container'),
+		containerInner: document.createElement('div'),
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
-			
-			containerInner.classList.add('container__tracks', 'list');
 			
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
 				<h4>by ${trackArtists}</h4>`;
+			
+			TrackView.containerInner.classList.add('containerInner', 'container__tracks', 'list');
+			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
 		}
 	}
@@ -544,9 +549,9 @@ const StatusView = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
-//FetchModel.fetchAll('artists');
+FetchModel.fetchAll('artists');
 FetchModel.fetchAll('albums');
-//FetchModel.fetchAll('tracks');
+FetchModel.fetchAll('tracks');
 FetchModel.fetchAll('playlists');
 
 // let sortedArtists = FetchModel.fetchSortedArtists();
