@@ -12,7 +12,7 @@ const baseUrl = `https://folksa.ga/api`;
     //The "general search"
     createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.innerHTML = "";
+            ArtistView.container.innerHTML = "";
             const searchQuery = document.getElementById('searchInput').value;
             
             /* Model
@@ -205,7 +205,7 @@ const PostModel = {
     addAlbum(){
         let album = {
             title: PostView.albumForm.title.value,
-            artists: PostView.albumForm.artists.value, //Can be multiple IDs, must be comma separated string if multiple
+            artists: PostView.albumForm.artists.value,
             releaseDate: PostView.albumForm.year.value,
             genres: PostView.albumForm.genres.value.replace(" ", ""),
             spotifyURL: PostView.albumForm.spotify.value,
@@ -264,6 +264,26 @@ const PostModel = {
             });
 
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+        }
+    }
+}
+
+
+const RatingModel = {
+    
+    calculateRatingAverage(playlist){
+        let ratingSum = 0;
+            for (var rating of playlist.ratings){  
+                ratingSum = ratingSum + rating; 
+            }
+        let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
+        
+        if (isNaN(ratingAverage)){
+            return 'No rating yet';
+        }
+        else{
+            ratingAverage = Math.floor(ratingAverage);
+            return `${ratingAverage} / 10`;
         }
     }
 }
@@ -332,12 +352,13 @@ const PlaylistView = {
     
     displayPlaylist(playlist){
         /* TO DO: 
-        * - Loop out tracks
-        * - Loop out artists
         * - Loop out comments
         * - Send along comments to a post-function
         */
-        
+       
+        let rating = RatingModel.calculateRatingAverage(playlist);
+        let tracklist = PlaylistView.getTrackListFrom(playlist);
+
         playlistContainer: document.getElementById('playlistContainer'),
         playlistContainer.classList.add('container__playlists', 'list');
         
@@ -345,11 +366,25 @@ const PlaylistView = {
         playlistDiv.innerHTML = `
             <h3>${playlist.title}</h3><br>
             <h4>Created by: ${playlist.createdBy}</h4>
-            <h4>Rating: ${playlist.ratings}</h4>
-            <h4>Number of cmments: ${playlist.comments.length}</h4>
-            <input type="text" placeholder="Add comment (not working)">`;
+            <h4>Tracks: ${playlist.tracks.length}</h4>
+            <h4>Rating: ${rating}</h4>
+            <h4>Number of comments: ${playlist.comments.length}</h4>
+            ${tracklist}
+            <input type="text" placeholder="Add comment (not working)"><br>
+            <input type="number" placeholder="Add rating" min="1" max="10">`;
         playlistContainer.appendChild(playlistDiv);
-    }
+
+    },
+
+    getTrackListFrom(playlist){
+        let tracklist = '';
+        for (var i = 0; i < playlist.tracks.length; i++){
+            let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
+            let artistName = `${playlist.tracks[i].artists[0].name}</p><br>`;
+            tracklist = tracklist + trackTitle + artistName;
+        }
+        return tracklist;
+    },
 }
 	
 const SearchView = {
@@ -415,7 +450,7 @@ const NavigationView = {
         NavigationView.homeMenuAction.addEventListener('click', function(){
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
@@ -428,14 +463,14 @@ const NavigationView = {
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
             NavigationView.playlistContainer.classList.remove('hidden');
             
-            ArtistView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
         /* If the user tries to search while on the contribute "page",
         we still allow them to do so, and hide the post-view */
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
@@ -445,12 +480,12 @@ const NavigationView = {
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
-            AlbumView.containerInner.classList.add('hidden');
+            ArtistView.container.classList.add('hidden');
             NavigationView.playlistContainer.classList.add('hidden');
         });
 
         SearchView.searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.classList.remove('hidden');
+            ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },
