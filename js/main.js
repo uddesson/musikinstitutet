@@ -357,7 +357,8 @@ const PlaylistView = {
         */
        
         let rating = RatingModel.calculateRatingAverage(playlist);
-       
+        let tracklist = PlaylistView.getTrackListFrom(playlist);
+
         playlistContainer: document.getElementById('playlistContainer'),
         playlistContainer.classList.add('container__playlists', 'list');
         
@@ -365,12 +366,25 @@ const PlaylistView = {
         playlistDiv.innerHTML = `
             <h3>${playlist.title}</h3><br>
             <h4>Created by: ${playlist.createdBy}</h4>
-            <h4>Rating: ${playlist.ratings}</h4>
-            <h4>Number of cmments: ${playlist.comments.length}</h4>
-            <input type="text" placeholder="Add comment (not working)">`;
+            <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating}</h4>
+            <h4>Number of comments: ${playlist.comments.length}</h4>
+            ${tracklist}
+            <input type="text" placeholder="Add comment (not working)"><br>
+            <input type="number" placeholder="Add rating" min="1" max="10">`;
         playlistContainer.appendChild(playlistDiv);
-    }
+
+    },
+
+    getTrackListFrom(playlist){
+        let tracklist = '';
+        for (var i = 0; i < playlist.tracks.length; i++){
+            let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
+            let artistName = `${playlist.tracks[i].artists[0].name}</p><br>`;
+            tracklist = tracklist + trackTitle + artistName;
+        }
+        return tracklist;
+    },
 }
 	
 const SearchView = {
