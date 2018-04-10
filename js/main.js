@@ -24,7 +24,11 @@ const baseUrl = `https://folksa.ga/api`;
             FetchModel.fetchSearched('albums', searchQuery);
             FetchModel.fetchSearched('playlists', searchQuery);
 
-            Fetc
+            //kolla genrena
+            FetchModel.fetchSpecificGenre('artists', searchQuery);
+            FetchModel.fetchSpecificGenre('tracks', searchQuery);
+            FetchModel.fetchSpecificGenre('albums', searchQuery);
+            FetchModel.fetchSpecificGenre('playlists', searchQuery);
         });
     })()
 }
