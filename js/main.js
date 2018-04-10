@@ -277,7 +277,7 @@ const PostModel = {
 			let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
-					<h3>${artist.name}</h3>
+					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<p>Genres: ${artist.genres}</p>
 					<button id="delete">Delete</button>`;
 			ArtistView.containerInner.appendChild(artistDiv);
@@ -294,7 +294,7 @@ const PostModel = {
 			
 			let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
-					<h3>${album.title}</h3><br>
+					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
 			AlbumView.containerInner.appendChild(albumDiv);
@@ -311,7 +311,7 @@ const PostModel = {
 			
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
-				<h3>${track.title}</h3><br>
+				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
 				<h4>by ${trackArtists}</h4>`;
 			TrackView.containerInner.appendChild(trackDiv);
 		}
