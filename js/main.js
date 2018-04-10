@@ -269,6 +269,26 @@ const PostModel = {
 }
 
 
+const RatingModel = {
+    
+    calculateRatingAverage(playlist){
+        let ratingSum = 0;
+            for (var rating of playlist.ratings){  
+                ratingSum = ratingSum + rating; 
+            }
+        let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
+        
+        if (isNaN(ratingAverage)){
+            return 'No rating yet';
+        }
+        else{
+            ratingAverage = Math.floor(ratingAverage);
+            return `${ratingAverage} / 10`;
+        }
+    }
+}
+
+
 /******************************************************
  *********************** VIEWS ************************
  ******************************************************/
@@ -331,7 +351,9 @@ const PlaylistView = {
         * - Loop out comments
         * - Send along comments to a post-function
         */
-        
+       
+        let rating = RatingModel.calculateRatingAverage(playlist);
+       
         playlistContainer: document.getElementById('playlistContainer'),
         playlistContainer.classList.add('container__playlists', 'list');
         
@@ -342,6 +364,7 @@ const PlaylistView = {
             <h4>Rating: ${playlist.ratings}</h4>
             <h4>Number of cmments: ${playlist.comments.length}</h4>
             <input type="text" placeholder="Add comment (not working)">`;
+            <h4>Rating: ${rating}</h4>
         playlistContainer.appendChild(playlistDiv);
     }
 }
