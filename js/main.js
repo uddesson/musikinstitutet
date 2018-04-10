@@ -284,7 +284,7 @@ const PostModel = {
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<p>Genres: ${artist.genres}</p>
 					<button id="delete">Delete</button>`;
-			ArtistView.containerInner.classList.add('containerInner', 'container__artist', 'grid');
+			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
 		}
@@ -304,7 +304,7 @@ const PostModel = {
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
 			
-			AlbumView.containerInner.classList.add('containerInner', 'container__albums', 'grid');
+			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
 		}
@@ -322,7 +322,7 @@ const PostModel = {
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
 				<h4>by ${trackArtists}</h4>`;
 			
-			TrackView.containerInner.classList.add('containerInner', 'container__tracks', 'list');
+			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
 		}
