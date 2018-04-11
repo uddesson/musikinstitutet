@@ -315,8 +315,16 @@ const RatingModel = {
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
-					<p>Genres: ${artist.genres}</p>
-					<button id="delete">Delete</button>`;
+                    <p>Genres: ${artist.genres}</p>`;
+            
+            //make function?
+            button = document.createElement('button');
+            button.id = "button";
+            button.addEventListener('click', function(){
+                console.log(artist._id);
+            });
+            artistDiv.appendChild(button);
+
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
