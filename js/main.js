@@ -106,7 +106,29 @@ const ResponseController = {
     }
     
 }
+//TO DO:
+//funciton should be in an object
+//should take in track id to be able to add to playlist
+//add one eventlistener to div and get playlist id using this/target
+function displayAddToPlaylist(response){
+    let div = document.createElement('div');
+    let ul = document.createElement('ul');
+    
+    //just for now
+    div.style.background = "white";
+    div.style.width = "400px";
+    div.style.position = "absolute";
+    div.style.top = "50px";
 
+    for(let playlist of response){
+        let li = document.createElement('li');
+        li.innerHTML = `${playlist.title}`;
+        ul.appendChild(li);
+    }
+
+    div.appendChild(ul);
+    container.appendChild(div);
+}
 
 /*******************************************************
  *********************** MODELS ************************
@@ -174,8 +196,19 @@ const FetchModel = {
         .then((comments) => {
             PlaylistView.showComments(comments)
         });
-    }
+    },
+
+    fetchPlaylists(){
+		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
+            .then(response => response.json())
+			.then((response) => {
+				displayAddToPlaylist(response);
+			})
+			.catch(error => console.log(error));
+        },
 };
+
+
 
 const PostModel = {
     // TO DO:
@@ -440,23 +473,11 @@ const RatingModel = {
             addButton = document.createElement('button');
             addButton.innerText = 'Add';
             addButton.addEventListener('click', function(){
-                let tracks = `${track._id},${track._id}`;
-                //Blandat playlist for now, should get id from clicked playlsist later
-                let playlistId = '5acca6ad7e57bb56f1181c98';
-                console.log(`${baseUrl}/playlists/${playlistId}/${tracks}?${apiKey}`);
-                fetch(`${baseUrl}/playlists/${playlistId}/${tracks}?${apiKey}`,{
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ tracks: tracks})
-                  })
-                  .then((response) => response.json())
-                  .then((playlist) => {
-                    console.log(playlist);
-                  });
+                FetchModel.fetchPlaylists();
+
+                console.log('add ', track._id);
             });
+
             trackDiv.appendChild(addButton);
     
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
