@@ -322,7 +322,6 @@ const RatingModel = {
             //and one for delete(function called in eventlistener)
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
-            deleteButton.id = "button";
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${artist.name}?`)){
@@ -369,7 +368,6 @@ const RatingModel = {
             //and one for delete(function called in eventlistener)    
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
-            deleteButton.id = "button";
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${album.title}?`)){
@@ -414,7 +412,6 @@ const RatingModel = {
             //and one for delete(function called in eventlistener)    
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
-            deleteButton.id = "button";
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${track.title}?`)){
@@ -433,17 +430,28 @@ const RatingModel = {
                         return;
                     }
             });
-            
+
             trackDiv.appendChild(deleteButton);
 
             addButton = document.createElement('button');
             addButton.innerText = 'Add';
-            addButton.id = "button";
             addButton.addEventListener('click', function(){
-                console.log("add", track.id);
-                //display div top on this?
-                //list existing playlists
-                //add eventlistener for adding new playlist
+                let tracks = `${track._id},${track._id}`;
+                //Blandat playlist for now, should get id from clicked playlsist later
+                let playlistId = '5acca6ad7e57bb56f1181c98';
+                console.log(`${baseUrl}/playlists/${playlistId}/${tracks}?${apiKey}`);
+                fetch(`${baseUrl}/playlists/${playlistId}/${tracks}?${apiKey}`,{
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tracks: tracks})
+                  })
+                  .then((response) => response.json())
+                  .then((playlist) => {
+                    console.log(playlist);
+                  });
             });
             trackDiv.appendChild(addButton);
     
@@ -477,7 +485,6 @@ const PlaylistView = {
         * - Loop out comments to user when "show comments" is clicked
         * - Send along new comment-input to a post-comment-function
         */
-        
         let rating = RatingModel.calculateRatingAverage(playlist);
         let tracklist = PlaylistView.getTrackListFrom(playlist);
         
@@ -501,7 +508,6 @@ const PlaylistView = {
             <input type="text" placeholder="Add comment (not working)"><br>
             <input type="number" placeholder="Add rating" min="1" max="10"><br>`;
         playlistContainer.appendChild(playlistDiv);
-
         // A "Show comments"-button is displayed if the playlist has any ( > 0) comments
         if(playlist.comments.length > 0){
             playlistDiv.appendChild(showCommentsButton)
