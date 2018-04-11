@@ -8,27 +8,34 @@ const baseUrl = `https://folksa.ga/api`;
 
  const SearchController = {
     searchInput: document.getElementById('searchInput'),
-    container: document.getElementById('container'),
 
     createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
             ArtistView.containerInner.innerHTML = "";
             AlbumView.containerInner.innerHTML = "";
             TrackView.containerInner.innerHTML = "";
-            //PlaylistView.containerInner.innerHTML = "";
 
             const searchQuery = document.getElementById('searchInput').value;
-        
+
             FetchModel.fetchSearched('artists', searchQuery);
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
-            FetchModel.fetchSearched('playlists', searchQuery);
 
-            //kolla genrena
-            FetchModel.fetchSpecificGenre('artists', searchQuery);
-            FetchModel.fetchSpecificGenre('tracks', searchQuery);
-            FetchModel.fetchSpecificGenre('albums', searchQuery);
-            FetchModel.fetchSpecificGenre('playlists', searchQuery);
+            //if user searches for something that matches an artist, their tracks should display
+            FetchModel.fetchAllTracks(searchQuery);
+            
+
+            /*
+            TO DO:
+            user should be able to search without f ex ' and still get a result
+
+            be able to search for playlists
+
+            Shows duplicates of search result sometimes?
+
+            check if genre: display as link, if clicked fetchSpecificGenre, display as search results
+            maybe also make input value genre
+            */
         });
     })()
 }
@@ -75,7 +82,7 @@ const ResponseController = {
 			break;
 			case 'tracks':
 				for (let track of response){
-					TrackView.displayTrack(track);
+                    TrackView.displayTrack(track);
 				}
             break;
             case 'playlists':
@@ -84,8 +91,22 @@ const ResponseController = {
 				}
 			break;
 		}
+    },
+
+    sortTracksByArtist(searchQuery, response){
+        for (let track of response){
+            if (track.artists.length > 0){
+                //now only take one artists
+                let artistName = track.artists[0].name;
+                if(artistName = searchQuery){
+                    TrackView.displayTrack(track);
+                }
+            }
+        }
     }
+    
 }
+
 
 /*******************************************************
  *********************** MODELS ************************
@@ -137,6 +158,15 @@ const FetchModel = {
             })
             .catch(error => console.log(error));
     },
+
+    fetchAllTracks(searchQuery){
+		return fetch(`${baseUrl}/tracks?limit=10&${apiKey}&sort=desc`)
+            .then(response => response.json())
+			.then((response) => {
+				ResponseController.sortTracksByArtist(searchQuery, response);
+			})
+			.catch(error => console.log(error));
+        },
     
     fetchComments(id){
         fetch(`${baseUrl}/playlists/${id}/comments?${apiKey}`)
@@ -328,8 +358,8 @@ const RatingModel = {
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
-		}
-	}
+		},
+    }
 
 const PlaylistView = {
 
@@ -391,51 +421,10 @@ const PlaylistView = {
         });
     }
 }
-	
+    
 const SearchView = {
-	
-    searchButton: document.getElementById('searchButton'),
-    searchInput: document.getElementById('searchInput'),
-    output: document.getElementById('searchOutput'),
-
-		displayTracks(tracks){
-			const ul = document.createElement('ul');
-
-			for (let track of tracks){
-				let listItem = document.createElement('li');
-
-				listItem.innerText = tracks.title;
-				// + display artist name and album title
-
-				//make links/eventlistener with the 3 id:s
-
-				ul.appendChild(listItem);
-			}
-
-			SearchView.output.appendChild(ul);
-		},
-
-		displayArtists(artists){
-			for (let artist of artists){
-				ArtistView.displayArtist(artist);
-				//make link/eventlistener with artist.id around both name and image
-			}
-		},
-
-		//TO DO: displayPlayslists()
-
-		//or should we make static divs with h2 and ul in index.html??
-		createDiv(categoryName){
-			const div = document.createElement('div');
-			const h2 = document.createElement('h2');
-
-			h2.innerText = categoryName;
-			div.appendChild(h2);
-
-			return div;
-		}
-	}
-
+    searchInput: document.getElementById('searchInput')
+}
 
 const NavigationView = {
     /* TO DO:
