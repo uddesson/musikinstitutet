@@ -313,7 +313,6 @@ const RatingModel = {
 
 //TO DO:
 //make an object.. view and/or somethinf
-//add one eventlistener to div and get playlist id using this/target
 function displayAddToPlaylist(response, trackId){
     let div = document.createElement('div');
     let ul = document.createElement('ul');
@@ -483,6 +482,7 @@ function displayAddToPlaylist(response, trackId){
             addButton.innerText = 'Add';
 
             addButton.addEventListener('click', function(){
+                console.log('scroll up');
                 FetchModel.fetchPlaylists(track._id);
             });
 
