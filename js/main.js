@@ -127,7 +127,7 @@ function displayAddToPlaylist(response){
     }
 
     div.appendChild(ul);
-    container.appendChild(div);
+    ArtistView.containerInner.appendChild(div);
 }
 
 /*******************************************************
