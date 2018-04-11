@@ -335,6 +335,8 @@ const RatingModel = {
                     .then((response) => response.json())
                     .then((artist) => {
                         console.log('you deleted', artist.name);
+                        ArtistView.containerInner.removeChild(artistDiv);
+                        
                     });
                 } else {
                         return;
@@ -365,7 +367,7 @@ const RatingModel = {
             
             //make function/controller
             //fex one for creating the button + eventlistenr 
-            //and one for delete(function called in eventlistener)    
+            //and one for delete(function called in eventlistener) 
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
 
@@ -381,6 +383,7 @@ const RatingModel = {
                     .then((response) => response.json())
                     .then((album) => {
                         console.log('you deleted', album.title);
+                        AlbumView.containerInner.removeChild(albumDiv);
                     });
                 } else {
                         return;
@@ -409,7 +412,7 @@ const RatingModel = {
                 
             //make function/controller
             //fex one for creating the button + eventlistenr 
-            //and one for delete(function called in eventlistener)    
+            //and one for delete(function called in eventlistener)  
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
 
@@ -425,6 +428,7 @@ const RatingModel = {
                     .then((response) => response.json())
                     .then((track) => {
                         console.log('you deleted', track.title);
+                        TrackView.containerInner.removeChild(trackDiv);
                     });
                 } else {
                         return;
