@@ -21,9 +21,6 @@ const baseUrl = `https://folksa.ga/api`;
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
 
-            //if user searches for something that matches an artist, their tracks should display
-            //FetchModel.fetchAllTracks(searchQuery);
-            
 
             /*
             TO DO:
@@ -91,18 +88,6 @@ const ResponseController = {
 				}
 			break;
 		}
-    },
-
-    sortTracksByArtist(searchQuery, response){
-        for (let track of response){
-            if (track.artists.length > 0){
-                //now only take one artists
-                let artistName = track.artists[0].name;
-                if(artistName = searchQuery){
-                    TrackView.displayTrack(track);
-                }
-            }
-        }
     }
 }
 
@@ -157,15 +142,6 @@ const FetchModel = {
             })
             .catch(error => console.log(error));
     },
-
-    fetchAllTracks(searchQuery){
-		return fetch(`${baseUrl}/tracks?limit=10&${apiKey}&sort=desc`)
-            .then(response => response.json())
-			.then((response) => {
-				ResponseController.sortTracksByArtist(searchQuery, response);
-			})
-			.catch(error => console.log(error));
-        },
     
     fetchComments(id){
         fetch(`${baseUrl}/playlists/${id}/comments?${apiKey}`)
