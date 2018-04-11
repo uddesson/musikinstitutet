@@ -319,6 +319,7 @@ const RatingModel = {
             
             //make function/controller   
             deleteButton = document.createElement('button');
+            deleteButton.innerText = "Add";
             deleteButton.id = "button";
             deleteButton.addEventListener('click', function(){
                 console.log("delete", artist._id);
@@ -365,24 +366,30 @@ const RatingModel = {
                 
             //make function/controller    
             deleteButton = document.createElement('button');
+            deleteButton.innerText = 'Delete';
             deleteButton.id = "button";
 
             deleteButton.addEventListener('click', function(){
-                fetch(`${baseUrl}/tracks/${track._id}?${apiKey}`, {
-                    method: 'DELETE',
-                    headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                  .then((response) => response.json())
-                  .then((track) => {
-                    console.log('you deleted', track.title);
-                  });
+                if (confirm(`Do you want to Delete ${track.title}?`)){
+                    fetch(`${baseUrl}/tracks/${track._id}?${apiKey}`, {
+                        method: 'DELETE',
+                        headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    .then((response) => response.json())
+                    .then((track) => {
+                        console.log('you deleted', track.title);
+                    });
+                } else {
+                        return;
+                    }
             });
             trackDiv.appendChild(deleteButton);
 
             addButton = document.createElement('button');
+            addButton.innerText = 'Add';
             addButton.id = "button";
             addButton.addEventListener('click', function(){
                 console.log("add", track.id);
