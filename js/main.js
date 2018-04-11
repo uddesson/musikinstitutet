@@ -317,13 +317,13 @@ const RatingModel = {
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
                     <p>Genres: ${artist.genres}</p>`;
             
-            //make function?
-            button = document.createElement('button');
-            button.id = "button";
-            button.addEventListener('click', function(){
-                console.log(artist._id);
+            //make function/controller   
+            deleteButton = document.createElement('button');
+            deleteButton.id = "button";
+            deleteButton.addEventListener('click', function(){
+                console.log("delete", artist._id);
             });
-            artistDiv.appendChild(button);
+            artistDiv.appendChild(deleteButton);
 
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
@@ -361,8 +361,23 @@ const RatingModel = {
 			let trackDiv = document.createElement('div');
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
-				<h4>by ${trackArtists}</h4>`;
-			
+                <h4>by ${trackArtists}</h4>`;
+                
+            //make function/controller    
+            deleteButton = document.createElement('button');
+            deleteButton.id = "button";
+            deleteButton.addEventListener('click', function(){
+                console.log("delete", track._id);
+            });
+            trackDiv.appendChild(deleteButton);
+
+            addButton = document.createElement('button');
+            addButton.id = "button";
+            addButton.addEventListener('click', function(){
+                console.log("add", track._id);
+            });
+            trackDiv.appendChild(addButton);
+    
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
