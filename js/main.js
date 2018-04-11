@@ -22,7 +22,7 @@ const baseUrl = `https://folksa.ga/api`;
             FetchModel.fetchSearched('albums', searchQuery);
 
             //if user searches for something that matches an artist, their tracks should display
-            FetchModel.fetchAllTracks(searchQuery);
+            //FetchModel.fetchAllTracks(searchQuery);
             
 
             /*
@@ -366,15 +366,29 @@ const RatingModel = {
             //make function/controller    
             deleteButton = document.createElement('button');
             deleteButton.id = "button";
+
             deleteButton.addEventListener('click', function(){
-                console.log("delete", track._id);
+                fetch(`${baseUrl}/tracks/${track._id}?${apiKey}`, {
+                    method: 'DELETE',
+                    headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                  .then((response) => response.json())
+                  .then((track) => {
+                    console.log('you deleted', track.title);
+                  });
             });
             trackDiv.appendChild(deleteButton);
 
             addButton = document.createElement('button');
             addButton.id = "button";
             addButton.addEventListener('click', function(){
-                console.log("add", track._id);
+                console.log("add", track.id);
+                //display div top on this?
+                //list existing playlists
+                //add eventlistener for adding new playlist
             });
             trackDiv.appendChild(addButton);
     
