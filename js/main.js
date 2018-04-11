@@ -319,7 +319,7 @@ const RatingModel = {
             
             //make function/controller   
             deleteButton = document.createElement('button');
-            deleteButton.innerText = "Add";
+            deleteButton.innerText = "Delete";
             deleteButton.id = "button";
             deleteButton.addEventListener('click', function(){
                 console.log("delete", artist._id);
