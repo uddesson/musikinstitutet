@@ -317,13 +317,31 @@ const RatingModel = {
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
                     <p>Genres: ${artist.genres}</p>`;
             
-            //make function/controller   
+            //make function/controller
+            //fex one for creating the button + eventlistenr 
+            //and one for delete(function called in eventlistener)
             deleteButton = document.createElement('button');
-            deleteButton.innerText = "Delete";
+            deleteButton.innerText = 'Delete';
             deleteButton.id = "button";
+
             deleteButton.addEventListener('click', function(){
-                console.log("delete", artist._id);
+                if (confirm(`Do you want to Delete ${artist.name}?`)){
+                    fetch(`${baseUrl}/artists/${artist._id}?${apiKey}`, {
+                        method: 'DELETE',
+                        headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    .then((response) => response.json())
+                    .then((artist) => {
+                        console.log('you deleted', artist.name);
+                    });
+                } else {
+                        return;
+                    }
             });
+
             artistDiv.appendChild(deleteButton);
 
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
@@ -345,7 +363,34 @@ const RatingModel = {
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
-			
+            
+            //make function/controller
+            //fex one for creating the button + eventlistenr 
+            //and one for delete(function called in eventlistener)    
+            deleteButton = document.createElement('button');
+            deleteButton.innerText = 'Delete';
+            deleteButton.id = "button";
+
+            deleteButton.addEventListener('click', function(){
+                if (confirm(`Do you want to Delete ${album.title}?`)){
+                    fetch(`${baseUrl}/albums/${album._id}?${apiKey}`, {
+                        method: 'DELETE',
+                        headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    .then((response) => response.json())
+                    .then((album) => {
+                        console.log('you deleted', album.title);
+                    });
+                } else {
+                        return;
+                    }
+            });
+
+            albumDiv.appendChild(deleteButton);
+                    
 			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
@@ -364,7 +409,9 @@ const RatingModel = {
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
                 <h4>by ${trackArtists}</h4>`;
                 
-            //make function/controller    
+            //make function/controller
+            //fex one for creating the button + eventlistenr 
+            //and one for delete(function called in eventlistener)    
             deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
             deleteButton.id = "button";
@@ -386,6 +433,7 @@ const RatingModel = {
                         return;
                     }
             });
+            
             trackDiv.appendChild(deleteButton);
 
             addButton = document.createElement('button');
