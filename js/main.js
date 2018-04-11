@@ -104,31 +104,8 @@ const ResponseController = {
             }
         }
     }
-    
 }
-//TO DO:
-//funciton should be in an object
-//should take in track id to be able to add to playlist
-//add one eventlistener to div and get playlist id using this/target
-function displayAddToPlaylist(response){
-    let div = document.createElement('div');
-    let ul = document.createElement('ul');
-    
-    //just for now
-    div.style.background = "white";
-    div.style.width = "400px";
-    div.style.position = "absolute";
-    div.style.top = "50px";
 
-    for(let playlist of response){
-        let li = document.createElement('li');
-        li.innerHTML = `${playlist.title}`;
-        ul.appendChild(li);
-    }
-
-    div.appendChild(ul);
-    ArtistView.containerInner.appendChild(div);
-}
 
 /*******************************************************
  *********************** MODELS ************************
@@ -198,11 +175,11 @@ const FetchModel = {
         });
     },
 
-    fetchPlaylists(){
+    fetchPlaylists(trackId){
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				displayAddToPlaylist(response);
+				displayAddToPlaylist(response, trackId);
 			})
 			.catch(error => console.log(error));
         },
@@ -333,6 +310,38 @@ const RatingModel = {
         }
     }
 }
+
+//TO DO:
+//make an object.. view and/or somethinf
+//add one eventlistener to div and get playlist id using this/target
+function displayAddToPlaylist(response, trackId){
+    let div = document.createElement('div');
+    let ul = document.createElement('ul');
+
+    
+    //just for now
+    div.style.background = "white";
+    div.style.width = "400px";
+    div.style.position = "absolute";
+    div.style.top = "50px";
+
+    for(let playlist of response){
+        let li = document.createElement('li');
+        li.innerHTML = playlist.title;
+        li.id = playlist._id;
+        ul.appendChild(li);
+    }
+
+    ul.addEventListener('click', function(ul){
+        //here do fetch+post track to playlists!
+        console.log('playlistId: ', ul.srcElement.id);
+        console.log('trackId ', trackId);
+    });
+
+    div.appendChild(ul);
+    ArtistView.containerInner.appendChild(div);
+}
+
 
 
 /******************************************************
@@ -472,10 +481,9 @@ const RatingModel = {
 
             addButton = document.createElement('button');
             addButton.innerText = 'Add';
-            addButton.addEventListener('click', function(){
-                FetchModel.fetchPlaylists();
 
-                console.log('add ', track._id);
+            addButton.addEventListener('click', function(){
+                FetchModel.fetchPlaylists(track._id);
             });
 
             trackDiv.appendChild(addButton);
