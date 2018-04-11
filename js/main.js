@@ -175,7 +175,7 @@ const FetchModel = {
         });
     },
 
-    fetchPlaylists(trackId){
+    fetchPlaylistsForAdding(trackId){
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
@@ -317,7 +317,7 @@ const AddToPlaylistView = {
 
     displayPlaylists: (response, trackId) => {
         let ul = AddToPlaylistView.ul;
-        
+
         //just for now
         AddToPlaylistView.div.style.background = "white";
         AddToPlaylistView.div.style.width = "400px";
@@ -485,7 +485,7 @@ const AddToPlaylistView = {
 
             addButton.addEventListener('click', function(){
                 console.log('scroll up');
-                FetchModel.fetchPlaylists(track._id);
+                FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
             trackDiv.appendChild(addButton);
