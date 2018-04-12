@@ -358,7 +358,7 @@ const AddToPlaylistView = {
 			artistDiv.innerHTML = `
 					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
-					<button id="delete" class="clear">Delete</button>`;
+					<button id="delete" class="clear small">Delete</button>`;
 			
 			const genreDiv = document.createElement('div');
 			genreDiv.classList.add('genres');
