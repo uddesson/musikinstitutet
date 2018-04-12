@@ -370,7 +370,6 @@ const AddToPlaylistView = {
 				genreDiv.appendChild(p);
 			}
 			artistDiv.appendChild(genreDiv);
-            <p>Genres: ${artist.genres}</p>`;
             
             //make function/controller
             //fex one for creating the button + eventlistenr 
