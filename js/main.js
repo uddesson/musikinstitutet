@@ -175,11 +175,11 @@ const FetchModel = {
         });
     },
 
-    fetchPlaylists(trackId){
+    fetchPlaylistsForAdding(trackId){
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				displayAddToPlaylist(response, trackId);
+				AddToPlaylistView.displayPlaylists(response, trackId);
 			})
 			.catch(error => console.log(error));
         },
@@ -311,36 +311,37 @@ const RatingModel = {
     }
 }
 
-//TO DO:
-//make an object.. view and/or somethinf
-//add one eventlistener to div and get playlist id using this/target
-function displayAddToPlaylist(response, trackId){
-    let div = document.createElement('div');
-    let ul = document.createElement('ul');
+const AddToPlaylistView = {
+    div: document.createElement('div'),
+    ul: document.createElement('ul'),
 
-    
-    //just for now
-    div.style.background = "white";
-    div.style.width = "400px";
-    div.style.position = "absolute";
-    div.style.top = "50px";
+    displayPlaylists: (response, trackId) => {
+        let ul = AddToPlaylistView.ul;
 
-    for(let playlist of response){
-        let li = document.createElement('li');
-        li.innerHTML = playlist.title;
-        li.id = playlist._id;
-        ul.appendChild(li);
+        //just for now
+        AddToPlaylistView.div.style.background = "white";
+        AddToPlaylistView.div.style.width = "400px";
+        AddToPlaylistView.div.style.position = "absolute";
+        AddToPlaylistView.div.style.top = "50px";
+
+        for(let playlist of response){
+            let li = document.createElement('li');
+            li.innerHTML = playlist.title;
+            li.id = playlist._id;
+            AddToPlaylistView.ul.appendChild(li);
+        }
+        AddToPlaylistView.ul.addEventListener('click', function(ul){
+            //here do fetch+post track to playlists!
+            console.log('playlistId: ', ul.srcElement.id);
+            console.log('trackId ', trackId);
+        });
+
+        AddToPlaylistView.div.appendChild(AddToPlaylistView.ul);
+        ArtistView.containerInner.appendChild(AddToPlaylistView.div);
     }
-
-    ul.addEventListener('click', function(ul){
-        //here do fetch+post track to playlists!
-        console.log('playlistId: ', ul.srcElement.id);
-        console.log('trackId ', trackId);
-    });
-
-    div.appendChild(ul);
-    ArtistView.containerInner.appendChild(div);
 }
+
+
 
 
 
@@ -483,7 +484,8 @@ function displayAddToPlaylist(response, trackId){
             addButton.innerText = 'Add';
 
             addButton.addEventListener('click', function(){
-                FetchModel.fetchPlaylists(track._id);
+                console.log('scroll up');
+                FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
             trackDiv.appendChild(addButton);
