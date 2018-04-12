@@ -1,10 +1,15 @@
 $border-radius__small: 5px;
 
 $color__text--light: #595763; //grey
-$color__text--links: #35359c; //matte navy
+$color__text--links: #365184; //matte navy
+
+$color__button--dark: #365184; //matte navy
+$color__button--dark-hover: #576b90; //lighter matte navy
 
 $color__highlight--light: #ff765b; //light orange
 $color__highlight--strong: #ff431f; //strong orange
+
+$transition__hover--bg: ease background .3s;
 
 /******************************
  *********** RESET ************
@@ -30,6 +35,12 @@ li{
 	vertical-align: middle;
 	margin: 0 20px 0 0;
 	float: left;
+}
+
+button {
+	outline:none;
+	border-color:none;
+	border:none;
 }
 
 /********************************
@@ -78,6 +89,10 @@ a {
 	width:300px;
 	display:block;
 	margin:100px auto;
+}
+
+.navbar {
+	
 }
 
 
@@ -172,22 +187,41 @@ nav {
  ***** INPUT AND BUTTONS ******
  ******************************/
 
-<<<<<<< HEAD
 input[type=text], input[type=number] {
 	width: 300px;
-	height: 20px;
+	height: 30px;
 	border-radius: $border-radius__small;
 }
 button {
-	height: 25px;
 	border-radius: $border-radius__small;
+	transition: $transition__hover--bg;
 	cursor:pointer;
+	&.dark {
+		background: $color__button--dark;
+		color:#f8f8f8;
+		&:hover {
+			background: $color__button--dark-hover;
+			transition: $transition__hover--bg;
+		}
+	}
+	&.clear {
+		border:none;
+		background: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	&.large {
+		height: 45px;
+		font-size: 1rem;
+    	letter-spacing: 1px;
+	}
+	&.small {
+		font-size:.7rem;
+		padding:5px 0;
+	}
 }
-.clear {
-	border:none;
-	font-size:.8em;
-	padding:5px 0;
-}
+
 
 .searchInput {
 	margin:0 auto 40px;
