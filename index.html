@@ -5,50 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
-    <title>Musikgäris</title>
+    <title>FED17 FAVES</title>
 </head>
 <body>
-
+   <header>
     <nav>
         <ul>
             <li>
-                <input id="searchInput" type="text">
-                <button id="searchButton">Search</button>
+                <h2 id="home">Home</h2>
             </li>
             <li>
-                <!-- Temporary inline-styles. Remove later -->
-                <h2 id="home" style="text-decoration: underline; cursor: pointer;">Home</h2>
+                <h2 id="playlists">Playlists</h2>
             </li>
             <li>
-                <!-- Temporary inline-styles. Remove later -->
-                <h2 id="playlists" style="text-decoration: underline; cursor: pointer;">Playlists</h2>
-            </li>
-            <li>
-                <!-- Temporary inline-styles. Remove later -->
-                <h2 id="contribute" style="text-decoration: underline; cursor: pointer;">Contribute to Musikgäris<h2>
+                <h2 id="contribute">Contribute to FED17 Faves<h2>
             </li>
         </ul>
     </nav>
-    
+   		<a href="index.html"><img src="images/fed17faves-logo.png" alt="FED17 FAVES logo" class="logo"></a>
+   		<div class="searchInput">
+    		<input id="searchInput" type="text">
+    		<button id="searchButton" class="dark large">Search</button>
+    	</div>
+   	</header>
     
     <div id="searchOutput">
         <!--Generated with JS-->
     </div>
         
     <div class="container" id="container">
+<!--
        <div class="container__inner" id="containerInner">
-        	<!--Generated with JS-->
+        	Generated with JS
         </div>
+-->
     </div>
 
     
     <div id="postFormsWrapper" class="wrapper hidden">
         
         <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addArtistAction" style="text-decoration: underline; color: pink; cursor: pointer;">Add Artist</h2>
+        <h2 id="addArtistAction">Add Artist ⌄</h2>
         
         <!-- Add artist-form -->
-        <form class="hidden" style="border: 2px dashed pink";>
+        <form class="hidden">
             <h3>Full Artist Name</h3>
             <label for="artistName" class="hidden">Full Artist Name</label>
             <input id="artistName" type="text" placeholder="Janelle Monáe">
@@ -77,7 +77,7 @@
             <label for="artistImage" class="hidden">Link to image of artist</label>
             <input id="artistImage" type="text" placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Janelle_Mon%C3%A1e_2016.jpg/1024px-Janelle_Mon%C3%A1e_2016.jpg">
             <br>
-            <input type="submit" id="addArtistButton" value="Add Artist">
+            <input type="submit" id="addArtistButton" class="button large dark" value="Add Artist">
 
             <div id="addedArtistStatus" class="status hidden">
                 <p id="statusMessage">
@@ -87,10 +87,10 @@
         </form>
 
         <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addAlbumAction" style="text-decoration: underline; color: lightblue; cursor: pointer;">Add Album</h2>
+        <h2 id="addAlbumAction">Add Album ⌄</h2>
 
         <!-- Add album-form -->
-        <form class="hidden" style="border: 2px dashed lightblue";>
+        <form class="hidden">
             <h3>Album Title</h3>
             <label for="albumTitle" class="hidden">Album Title</label>
             <input id="albumTitle" type="text" placeholder="The Electric Lady" >
@@ -115,7 +115,7 @@
             <label for="albumCoverUrl" class="hidden">Link to Album Cover</label>
             <input id="albumCoverUrl" type="text" placeholder="https://images.genius.com/bcf7f8beab6a3819dd4017f0c25ef27e.750x750x1.jpg">
             <br>
-            <input type="submit" id="addAlbumButton" value="Add Album">
+            <input type="submit" id="addAlbumButton" class="button large dark" value="Add Album">
 
             <div id="addedAlbumStatus" class="status hidden">
                 <p id="statusMessage">
@@ -123,12 +123,11 @@
                 </p>
             </div>
         </form>
-
-        <!-- Temporary inline-styles here should be REMOVED later -->
-        <h2 id="addTrackAction" style="text-decoration: underline; color: lightgreen; cursor: pointer;">Add Track</h2>
+        
+        <h2 id="addTrackAction">Add Track ⌄</h2>
 
         <!-- Add track-form -->
-        <form class="hidden" style="border: 2px dashed lightgreen";>
+        <form class="hidden">
             <h3>Track title</h3>
             <label for="trackTitle" class="hidden">Track title</label>
             <input id="trackTitle" type="text" placeholder="Dance Apocalyptic">
@@ -141,7 +140,7 @@
             <label for="trackAlbum" class="hidden">Album</label>
             <input id="trackAlbum" type="text" placeholder="Electric Lady">
             <br>
-            <input type="submit" id="addTrackButton" value="Add Track">
+            <input type="submit" id="addTrackButton" class="button large dark" value="Add Track">
             
             <div id="addedTrackStatus" class="status hidden">
                 <p id="statusMessage">
@@ -151,9 +150,8 @@
         </form>
     </div> <!-- Closes postFormsWrapper-->
 
-    <div id="playlistWrapper" class="wrapper hidden">
-        <h2>Massa playlists här wooow</h2>
-        <!-- Generated by js -->
+    <div id="playlistContainer" class="hidden">
+            <!-- Generated by js -->
     </div>
     
     <script src="js/main.js"></script>

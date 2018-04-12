@@ -1,3 +1,16 @@
+$border-radius__small: 5px;
+
+$color__text--light: #595763; //grey
+$color__text--dark: #365184; //matte navy
+
+$color__button--dark: #365184; //matte navy
+$color__button--dark-hover: #576b90; //lighter matte navy
+
+$color__highlight--light: #ff765b; //light orange
+$color__highlight--strong: #ff431f; //strong orange
+
+$transition__hover--bg: ease background .3s;
+
 /******************************
  *********** RESET ************
  ******************************/
@@ -24,22 +37,176 @@ li{
 	float: left;
 }
 
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+}
+
+button, .button {
+	outline:none;
+	border-color:none;
+	border:none;
+}
+
+/********************************
+ ************ GENERAL ************
+ ********************************/
+body {
+	//background: radial-gradient(#eef0ed, #c9dbda);
+	background: radial-gradient(#fff, #c9dbda);
+	background-size: cover;
+	background-attachment: fixed;
+}
+div {
+	word-wrap: break-word;
+}
+
+/*************************************
+ ************ TYPORGRAPHY ************
+ *************************************/
+body {
+	font-family: 'DIN';
+}
+a {
+	text-decoration: none;
+	color: $color__text--dark;
+}
+.text--bold{
+	font-weight: bold;
+}
+
+/********************************
+ ************ HEADER ************
+ ********************************/
+.logo {
+	width:160px;
+	display:block;
+	position:fixed;
+	top:20px;
+	right:20px;
+	z-index:10;
+}
+
+
 /******************************
- ************ GRID ************
+ *********** NAV **************
  ******************************/
 
-body {
-	margin:10px;
+nav {
+	background: #376379;
+	color: #f7f7f7;
+	padding:10px;
+	height: 40px;
+	width:100%;
+	position:fixed;
+	z-index:9;
+		h2 {
+			cursor:pointer;
+			font-size: 1em;
+			padding: .5em;
+			text-transform: uppercase;
+			letter-spacing: 1px
+		}
 }
+
+/******************************
+ ***** INPUT AND BUTTONS ******
+ ******************************/
+
+input[type=text], input[type=number] {
+	width:100%;
+	height: 40px;
+	border-radius: $border-radius__small;
+	border: 1px solid #e0e0e0;
+    text-indent: 8px;
+	font-size: 1em;
+    padding: 0.3em;
+	font-family: inherit;
+	margin: 6px 0;
+}
+button, .button {
+	border-radius: $border-radius__small;
+	transition: $transition__hover--bg;
+	cursor:pointer;
+	&.dark {
+		background: $color__button--dark;
+		color:#f8f8f8;
+		&:hover {
+			background: $color__button--dark-hover;
+			transition: $transition__hover--bg;
+		}
+	}
+	&.clear {
+		border:none;
+		background: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	&.large {
+		height: 45px;
+		font-size: 1rem;
+    	letter-spacing: 1px;
+		padding: 0 30px;
+	}
+	&.small {
+		font-size:.7rem;
+		padding:5px 0;
+	}
+}
+
+
+.searchInput {
+	margin:0 auto 40px;
+	width:100%;
+	max-width:450px;
+	
+	input[type="text"], button {
+		height:40px;
+	}
+	button {
+		width:100px;
+	}
+}
+
+
+/******************************
+ ***** FUNCTIONAL STYLES ******
+ ******************************/
+
+ .hidden{
+	 display: none;
+ }
+
+
+/****************************************
+ ************ GRID/LIST VIEW ************
+ ****************************************/
 
 .wrapper {
 	// height:100vh; 
-	width:100%;
+//	width:100%;
 	display: grid;
 }
 .container__inner{
 	max-width: 1200px;
-	margin:auto;
+	margin:0 auto 100px;
+	&>div {
+		background: #fff;
+		border-radius: $border-radius__small;
+		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
+		display: flex;
+    	justify-content: space-between;
+	}
+}
+.container__artist{
+	text-align: center;
+	align-items: center;
+	img {
+		border-radius: 50%;
+		margin-bottom: 1rem;
+	}
 }
 .grid {
 	width:100%;
@@ -48,15 +215,24 @@ body {
 	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 .grid>div, .list>div {
-	background: #ff2881;
 	margin:10px;
 	padding:20px;
 }
 
-.list div {
-	width:100%;
+.grid>div {
+	flex-direction: column;
+	h3 {
+		padding: 0 0 .6em;
+	}
 }
 
+.list {
+	max-width: 780px;
+	&>div {
+		width:100%;
+		flex-direction: row;
+	}
+}
 /***** IMAGES *****/
 .grid > div {
     position: relative;
@@ -69,25 +245,44 @@ body {
     height: 240px;
  }
 
-/******************************
- ***** INPUT AND BUTTONS ******
- ******************************/
 
-input[type=text]{
-	width: 200px;
-	height: 20px;
-	margin: 0 0 0 10px;
+.genres {
+	p {
+		text-align: center;
+		font-size: .7em;
+		background: $color__highlight--light;
+		display: inline-block;
+		margin: auto;
+		padding: 5px 12px;
+		border-radius: 5px;
+		margin: 6px 3px 0 3px;
+	}
 }
 
-button{
-	height: 25px;
-}
-
-
-/******************************
- ***** FUNCTIONAL STYLES ******
+/*******************************
+ *********** FORM **************
  ******************************/
-
- .hidden{
-	 display: none;
- }
+#postFormsWrapper{
+	width: 100%;
+	max-width:550px;
+	margin:80px auto;
+	h2 {
+		margin: 0 0 20px;
+		cursor:pointer;
+	}
+	form {
+		margin:auto;
+		width:100%;
+		padding: 20px 0 80px;
+		h3 {
+			padding: .8em 0 0;
+			font-size: .8rem;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			text-indent: 6px;
+		}
+		.button {
+			margin-top:30px;
+		}
+	}
+}
