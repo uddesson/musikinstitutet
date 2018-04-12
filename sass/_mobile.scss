@@ -1,3 +1,11 @@
+$border-radius__small: 5px;
+
+$color__text--light: #595763; //grey
+$color__text--links: #35359c; //matte navy
+
+$color__highlight--light: #ff765b; //light orange
+$color__highlight--strong: #ff431f; //strong orange
+
 /******************************
  *********** RESET ************
  ******************************/
@@ -24,15 +32,30 @@ li{
 	float: left;
 }
 
-div{
+/********************************
+ ************ GENERAL ************
+ ********************************/
+body {
+	//background: radial-gradient(#eef0ed, #c9dbda);
+	background: radial-gradient(#fff, #c9dbda);
+	background-size: cover;
+	background-attachment: fixed;
+	margin:10px;
+}
+div {
 	word-wrap: break-word;
 }
 
-
-/******************************
- ************ TEXT ************
- ******************************/
-
+/*************************************
+ ************ TYPORGRAPHY ************
+ *************************************/
+body {
+	font-family: 'Circular';
+}
+a {
+	text-decoration: none;
+	color: $color__text--links;
+}
 .text--bold{
 	font-weight: bold;
 }
@@ -40,19 +63,51 @@ div{
 /******************************
  ************ GRID ************
  ******************************/
-
 body {
-	margin:10px;
+	font-family: 'Circular';
 }
+a {
+	text-decoration: none;
+	color: $color__text--links;
+}
+
+/********************************
+ ************ HEADER ************
+ ********************************/
+.logo {
+	width:300px;
+	display:block;
+	margin:100px auto;
+}
+
+
+/****************************************
+ ************ GRID/LIST VIEW ************
+ ****************************************/
 
 .wrapper {
 	// height:100vh; 
-	width:100%;
+//	width:100%;
 	display: grid;
 }
 .container__inner{
 	max-width: 1200px;
-	margin:auto;
+	margin:0 auto 100px;
+	&>div {
+		background: #fff;
+		border-radius: $border-radius__small;
+		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
+		display: flex;
+    	justify-content: space-between;
+	}
+}
+.container__artist{
+	text-align: center;
+	align-items: center;
+	img {
+		border-radius: 50%;
+		margin-bottom: 1rem;
+	}
 }
 .grid {
 	width:100%;
@@ -61,15 +116,24 @@ body {
 	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 .grid>div, .list>div {
-	background: #ff2881;
 	margin:10px;
 	padding:20px;
 }
 
-.list div {
-	width:100%;
+.grid>div {
+	flex-direction: column;
+	h3 {
+		padding: 0 0 .6em;
+	}
 }
 
+.list {
+	max-width: 780px;
+	&>div {
+		width:100%;
+		flex-direction: row;
+	}
+}
 /***** IMAGES *****/
 .grid > div {
     position: relative;
@@ -82,11 +146,25 @@ body {
     height: 240px;
  }
 
+
+.genres {
+	p {
+		text-align: center;
+		font-size: .7em;
+		background: $color__highlight--light;
+		display: inline-block;
+		margin: auto;
+		padding: 5px 12px;
+		border-radius: 5px;
+		margin: 6px 3px 0 3px;
+	}
+}
+
 /******************************
  *********** NAV **************
  ******************************/
 
-nav{
+nav {
 	height: 40px;
 }
 
@@ -94,13 +172,34 @@ nav{
  ***** INPUT AND BUTTONS ******
  ******************************/
 
-input[type=text], input[type=number]{
-	width: 200px;
+<<<<<<< HEAD
+input[type=text], input[type=number] {
+	width: 300px;
 	height: 20px;
+	border-radius: $border-radius__small;
+}
+button {
+	height: 25px;
+	border-radius: $border-radius__small;
+	cursor:pointer;
+}
+.clear {
+	border:none;
+	font-size:.8em;
+	padding:5px 0;
 }
 
-button{
-	height: 25px;
+.searchInput {
+	margin:0 auto 40px;
+	width:100%;
+	max-width:450px;
+	
+	input[type="text"], button {
+		height:40px;
+	}
+	button {
+		width:100px;
+	}
 }
 
 
