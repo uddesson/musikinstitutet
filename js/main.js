@@ -40,7 +40,6 @@ const baseUrl = `https://folksa.ga/api`;
     })()
 }
 
-
 const InputController = {
     
     inputIsEmptySpace(singleInput){
@@ -62,6 +61,17 @@ const InputController = {
                 }
             }
         }
+    },
+
+    setPlaceHolderIfUndefined(imageSrc){
+        // Returns src for placeholder image
+        if (imageSrc === undefined){
+            imageSrc = "images/test-placeholder.jpg";
+            return imageSrc; 
+        }
+
+        //Returns imagesrc as original argument
+        return imageSrc; 
     }
 }
 
@@ -355,9 +365,10 @@ const AddToPlaylistView = {
 		containerInner: document.createElement('section'),
 		
 		displayArtist(artist){
+            let imageSrc = InputController.setPlaceHolderIfUndefined(artist.coverImage);
             let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
-					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
+                    <img src="${imageSrc}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<button id="delete" class="clear small">Delete</button>`;
 			
