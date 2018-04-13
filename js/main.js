@@ -103,8 +103,8 @@ const FetchModel = {
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
         }
-        
-		return fetch(`${baseUrl}/${category}?limit=52&${apiKey}&sort=desc`)
+        //limit 12 now to get a better view when testing, fetch more when launching?
+		return fetch(`${baseUrl}/${category}?limit=12&${apiKey}&sort=desc`)
             .then(response => response.json())
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
@@ -126,7 +126,8 @@ const FetchModel = {
             {
 			    title = 'name';
             }
-        return fetch(`${baseUrl}/${category}?${title}=${searchQuery}&${apiKey}`)
+            //limit 12 now to get a better view when testing, no limit when launching:)
+        return fetch(`${baseUrl}/${category}?limit=12?${title}=${searchQuery}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
