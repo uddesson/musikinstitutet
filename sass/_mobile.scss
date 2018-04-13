@@ -1,15 +1,15 @@
 $border-radius__small: 5px;
 
 $color__text--light: #595763; //grey
-$color__text--dark: #365184; //matte navy
+$color__text--dark: #3a517d; //matte navy
 
-$color__button--dark: #365184; //matte navy
+$color__button--dark: #3a517d; //matte navy
 $color__button--dark-hover: #576b90; //lighter matte navy
 
 $color__highlight--light: #ff765b; //light orange
 $color__highlight--strong: #ff431f; //strong orange
 
-$transition__hover--bg: ease background .3s;
+$transition__bg--ease: ease background .3s;
 
 /******************************
  *********** RESET ************
@@ -94,7 +94,8 @@ a {
  ******************************/
 
 nav {
-	background: #376379;
+//	background: #376379;
+	background: $color__button--dark;
 	color: #f7f7f7;
 	padding:10px;
 	height: 40px;
@@ -127,14 +128,14 @@ input[type=text], input[type=number] {
 }
 button, .button {
 	border-radius: $border-radius__small;
-	transition: $transition__hover--bg;
+	transition: $transition__bg--ease;
 	cursor:pointer;
 	&.dark {
 		background: $color__button--dark;
 		color:#f8f8f8;
 		&:hover {
 			background: $color__button--dark-hover;
-			transition: $transition__hover--bg;
+			transition: $transition__bg--ease;
 		}
 	}
 	&.clear {
@@ -151,8 +152,11 @@ button, .button {
 		padding: 0 30px;
 	}
 	&.small {
-		font-size:.7rem;
-		padding:5px 0;
+		font-size: .7rem;
+		padding: .5rem 1.2rem;
+		font-family: inherit;
+		margin: 10px 0;
+		letter-spacing: .4px;
 	}
 }
 
@@ -161,12 +165,17 @@ button, .button {
 	margin:0 auto 40px;
 	width:100%;
 	max-width:450px;
-	
 	input[type="text"], button {
 		height:40px;
+		margin-bottom: 20px;
+		margin-top:25vh;
+		position:sticky;
+		top:10px;
+		z-index:12;
 	}
 	button {
-		width:100px;
+		margin: auto;
+		display: block;
 	}
 }
 
@@ -228,6 +237,7 @@ button, .button {
 
 .list {
 	max-width: 780px;
+	margin:auto;
 	&>div {
 		width:100%;
 		flex-direction: row;
@@ -243,6 +253,8 @@ button, .button {
     object-fit: cover;
     width: 100%;
     height: 240px;
+	background: #cccccc;
+	background-size: 56%;
  }
 
 
@@ -259,9 +271,35 @@ button, .button {
 	}
 }
 
-/*******************************
- *********** FORM **************
- ******************************/
+/**************************************
+ ************* PLAYLISTS **************
+ **************************************/
+.container__playlists {
+	h3 {
+		font-size: 2rem;
+	}
+	h4 {
+		font-size: .8rem;
+		text-transform: uppercase;
+		letter-spacing: .5px;
+		margin-bottom: .8rem;
+	}
+	p {
+		background: #fff;
+		border-radius: 5px;
+		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
+		padding: 1rem;
+	}
+	.text--bold {
+		text-transform: capitalize;
+	}
+	
+}
+
+
+/*********************************
+ ************* FORM **************
+ ********************************/
 #postFormsWrapper{
 	width: 100%;
 	max-width:550px;

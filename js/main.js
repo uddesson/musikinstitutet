@@ -511,7 +511,7 @@ const PlaylistView = {
         let tracklist = '';
         for (var i = 0; i < playlist.tracks.length; i++){
             let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
-            let artistName = `${playlist.tracks[i].artists[0].name}</p><br>`;
+            let artistName = `${playlist.tracks[i].artists[0].name}</p>`;
             tracklist = tracklist + trackTitle + artistName;
         }
         return tracklist;
@@ -538,6 +538,7 @@ const PlaylistView = {
 
         // Create elements below
         let showCommentsButton = document.createElement('button');
+		showCommentsButton.classList.add('dark', 'small');
         showCommentsButton.innerHTML = 'Show comments';
 
         // This is where we output the content to the user
