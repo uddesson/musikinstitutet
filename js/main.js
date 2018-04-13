@@ -422,9 +422,10 @@ const AddToPlaylistView = {
 		
 		displayAlbum(album){
 			let albumArtists = album.artists.map((artist) => artist.name);
+            let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
-					<img src="${album.coverImage}" alt="${album.title}" class="image">
+					<img src="${imageSrc}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
