@@ -66,10 +66,9 @@ const InputController = {
     setPlaceHolderIfUndefined(imageSrc){
         // Returns src for placeholder image
         if (imageSrc === undefined){
-            imageSrc = "images/test-placeholder.jpg";
+            imageSrc = "images/placeholder.jpg";
             return imageSrc; 
         }
-
         //Returns imagesrc as original argument
         return imageSrc; 
     }
