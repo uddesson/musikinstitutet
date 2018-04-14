@@ -37,7 +37,6 @@ const baseUrl = `https://folksa.ga/api`;
     })()
 }
 
-
 const InputController = {
     
     inputIsEmptySpace(singleInput){
@@ -59,6 +58,16 @@ const InputController = {
                 }
             }
         }
+    },
+
+    setPlaceHolderIfUndefined(imageSrc){
+        // Returns src for placeholder image
+        if (imageSrc === undefined){
+            imageSrc = "images/placeholder.jpg";
+            return imageSrc; 
+        }
+        //Returns imagesrc as original argument
+        return imageSrc; 
     }
 }
 
@@ -331,9 +340,10 @@ const AddToPlaylistView = {
 		containerInner: document.createElement('section'),
 		
 		displayArtist(artist){
+            let imageSrc = InputController.setPlaceHolderIfUndefined(artist.coverImage);
             let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
-					<img src="${artist.coverImage}" alt="${artist.name}" class="image">
+                    <img src="${imageSrc}" alt="${artist.name}" class="image">
 					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
 					<button id="delete" class="clear small">Delete</button>`;
 			
@@ -387,9 +397,10 @@ const AddToPlaylistView = {
 		
 		displayAlbum(album){
 			let albumArtists = album.artists.map((artist) => artist.name);
+            let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
 			albumDiv.innerHTML = `
-					<img src="${album.coverImage}" alt="${album.title}" class="image">
+					<img src="${imageSrc}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
@@ -487,7 +498,7 @@ const PlaylistView = {
         let tracklist = '';
         for (var i = 0; i < playlist.tracks.length; i++){
             let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
-            let artistName = `${playlist.tracks[i].artists[0].name}</p><br>`;
+            let artistName = `${playlist.tracks[i].artists[0].name}</p>`;
             tracklist = tracklist + trackTitle + artistName;
         }
         return tracklist;
@@ -514,6 +525,7 @@ const PlaylistView = {
 
         // Create elements below
         let showCommentsButton = document.createElement('button');
+		showCommentsButton.classList.add('dark', 'small');
         showCommentsButton.innerHTML = 'Show comments';
 
         // This is where we output the content to the user
