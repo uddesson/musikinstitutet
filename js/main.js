@@ -540,9 +540,14 @@ const PlaylistView = {
     },
 
     showComments(comments){
-        for (var i = 0; i < comments.length; i++){
-            let comment = comments[i].body;
-            console.log(comment);
+        if(comments == ''){
+            console.log('No comments yet');
+        } 
+        else {
+            for (var i = 0; i < comments.length; i++){
+                let comment = comments[i].body;
+                console.log(comment);
+            }
         }
     },
     
