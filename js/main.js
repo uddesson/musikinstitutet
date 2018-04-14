@@ -12,8 +12,8 @@ const baseUrl = `https://folksa.ga/api`;
     createEventListener: (() => {
         searchInput.addEventListener('keyup', function(){
             ArtistView.containerInner.innerHTML = "";
-            AlbumView.containerInner.innerHTML = "";
             TrackView.containerInner.innerHTML = "";
+            AlbumView.containerInner.innerHTML = "";
 
             const searchQuery = document.getElementById('searchInput').value;
 
@@ -291,6 +291,29 @@ const PostModel = {
     }
 }
 
+const DeleteModel = {
+    //TO DO: make switch statement, if artist: title=name
+    deleteOne(objectToDelete, category){
+        if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
+            fetch(`${baseUrl}/${category}s/${objectToDelete._id}?${apiKey}`, {
+                method: 'DELETE',
+                headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .then((response) => response.json())
+            .then((objectToDelete) => {
+                console.log('you deleted', objectToDelete.title);
+                //TO DO:this need to be made dynamic as well or update siteo.
+                ArtistView.containerInner.removeChild(`${category}Div`);
+                
+            });
+        } else {
+                return;
+            }
+    }
+}
 
 const RatingModel = {
     
@@ -311,35 +334,36 @@ const RatingModel = {
     }
 }
 
+
+
 const AddToPlaylistView = {
-    div: document.createElement('div'),
-    ul: document.createElement('ul'),
 
     displayPlaylists: (response, trackId) => {
-        let ul = AddToPlaylistView.ul;
+        let div = document.createElement('div');
+        let ul = document.createElement('ul');
 
         //just for now
-        AddToPlaylistView.div.style.background = "white";
-        AddToPlaylistView.div.style.width = "400px";
-        AddToPlaylistView.div.style.position = "absolute";
-        AddToPlaylistView.div.style.top = "50px";
+        div.style.background = "white";
+        div.style.width = "400px";
+        div.style.position = "absolute";
+        div.style.top = "50px";
 
         for(let playlist of response){
             let li = document.createElement('li');
             li.innerHTML = playlist.title;
             li.id = playlist._id;
-            AddToPlaylistView.ul.appendChild(li);
+            ul.appendChild(li);
         }
 
-        AddToPlaylistView.ul.addEventListener('click', function(ul){
+        ul.addEventListener('click', function(ul){
             let playlistId = ul.srcElement.id;
             let tracks = trackId;
 
             PostModel.addTrackToPlaylist(playlistId, tracks);
         });
 
-        AddToPlaylistView.div.appendChild(AddToPlaylistView.ul);
-        ArtistView.containerInner.appendChild(AddToPlaylistView.div);
+        div.appendChild(ul);
+        ArtistView.containerInner.appendChild(div);
     }
 }
 
@@ -381,23 +405,7 @@ const AddToPlaylistView = {
             deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
-                if (confirm(`Do you want to Delete ${artist.name}?`)){
-                    fetch(`${baseUrl}/artists/${artist._id}?${apiKey}`, {
-                        method: 'DELETE',
-                        headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                    .then((response) => response.json())
-                    .then((artist) => {
-                        console.log('you deleted', artist.name);
-                        ArtistView.containerInner.removeChild(artistDiv);
-                        
-                    });
-                } else {
-                        return;
-                    }
+                DeleteModel.deleteOne(artist, 'artist');
             });
 
             let buttonDiv = document.createElement('div');
@@ -431,22 +439,7 @@ const AddToPlaylistView = {
             deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
-                if (confirm(`Do you want to Delete ${album.title}?`)){
-                    fetch(`${baseUrl}/albums/${album._id}?${apiKey}`, {
-                        method: 'DELETE',
-                        headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                    .then((response) => response.json())
-                    .then((album) => {
-                        console.log('you deleted', album.title);
-                        AlbumView.containerInner.removeChild(albumDiv);
-                    });
-                } else {
-                        return;
-                    }
+                DeleteModel.deleteOne(album, 'album');
             });
 
             let buttonDiv = document.createElement('div');
@@ -486,22 +479,7 @@ const AddToPlaylistView = {
             deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
-                if (confirm(`Do you want to Delete ${track.title}?`)){
-                    fetch(`${baseUrl}/tracks/${track._id}?${apiKey}`, {
-                        method: 'DELETE',
-                        headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                    .then((response) => response.json())
-                    .then((track) => {
-                        console.log('you deleted', track.title);
-                        TrackView.containerInner.removeChild(trackDiv);
-                    });
-                } else {
-                        return;
-                    }
+                DeleteModel.deleteOne(track, 'track');
             });
 
             let buttonsDiv = document.createElement('div');
