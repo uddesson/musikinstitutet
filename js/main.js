@@ -516,62 +516,75 @@ const AddToPlaylistView = {
     }
 
 const PlaylistView = {
+    container: document.getElementById('playlistContainer'),
+    containerInner: document.createElement('section'),
 
     getTrackListFrom(playlist){
         let tracklist = '';
-        for (var i = 0; i < playlist.tracks.length; i++){
-            let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
-            let artistName = `${playlist.tracks[i].artists[0].name}</p>`;
-            tracklist = tracklist + trackTitle + artistName;
+        if (playlist.tracks.length > 0){
+            let artistName = '';
+            for (var i = 0; i < playlist.tracks.length; i++){   
+                if (playlist.tracks[i].artists[0] == undefined){
+                   artistName = 'Unknown artist';
+                } else{
+                    artistName = `${playlist.tracks[i].artists[0].name}</p>`;
+                }
+                let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
+                tracklist = tracklist + trackTitle + artistName;
+            }
+        } else{
+            tracklist = `<p>No tracks yet</p>`;
         }
-        return tracklist;
+        return tracklist; 
     },
 
     showComments(comments){
-        for (var i = 0; i < comments.length; i++){
-            let comment = comments[i].body;
-            console.log(comment);
+        if(comments == ''){
+            console.log('No comments yet');
+        } 
+        else {
+            for (var i = 0; i < comments.length; i++){
+                let comment = comments[i].body;
+                console.log(comment);
+            }
         }
     },
     
     displayPlaylist(playlist){
-        /* TO DO: 
-        * - Loop out comments to user when "show comments" is clicked
-        * - Send along new comment-input to a post-comment-function
-        */
         let rating = RatingModel.calculateRatingAverage(playlist);
-        let tracklist = PlaylistView.getTrackListFrom(playlist);
-        
-        // Put the playlists in the right container and add classes
-        playlistContainer: document.getElementById('playlistContainer');
-        playlistContainer.classList.add('container__playlists', 'list');
+        // let tracklist = PlaylistView.getTrackListFrom(playlist); 
+        let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage)
 
         // Create elements below
-        let showCommentsButton = document.createElement('button');
-		showCommentsButton.classList.add('dark', 'small');
-        showCommentsButton.innerHTML = 'Show comments';
+        let showSignlePlaylistButton = document.createElement('button');
+		showSignlePlaylistButton.classList.add('dark', 'small');
+        showSignlePlaylistButton.innerHTML = 'Show playlist';
+        
+        // let showCommentsButton = document.createElement('button');
+		// showCommentsButton.classList.add('dark', 'small');
+        // showCommentsButton.innerHTML = 'Show comments';
 
-        // This is where we output the content to the user
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
+            <img src="${imageSrc}" alt="${playlist.title}" class="image">
             <h3>${playlist.title}</h3><br>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
-            <h4>Rating: ${rating}</h4>
-            <h4>Number of comments: ${playlist.comments.length}</h4>
-            ${tracklist}
-            <input type="text" placeholder="Add comment (not working)"><br>
-            <input type="number" placeholder="Add rating" min="1" max="10"><br>`;
-        playlistContainer.appendChild(playlistDiv);
-        // A "Show comments"-button is displayed if the playlist has any ( > 0) comments
-        if(playlist.comments.length > 0){
-            playlistDiv.appendChild(showCommentsButton)
-        };
+            <h4>Rating: ${rating}</h4>`;
+        container.appendChild(playlistDiv);
 
         // Eventlistener for fetching comments is added to that button
-        showCommentsButton.addEventListener('click', function(){
-            FetchModel.fetchComments(playlist._id);
-        });
+        // showCommentsButton.addEventListener('click', function(){
+        //     FetchModel.fetchComments(playlist._id);
+        // });
+
+        // playlistDiv.appendChild(showCommentsButton)
+        
+        playlistDiv.appendChild(showSignlePlaylistButton);
+
+        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+        PlaylistView.container.appendChild(PlaylistView.containerInner);
+        PlaylistView.containerInner.appendChild(playlistDiv);
     }
 }
     
