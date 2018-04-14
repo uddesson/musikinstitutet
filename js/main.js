@@ -274,6 +274,20 @@ const PostModel = {
 
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
+    },
+    addTrackToPlaylist(playlistId, tracks){
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tracks: tracks })
+        })
+        .then((response) => response.json())
+        .then((playlist) => {
+            console.log("You've added a track to ", playlist.title);
+        });
     }
 }
 
@@ -316,10 +330,12 @@ const AddToPlaylistView = {
             li.id = playlist._id;
             AddToPlaylistView.ul.appendChild(li);
         }
+
         AddToPlaylistView.ul.addEventListener('click', function(ul){
-            //here do fetch+post track to playlists!
-            console.log('playlistId: ', ul.srcElement.id);
-            console.log('trackId ', trackId);
+            let playlistId = ul.srcElement.id;
+            let tracks = trackId;
+
+            PostModel.addTrackToPlaylist(playlistId, tracks);
         });
 
         AddToPlaylistView.div.appendChild(AddToPlaylistView.ul);
@@ -361,8 +377,8 @@ const AddToPlaylistView = {
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)
-            deleteButton = document.createElement('button');
-            deleteButton.innerText = 'Delete';
+            let deleteButton = document.createElement('button');
+            deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${artist.name}?`)){
@@ -384,7 +400,10 @@ const AddToPlaylistView = {
                     }
             });
 
-            artistDiv.appendChild(deleteButton);
+            let buttonDiv = document.createElement('div');
+            buttonDiv.appendChild(deleteButton);
+            artistDiv.appendChild(buttonDiv);
+
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
 			ArtistView.containerInner.appendChild(artistDiv);
@@ -408,8 +427,8 @@ const AddToPlaylistView = {
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener) 
-            deleteButton = document.createElement('button');
-            deleteButton.innerText = 'Delete';
+            let deleteButton = document.createElement('button');
+            deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${album.title}?`)){
@@ -430,7 +449,10 @@ const AddToPlaylistView = {
                     }
             });
 
-            albumDiv.appendChild(deleteButton);
+            let buttonDiv = document.createElement('div');
+            buttonDiv.appendChild(deleteButton);
+            albumDiv.appendChild(buttonDiv);
+            
 			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
@@ -452,8 +474,16 @@ const AddToPlaylistView = {
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
-            deleteButton = document.createElement('button');
-            deleteButton.innerText = 'Delete';
+            let addButton = document.createElement('button');
+            addButton.innerText = '+';
+
+            addButton.addEventListener('click', function(){
+                console.log('scroll up');
+                FetchModel.fetchPlaylistsForAdding(track._id);
+            });
+
+            let deleteButton = document.createElement('button');
+            deleteButton.innerText = 'x';
 
             deleteButton.addEventListener('click', function(){
                 if (confirm(`Do you want to Delete ${track.title}?`)){
@@ -474,17 +504,10 @@ const AddToPlaylistView = {
                     }
             });
 
-            trackDiv.appendChild(deleteButton);
-
-            addButton = document.createElement('button');
-            addButton.innerText = 'Add';
-
-            addButton.addEventListener('click', function(){
-                console.log('scroll up');
-                FetchModel.fetchPlaylistsForAdding(track._id);
-            });
-
-            trackDiv.appendChild(addButton);
+            let buttonsDiv = document.createElement('div');
+            buttonsDiv.appendChild(addButton);
+            buttonsDiv.appendChild(deleteButton);
+            trackDiv.appendChild(buttonsDiv);
     
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
