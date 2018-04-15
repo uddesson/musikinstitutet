@@ -93,7 +93,7 @@ const ResponseController = {
             break;
             case 'playlists':
 				for (let playlist of response){
-					PlaylistView.displayPlaylist(playlist);
+					PlaylistView.displayPlaylists(playlist);
 				}
 			break;
 		}
@@ -164,7 +164,7 @@ const FetchModel = {
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				AddToPlaylistView.displayPlaylists(response, trackId);
+				AddToPlaylistView.displayPlaylistss(response, trackId);
 			})
 			.catch(error => console.log(error));
         },
@@ -337,7 +337,7 @@ const RatingModel = {
 
 const AddToPlaylistView = {
 
-    displayPlaylists: (response, trackId) => {
+    displayPlaylistss: (response, trackId) => {
         let div = document.createElement('div');
         let ul = document.createElement('ul');
 
@@ -503,9 +503,9 @@ const PlaylistView = {
                 if (playlist.tracks[i].artists[0] == undefined){
                    artistName = 'Unknown artist';
                 } else{
-                    artistName = `${playlist.tracks[i].artists[0].name}</p>`;
+                    artistName = `${playlist.tracks[i].artists[0].name}</p></div>`;
                 }
-                let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
+                let trackTitle = `<div><p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
                 tracklist = tracklist + trackTitle + artistName;
             }
         } else{
@@ -515,30 +515,41 @@ const PlaylistView = {
     },
 
     showComments(comments){
+        let commentList = document.createElement('ul')
+        
         if(comments == ''){
-            console.log('No comments yet');
+            let listElement = document.createElement('li');
+            listElement.innerText = 'No comments yet';
+            commentList.appendChild(listElement);
         } 
         else {
             for (var i = 0; i < comments.length; i++){
                 let comment = comments[i].body;
-                console.log(comment);
+                let listElement = document.createElement('li');
+                let deleteButton = document.createElement('button');
+                deleteButton.innerText = 'x';
+                listElement.innerText = comment;
+                listElement.appendChild(deleteButton);
+                commentList.appendChild(listElement);
             }
         }
+        
+        PlaylistView.container.appendChild(commentList);
+
+        // deleteButton.addEventListener('click', function(){
+        //     DeleteModel.deleteOne(comment, 'comment');
+        // });
     },
     
-    displayPlaylist(playlist){
+    displayPlaylists(playlist){
         let rating = RatingModel.calculateRatingAverage(playlist);
-        // let tracklist = PlaylistView.getTrackListFrom(playlist); 
         let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage)
 
         // Create elements below
-        let showSignlePlaylistButton = document.createElement('button');
-		showSignlePlaylistButton.classList.add('dark', 'small');
-        showSignlePlaylistButton.innerHTML = 'Show playlist';
-        
-        // let showCommentsButton = document.createElement('button');
-		// showCommentsButton.classList.add('dark', 'small');
-        // showCommentsButton.innerHTML = 'Show comments';
+        let showSinglePlaylistButton = document.createElement('button');
+        showSinglePlaylistButton.dataset.id = playlist._id;
+		showSinglePlaylistButton.classList.add('dark', 'small');
+        showSinglePlaylistButton.innerHTML = 'Show playlist';
 
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
@@ -548,19 +559,44 @@ const PlaylistView = {
             <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating}</h4>`;
         container.appendChild(playlistDiv);
-
-        // Eventlistener for fetching comments is added to that button
-        // showCommentsButton.addEventListener('click', function(){
-        //     FetchModel.fetchComments(playlist._id);
-        // });
-
-        // playlistDiv.appendChild(showCommentsButton)
         
-        playlistDiv.appendChild(showSignlePlaylistButton);
+        playlistDiv.appendChild(showSinglePlaylistButton);
 
         PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         PlaylistView.containerInner.appendChild(playlistDiv);
+
+
+        showSinglePlaylistButton.addEventListener('click', function(){
+            let id = this.dataset.id;
+            PlaylistView.displaySinglePlaylist(id, rating, playlist)           
+        });
+    },
+
+    displaySinglePlaylist(id, rating, playlist){
+        let showCommentsButton = document.createElement('button');
+		showCommentsButton.classList.add('dark', 'small');
+        showCommentsButton.innerHTML = 'Show comments';
+        
+       
+
+        let tracklist = PlaylistView.getTrackListFrom(playlist); 
+        
+
+        let singlePlaylistContent = `
+        <section class="containerInner container__inner container__tracks list">
+        <h3>${playlist.title}</h3><br>
+        <h4>Created by: ${playlist.createdBy}</h4>
+        <h4>Rating: ${rating}</h4>
+        ${tracklist}</section>`;
+        
+        PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
+        PlaylistView.container.appendChild(showCommentsButton);
+        
+         // Eventlistener for fetching comments is added to that button
+        showCommentsButton.addEventListener('click', function(){
+            FetchModel.fetchComments(id);
+        });
     }
 }
     
