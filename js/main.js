@@ -339,17 +339,17 @@ const AddToPlaylistView = {
 
     displayPlaylists: (response, trackId) => {
         let div = document.createElement('div');
+        div.classList.add('popup__add-to-playlist');
         let ul = document.createElement('ul');
         let createPlaylistButton = document.createElement('button');
         createPlaylistButton.innerText = 'Create new playlist';
         createPlaylistButton.classList.add('light', 'large');
+        const createPlaylistContainer = document.getElementById('createPlaylistContainer');
 
-
-        //just for now
-        div.style.background = "white";
-        div.style.width = "400px";
-        div.style.position = "absolute";
-        div.style.top = "50px";
+        createPlaylistButton.addEventListener('click', function(){
+            createPlaylistContainer.classList.toggle('hidden');
+            div.appendChild(createPlaylistContainer);
+        });
 
         for(let playlist of response){
             let li = document.createElement('li');
@@ -360,9 +360,10 @@ const AddToPlaylistView = {
 
         ul.addEventListener('click', function(ul){
             let playlistId = ul.srcElement.id;
-            let tracks = trackId;
+            let track = trackId;
+            console.log(ul.srcElement.id);
 
-            PostModel.addTrackToPlaylist(playlistId, tracks);
+            PostModel.addTrackToPlaylist(playlistId, track);
         });
 
         div.appendChild(ul);
