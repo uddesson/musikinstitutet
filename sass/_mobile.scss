@@ -185,15 +185,6 @@ button, .button {
 }
 
 
-/******************************
- ***** FUNCTIONAL STYLES ******
- ******************************/
-
- .hidden{
-	 display: none;
- }
-
-
 /****************************************
  ************ GRID/LIST VIEW ************
  ****************************************/
@@ -349,7 +340,12 @@ button, .button {
 	overflow: scroll;
 
 	li {
-		padding: 0 0 1em;
+		padding: .5em 0 .5em;
+		cursor:pointer;
+		&:hover {
+			background:#f7f7f7;
+			border-radius: $border-radius__small;
+		}
 	}
 	#createPlaylistContainer {
 		margin-top:30px;
@@ -358,3 +354,11 @@ button, .button {
 	}
 
 }
+
+/******************************
+ ***** FUNCTIONAL STYLES ******
+ ******************************/
+
+ .hidden{
+	 display: none!important;
+ }
