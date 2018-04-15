@@ -323,7 +323,21 @@ addTrackToPlaylist(playlistId, tracks){
             .then((playlist) => {
                 FetchModel.fetchComments(playlistId);
           });
-    }
+    },
+	rate(category, id, rating){
+			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ rating: rating })
+		})
+		.then((response) => response.json())
+		.then((category) => {
+			console.log(category);
+		});
+	}
 }
 
 const DeleteModel = {
@@ -548,6 +562,11 @@ const AddToPlaylistView = {
 				number.value = i;
 				ratingInput.appendChild(number);
 			}
+			ratingInput.addEventListener('change', function(){
+				// skcika in ratingInput.value till API
+				console.log(ratingInput.value);
+				PostModel.rate('track', track._id, ratingInput.value);
+			});
 			
             //make function/controller
             //fex one for creating the button + eventlistenr 
