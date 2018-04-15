@@ -173,8 +173,6 @@ const FetchModel = {
 
 
 const PostModel = {
-    // TO DO:
-    // * Add playlists
 
     addArtist(){
         let artist = {
@@ -274,19 +272,44 @@ const PostModel = {
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
     },
-    addTrackToPlaylist(playlistId, tracks){
-        fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
+
+    addPlaylist(){
+        let playlist = {
+            title: "Folksy Molksy",
+            genres: "Folk, Folk Rock",
+            createdBy: "The Playlister",
+            tracks: "5aae2d13b9791d0344d8f717,5aae2e6fb9791d0344d8f71c",
+            coverImage: "https://www.internetmuseum.se/wordpress/wp-content/uploads/compisknappar-504x329.jpg",
+            coverImageColor: "#000"
+        }
+        
+        fetch('https://folksa.ga/api/playlists',{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ tracks: tracks })
+            body: JSON.stringify(playlist)
         })
         .then((response) => response.json())
         .then((playlist) => {
-            console.log("You've added a track to ", playlist.title);
+            console.log(playlist);
         });
+},
+
+addTrackToPlaylist(playlistId, tracks){
+    fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tracks: tracks })
+    })
+    .then((response) => response.json())
+    .then((playlist) => {
+        console.log("You've added a track to ", playlist.title);
+    });
     }
 }
 
@@ -343,12 +366,22 @@ const AddToPlaylistView = {
         let ul = document.createElement('ul');
         let createPlaylistButton = document.createElement('button');
         createPlaylistButton.innerText = 'Create new playlist';
-        createPlaylistButton.classList.add('light', 'large');
+        createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
 
         createPlaylistButton.addEventListener('click', function(){
+            
+            //show create playlist form
             createPlaylistContainer.classList.toggle('hidden');
-            div.appendChild(createPlaylistContainer);
+
+            if(createPlaylistButton.classList.contains('showPlaylistForm')){
+                createPlaylistButton.insertAdjacentElement('beforebegin', createPlaylistContainer);
+                createPlaylistButton.classList.toggle('showPlaylistForm');
+            } else {
+                createPlaylistButton.classList.toggle('showPlaylistForm');
+
+            }
+            
         });
 
         for(let playlist of response){
