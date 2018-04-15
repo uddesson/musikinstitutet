@@ -164,7 +164,7 @@ const FetchModel = {
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				AddToPlaylistView.displayPlaylistss(response, trackId);
+				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
 			.catch(error => console.log(error));
         },
@@ -373,7 +373,7 @@ const RatingModel = {
 
 const AddToPlaylistView = {
 
-    displayPlaylistss: (response, trackId) => {
+    displayPlaylistsPopUp: (response, trackId) => {
         let div = document.createElement('div');
         div.classList.add('popup__add-to-playlist');
         let ul = document.createElement('ul');
@@ -387,7 +387,7 @@ const AddToPlaylistView = {
 		  var isClickInside = div.contains(event.target);
 		  if (!isClickInside){
 			console.log('Clicked outside div')
-			div.classList.toggle('hidden');
+			div.classList.add('hidden');
 		  }
 		});
 		
