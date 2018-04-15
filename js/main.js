@@ -347,6 +347,20 @@ const DeleteModel = {
         } else {
                 return;
             }
+    },
+
+    deleteComment(commentID, playlistID){
+        fetch(`https://folksa.ga/api/comments/${commentID}?key=flat_eric`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then((response) => response.json())
+        .then((comment) => {
+            FetchModel.fetchComments(playlistID);
+        });
     }
 }
 
@@ -604,7 +618,10 @@ const PlaylistView = {
         } 
         else {
             for (var i = 0; i < comments.length; i++){
+                // console.log(comments[i])
                 let comment = `"${comments[i].body}" by ${comments[i].username}`;
+                let commentId = comments[i]._id;
+                let playlistId = comments[i].playlist;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
                 deleteButton.innerText = 'x';
@@ -613,7 +630,7 @@ const PlaylistView = {
                 commentList.appendChild(listElement);
 
                 deleteButton.addEventListener('click', function(){
-                    DeleteModel.deleteOne(comment, 'comment');
+                    DeleteModel.deleteComment(commentId, playlistId);
                 });
             }
         }
