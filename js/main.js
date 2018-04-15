@@ -387,7 +387,7 @@ const AddToPlaylistView = {
 		  var isClickInside = div.contains(event.target);
 		  if (!isClickInside){
 			console.log('Clicked outside div')
-			div.classList.toggle('hidden');
+			div.classList.add('hidden');
 		  }
 		});
 		
