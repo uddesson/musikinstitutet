@@ -34,7 +34,6 @@ ul{
 li{
 	vertical-align: middle;
 	margin: 0 20px 0 0;
-	float: left;
 }
 
 input {
@@ -109,6 +108,9 @@ nav {
 			text-transform: uppercase;
 			letter-spacing: 1px
 		}
+	ul li {
+		float: left;
+	}
 }
 
 /******************************
@@ -137,6 +139,9 @@ button, .button {
 			background: $color__button--dark-hover;
 			transition: $transition__bg--ease;
 		}
+	}
+	&.light {
+		background: #dedede;
 	}
 	&.clear {
 		border:none;
@@ -171,7 +176,7 @@ button, .button {
 		margin-top:25vh;
 		position:sticky;
 		top:10px;
-		z-index:12;
+		// z-index:12;
 	}
 	button {
 		margin: auto;
@@ -244,7 +249,7 @@ button, .button {
 	}
 }
 /***** IMAGES *****/
-.grid > div {
+.grid > div:not(.popup__add-to-playlist) {
     position: relative;
     overflow: hidden;
 }
@@ -323,4 +328,24 @@ button, .button {
 			margin-top:30px;
 		}
 	}
+}
+
+/*************************************
+ ******** ADD TO PLAYLIST-POPUP ***************
+ *************************************/
+
+.popup__add-to-playlist {
+	// div.style.background = "white";
+	// div.style.width = "400px";
+	// div.style.position = "absolute";
+	// div.style.top = "50px";
+	background: white;
+	width:500px;
+	padding:50px;
+	position: fixed;
+    top: 50px;
+    left: 410px;
+    z-index: 30;
+    max-height: 600px;
+	overflow: scroll;
 }
