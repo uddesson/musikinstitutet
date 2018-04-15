@@ -21,18 +21,7 @@ const baseUrl = `https://folksa.ga/api`;
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
 
-
-            /*
-            TO DO:
-            user should be able to search without f ex ' and still get a result
-
-            be able to search for playlists
-
-            Shows duplicates of search result sometimes?
-
-            check if genre: display as link, if clicked fetchSpecificGenre, display as search results
-            maybe also make input value genre
-            */
+            GenreController.checkIfGenre(searchQuery);
         });
     })()
 }
@@ -113,10 +102,79 @@ const ResponseController = {
     }
 }
 
+/* If searchquery matches a genre: display a link to that genre, 
+if clicked then fetchGenre, display as search results. artists, albums, tracks.
+also set search input value as the name of the genre*/
+GenreController = { 
+    checkIfGenre(searchQuery) {
+        switch (searchQuery) {
+            case 'jazz':
+                console.log('jazz');
+                //display jazz + image. eventlistener that triggers displayGenre
+                GenreController.displayGenre('jazz');
+            break;
+            case 'hip hop': 
+                console.log('hip hop');
+                GenreController.displayGenre('hip hop');
+            break;
+            case 'rock':
+                console.log('rock');
+                GenreController.displayGenre('rock');
+            break;
+            case 'folk':
+                console.log('folk');
+                GenreController.displayGenre('folk');
+            break;
+            case 'reggae':
+                console.log('reggae');
+                GenreController.displayGenre('reggae');
+            break;
+            case 'pop':
+                console.log('pop');
+                GenreController.displayGenre('pop');
+            break;
+            case 'rnb':
+                console.log('Rnb');
+                GenreController.displayGenre('rnb');
+            break;
+            case 'dancehall':
+                console.log('dancehall');
+                GenreController.displayGenre('dancehall');
+            break;
+            case 'indie':
+                console.log('indie');
+                GenreController.displayGenre('indie');
+            break;
+            case 'heavy metal':
+                console.log('heavy metal');
+                GenreController.displayGenre('heavy metal');
+            break;
+            case 'electronic':
+                console.log('electronic');
+                GenreController.displayGenre('electronic');
+            break;
+        }
+    },
+    //not really display.. setGenre??
+    displayGenre(genre){
+        ArtistView.containerInner.innerHTML = "";
+        TrackView.containerInner.innerHTML = "";
+        AlbumView.containerInner.innerHTML = "";
+
+        FetchModel.fetchGenre('artists', genre);
+        FetchModel.fetchGenre('albums', genre);
+        FetchModel.fetchGenre('tracks', genre);
+        
+        //to show user what genre they're on
+        searchInput.value = genre;
+    }
+}
+
 
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
+
 
 
 const FetchModel = {
@@ -156,7 +214,8 @@ const FetchModel = {
             .catch(error => console.log(error));
     },
     
-	fetchSpecificGenre(category, genre){
+	fetchGenre(category, genre){
+        console.log(`${baseUrl}/${category}?genres=${genre}&${apiKey}`);
         return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
