@@ -173,8 +173,6 @@ const FetchModel = {
 
 
 const PostModel = {
-    // TO DO:
-    // * Add playlists
 
     addArtist(){
         let artist = {
@@ -274,19 +272,36 @@ const PostModel = {
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
     },
-    addTrackToPlaylist(playlistId, tracks){
-        fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
+
+    addPlaylist(playlist){
+        
+        fetch(`https://folksa.ga/api/playlists?${apiKey}`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ tracks: tracks })
+            body: JSON.stringify(playlist)
         })
         .then((response) => response.json())
         .then((playlist) => {
-            console.log("You've added a track to ", playlist.title);
+            console.log(playlist);
         });
+},
+
+addTrackToPlaylist(playlistId, tracks){
+    fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tracks: tracks })
+    })
+    .then((response) => response.json())
+    .then((playlist) => {
+        console.log("You've added a track to ", playlist.title);
+    });
     },
 
     addComment(playlistId, text, user){
@@ -364,12 +379,39 @@ const AddToPlaylistView = {
         let ul = document.createElement('ul');
         let createPlaylistButton = document.createElement('button');
         createPlaylistButton.innerText = 'Create new playlist';
-        createPlaylistButton.classList.add('light', 'large');
+        createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
 
         createPlaylistButton.addEventListener('click', function(){
-            createPlaylistContainer.classList.toggle('hidden');
-            div.appendChild(createPlaylistContainer);
+
+            if(createPlaylistButton.classList.contains('showPlaylistForm')){
+                //show create playlist form
+                createPlaylistContainer.classList.toggle('hidden');
+                //append the form before the button
+                createPlaylistButton.insertAdjacentElement('beforebegin', createPlaylistContainer);
+                //change behavior from displaying form to creating playlist
+                createPlaylistButton.classList.toggle('showPlaylistForm');
+            } else {
+                let playlistName = document.getElementById('playlistName').value;
+                let createdBy = document.getElementById('createdBy').value;
+                let genres = document.getElementById('genres').value;
+                let playlistImage = document.getElementById('playlistImage').value;
+
+                let playlist = {
+                    title: playlistName,
+                    genres: genres,
+                    createdBy: createdBy,
+                    tracks: trackId,
+                    coverImage: playlistImage
+                };
+
+                PostModel.addPlaylist(playlist);
+                
+                //change behavior from creating playlist to displaying form
+                createPlaylistButton.classList.toggle('showPlaylistForm');
+
+            }
+            
         });
 
         for(let playlist of response){

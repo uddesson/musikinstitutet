@@ -124,7 +124,7 @@ input[type=text], input[type=number] {
 	border: 1px solid #e0e0e0;
     text-indent: 8px;
 	font-size: 1em;
-    padding: 0.3em;
+    padding: 0.3em 0;
 	font-family: inherit;
 	margin: 6px 0;
 }
@@ -339,7 +339,6 @@ button, .button {
 	// div.style.width = "400px";
 	// div.style.position = "absolute";
 	// div.style.top = "50px";
-	background: white;
 	width:500px;
 	padding:50px;
 	position: fixed;
@@ -348,4 +347,14 @@ button, .button {
     z-index: 30;
     max-height: 600px;
 	overflow: scroll;
+
+	li {
+		padding: 0 0 1em;
+	}
+	#createPlaylistContainer {
+		margin-top:30px;
+		background: #f7f7f7;
+		padding: 2em;
+	}
+
 }
