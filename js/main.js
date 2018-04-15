@@ -330,7 +330,7 @@ const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
         if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
-            fetch(`${baseUrl}/${category}s/${objectToDelete._id}?${apiKey}`, {
+            fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
                 headers: {
                         'Accept': 'application/json',
