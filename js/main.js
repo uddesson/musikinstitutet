@@ -135,8 +135,7 @@ const FetchModel = {
             {
 			    title = 'name';
             }
-            //limit 12 now to get a better view when testing, no limit when launching:)
-        return fetch(`${baseUrl}/${category}?limit=12?${title}=${searchQuery}&${apiKey}`)
+        return fetch(`${baseUrl}/${category}?&${title}=${searchQuery}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
@@ -384,8 +383,7 @@ const AddToPlaylistView = {
             let artistDiv = document.createElement('div');
 			artistDiv.innerHTML = `
                     <img src="${imageSrc}" alt="${artist.name}" class="image">
-					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>
-					<button id="delete" class="clear small">Delete</button>`;
+					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>`;
 			
 			const genreDiv = document.createElement('div');
 			genreDiv.classList.add('genres');
