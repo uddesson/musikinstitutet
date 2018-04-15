@@ -544,12 +544,21 @@ const AddToPlaylistView = {
 			let albumArtists = album.artists.map((artist) => artist.name);
             let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
+			let ratingInput = createRatingInput();
+			
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
             
+			
+			ratingInput.addEventListener('change', function(){
+				// skcika in ratingInput.value till API
+				console.log(ratingInput.value);
+				PostModel.rate('album', album._id, ratingInput.value);
+			});
+			
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener) 
@@ -561,6 +570,7 @@ const AddToPlaylistView = {
             });
 
             let buttonDiv = document.createElement('div');
+			buttonDiv.appendChild(ratingInput);
             buttonDiv.appendChild(deleteButton);
             albumDiv.appendChild(buttonDiv);
             
@@ -576,20 +586,13 @@ const AddToPlaylistView = {
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
-			
 			let trackDiv = document.createElement('div');
+			let ratingInput = createRatingInput();
+			
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
                 <h4>by ${trackArtists}</h4>`;
-            
-			//Create rating select field with 10 options
-			let ratingInput = document.createElement('select');
-			for(let i = 1; i <= 10; i++){
-				let number = document.createElement('option');
-				number.innerText = i;
-				number.value = i;
-				ratingInput.appendChild(number);
-			}
+			
 			ratingInput.addEventListener('change', function(){
 				// skcika in ratingInput.value till API
 				console.log(ratingInput.value);
@@ -614,6 +617,7 @@ const AddToPlaylistView = {
                 DeleteModel.deleteOne(track, 'track');
             });
 
+			createRatingInput();
             let buttonsDiv = document.createElement('div');
 			buttonsDiv.appendChild(ratingInput);
             buttonsDiv.appendChild(addButton);
@@ -623,7 +627,7 @@ const AddToPlaylistView = {
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
-		},
+		}
     }
 
 const PlaylistView = {
@@ -683,7 +687,7 @@ const PlaylistView = {
     
     displayPlaylists(playlist){
         let rating = RatingModel.calculateRatingAverage(playlist);
-        let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage)
+        let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage);
 
         // Create elements below
         let showSinglePlaylistButton = document.createElement('button');
@@ -715,8 +719,9 @@ const PlaylistView = {
     displaySinglePlaylist(id, rating, playlist){
         // Fetch comments for single playlist, since these should be displayed as well
         FetchModel.fetchComments(id);
-
+		let ratingInput = createRatingInput();
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
+		
         let singlePlaylistContent = `
             <section class="containerInner container__inner container__tracks list">
                 <h2>${playlist.title}</h2><br>
@@ -724,11 +729,18 @@ const PlaylistView = {
                 <h4>Rating: ${rating}</h4>
                 ${tracklist}
             </section>`;
-        
+		
+		ratingInput.addEventListener('change', function(){
+			// skcika in ratingInput.value till API
+			console.log(ratingInput.value);
+			PostModel.rate('playlist', playlist._id, ratingInput.value);
+		});
+		
+		
         let newComment = document.createElement('input');
         newComment.type = 'text';
         newComment.placeholder = 'New comment';
-
+		
         let commentBy = document.createElement('input');
         commentBy.type = 'text';
         commentBy.placeholder = "Who's commenting?";
@@ -742,6 +754,7 @@ const PlaylistView = {
         removePlaylistButton.classList.add('button', 'small', 'light');
 
         PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
+		PlaylistView.container.appendChild(ratingInput);
         PlaylistView.container.appendChild(newComment);
         PlaylistView.container.appendChild(commentBy);
         PlaylistView.container.appendChild(addCommentButton);
@@ -825,9 +838,8 @@ const NavigationView = {
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
-    },
+    }
 }
-
 
 const PostView = { 
     
@@ -893,6 +905,24 @@ const PostView = {
             PostModel.addTrack();
         })
     }
+}
+
+//Create a function that creates a rating input field
+function createRatingInput(){
+	//Create rating select field with 10 options
+	let ratingInput = document.createElement('select');
+
+	for(let i = 1; i <= 10; i++){
+		let number = document.createElement('option');
+		number.innerText = i;
+		number.value = i;
+		ratingInput.appendChild(number);
+	}
+	return ratingInput;
+}
+
+function displayRating(){
+	
 }
 
 
