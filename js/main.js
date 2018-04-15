@@ -381,7 +381,16 @@ const AddToPlaylistView = {
         createPlaylistButton.innerText = 'Create new playlist';
         createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
-
+		
+		//Hide popup when clicking outside of it
+		document.addEventListener('click', function(event) {
+		  var isClickInside = div.contains(event.target);
+		  if (!isClickInside){
+			console.log('Clicked outside div')
+			div.classList.toggle('hidden');
+		  }
+		});
+		
         createPlaylistButton.addEventListener('click', function(){
 
             if(createPlaylistButton.classList.contains('showPlaylistForm')){
