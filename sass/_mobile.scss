@@ -292,10 +292,20 @@ button, .button {
 	
 }
 
+//CREATE A CLASS FOR STYLING LATER ON
+#playlistContainer {
+	margin:0 auto 100px;
+	input, button {
+		max-width:500px;
+		margin: 10px auto;
+		display: block;
+	}
+}
 
 /*********************************
  ************* FORM **************
  ********************************/
+//CREATE A CLASS FOR STYLING LATER ON
 #postFormsWrapper{
 	width: 100%;
 	max-width:550px;
