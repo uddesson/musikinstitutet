@@ -92,12 +92,27 @@ const ResponseController = {
 				}
             break;
             case 'playlists':
+                // TO DO: Put sorting into separate function and call before loop
+                response.sort((playlistA, playlistB) => {
+                    let averageForA = RatingModel.calculateRatingAverage(playlistA);
+                    let averageForB = RatingModel.calculateRatingAverage(playlistB);
+
+                    if(averageForA < averageForB){
+                        return 1;
+                    }
+                    if(averageForB < averageForA){
+                        return -1;
+                    }
+                    return 0;
+                })  
 				for (let playlist of response){
 					PlaylistView.displayPlaylists(playlist);
 				}
 			break;
 		}
-    }
+    },
+
+    
 }
 
 
@@ -387,11 +402,11 @@ const RatingModel = {
         let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
         
         if (isNaN(ratingAverage)){
-            return 'No rating yet';
+            return 0;
         }
         else{
             ratingAverage = Math.floor(ratingAverage);
-            return `${ratingAverage} / 10`;
+            return ratingAverage;
         }
     }
 }
@@ -682,7 +697,7 @@ const PlaylistView = {
             <h3>${playlist.title}</h3><br>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
-            <h4>Rating: ${rating}</h4>`;
+            <h4>Rating: ${rating} / 10 </h4>`;
         container.appendChild(playlistDiv);
         
         playlistDiv.appendChild(showSinglePlaylistButton);
