@@ -742,6 +742,7 @@ const NavigationView = {
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
             NavigationView.playlistContainer.innerHTML = '';
+            PlaylistView.containerInner.innerHTML = '';
             NavigationView.playlistContainer.classList.remove('hidden');
             FetchModel.fetchAll('playlists');       
             
@@ -750,10 +751,11 @@ const NavigationView = {
         });
 
         /* If the user tries to search while on the contribute "page",
-        we still allow them to do so, and hide the post-view */
+        we still allow them to do so, and hide the other views */
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
+            NavigationView.playlistContainer.classList.add('hidden');
         });
     },
 
