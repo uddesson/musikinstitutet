@@ -539,7 +539,16 @@ const AddToPlaylistView = {
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
                 <h4>by ${trackArtists}</h4>`;
-                
+            
+			//Create rating select field with 10 options
+			let ratingInput = document.createElement('select');
+			for(let i = 1; i <= 10; i++){
+				let number = document.createElement('option');
+				number.innerText = i;
+				number.value = i;
+				ratingInput.appendChild(number);
+			}
+			
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
@@ -559,6 +568,7 @@ const AddToPlaylistView = {
             });
 
             let buttonsDiv = document.createElement('div');
+			buttonsDiv.appendChild(ratingInput);
             buttonsDiv.appendChild(addButton);
             buttonsDiv.appendChild(deleteButton);
             trackDiv.appendChild(buttonsDiv);
