@@ -340,6 +340,10 @@ const AddToPlaylistView = {
     displayPlaylists: (response, trackId) => {
         let div = document.createElement('div');
         let ul = document.createElement('ul');
+        let createPlaylistButton = document.createElement('button');
+        createPlaylistButton.innerText = 'Create new playlist';
+        createPlaylistButton.classList.add('light', 'large');
+
 
         //just for now
         div.style.background = "white";
@@ -362,6 +366,7 @@ const AddToPlaylistView = {
         });
 
         div.appendChild(ul);
+        div.appendChild(createPlaylistButton);
         ArtistView.containerInner.appendChild(div);
     }
 }
