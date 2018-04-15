@@ -342,11 +342,10 @@ const DeleteModel = {
                 console.log('you deleted', objectToDelete.title);
                 //TO DO:this need to be made dynamic as well or update siteo.
                 ArtistView.containerInner.removeChild(`${category}Div`);
-                
             });
         } else {
-                return;
-            }
+            return;
+        }
     },
 
     deleteComment(commentID, playlistID){
@@ -694,16 +693,26 @@ const PlaylistView = {
         addCommentButton.innerText = "Add comment";
         addCommentButton.classList.add('button', 'small', 'dark');
 
+        let removePlaylistButton = document.createElement('button');
+        removePlaylistButton.innerText = "Remove this playlist";
+        removePlaylistButton.classList.add('button', 'small', 'light');
+
         PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
         PlaylistView.container.appendChild(newComment);
         PlaylistView.container.appendChild(commentBy);
         PlaylistView.container.appendChild(addCommentButton);
         PlaylistView.container.appendChild(PlaylistView.commentsContainer);
+        PlaylistView.container.appendChild(removePlaylistButton);
 
         addCommentButton.addEventListener('click', function(){
             newComment = newComment.value;
             commentBy = commentBy.value;
             PostModel.addComment(playlist._id, newComment, commentBy);
+        })
+
+        removePlaylistButton.addEventListener('click', function(){
+            // console.log(playlist, playlist)
+            DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
 }
