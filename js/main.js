@@ -273,17 +273,9 @@ const PostModel = {
         }
     },
 
-    addPlaylist(){
-        let playlist = {
-            title: "Folksy Molksy",
-            genres: "Folk, Folk Rock",
-            createdBy: "The Playlister",
-            tracks: "5aae2d13b9791d0344d8f717,5aae2e6fb9791d0344d8f71c",
-            coverImage: "https://www.internetmuseum.se/wordpress/wp-content/uploads/compisknappar-504x329.jpg",
-            coverImageColor: "#000"
-        }
+    addPlaylist(playlist){
         
-        fetch('https://folksa.ga/api/playlists',{
+        fetch(`https://folksa.ga/api/playlists?${apiKey}`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -370,14 +362,31 @@ const AddToPlaylistView = {
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
 
         createPlaylistButton.addEventListener('click', function(){
-            
-            //show create playlist form
-            createPlaylistContainer.classList.toggle('hidden');
 
             if(createPlaylistButton.classList.contains('showPlaylistForm')){
+                //show create playlist form
+                createPlaylistContainer.classList.toggle('hidden');
+                //append the form before the button
                 createPlaylistButton.insertAdjacentElement('beforebegin', createPlaylistContainer);
+                //change behavior from displaying form to creating playlist
                 createPlaylistButton.classList.toggle('showPlaylistForm');
             } else {
+                let playlistName = document.getElementById('playlistName').value;
+                let createdBy = document.getElementById('createdBy').value;
+                let genres = document.getElementById('genres').value;
+                let playlistImage = document.getElementById('playlistImage').value;
+
+                let playlist = {
+                    title: playlistName,
+                    genres: genres,
+                    createdBy: createdBy,
+                    tracks: trackId,
+                    coverImage: playlistImage
+                };
+
+                PostModel.addPlaylist(playlist);
+                
+                //change behavior from creating playlist to displaying form
                 createPlaylistButton.classList.toggle('showPlaylistForm');
 
             }
