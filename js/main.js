@@ -135,7 +135,7 @@ const FetchModel = {
             {
 			    title = 'name';
             }
-        return fetch(`${baseUrl}/${category}?&${title}=${searchQuery}&${apiKey}`)
+        return fetch(`${baseUrl}/${category}?&${title}=${searchQuery}&${apiKey}&sort=desc`)
             .then(response => response.json())
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
