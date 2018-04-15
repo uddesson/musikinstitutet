@@ -287,6 +287,27 @@ const PostModel = {
         .then((playlist) => {
             console.log("You've added a track to ", playlist.title);
         });
+    },
+
+    addComment(playlistId, text, user){
+        let comment = {
+            playlist: playlistId,
+            body: text,
+            username: user
+        }
+        
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+            .then((response) => response.json())
+            .then((playlist) => {
+            console.log(playlist);
+          });
     }
 }
 
@@ -530,21 +551,23 @@ const PlaylistView = {
         } 
         else {
             for (var i = 0; i < comments.length; i++){
-                let comment = comments[i].body;
+                let comment = `"${comments[i].body}" by ${comments[i].username}`;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
                 deleteButton.innerText = 'x';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
                 commentList.appendChild(listElement);
+
+                deleteButton.addEventListener('click', function(){
+                    DeleteModel.deleteOne(comment, 'comment');
+                });
             }
         }
         
         PlaylistView.container.appendChild(commentList);
 
-        // deleteButton.addEventListener('click', function(){
-        //     DeleteModel.deleteOne(comment, 'comment');
-        // });
+        
     },
     
     displayPlaylists(playlist){
@@ -582,23 +605,44 @@ const PlaylistView = {
     displaySinglePlaylist(id, rating, playlist){
         let showCommentsButton = document.createElement('button');
 		showCommentsButton.classList.add('dark', 'small');
-        showCommentsButton.innerHTML = 'Show comments';
+        showCommentsButton.innerHTML = 'Show all comments';
         
-       
+        
+        let addCommentButton = document.createElement('button');
+        addCommentButton.innerText = "Add comment";
+        addCommentButton.classList.add('button', 'small', 'light');
+        
+        let newComment = document.createElement('input');
+        newComment.type = 'text';
+        newComment.placeholder = 'New comment';
 
+        let commentBy = document.createElement('input');
+        commentBy.type = 'text';
+        commentBy.placeholder = "Who's commenting?";
+        
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
 
         let singlePlaylistContent = `
         <section class="containerInner container__inner container__tracks list">
-        <h3>${playlist.title}</h3><br>
+        <h2>${playlist.title}</h2><br>
         <h4>Created by: ${playlist.createdBy}</h4>
         <h4>Rating: ${rating}</h4>
         ${tracklist}</section>`;
         
         PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
+        PlaylistView.container.appendChild(newComment);
+        PlaylistView.container.appendChild(commentBy);
+        PlaylistView.container.appendChild(addCommentButton);
         PlaylistView.container.appendChild(showCommentsButton);
-        
+
+        addCommentButton.addEventListener('click', function(){
+            newComment = newComment.value;
+            commentBy = commentBy.value;
+            PostModel.addComment(playlist._id, newComment, commentBy);
+            
+        })
+
          // Eventlistener for fetching comments is added to that button
         showCommentsButton.addEventListener('click', function(){
             FetchModel.fetchComments(id);
