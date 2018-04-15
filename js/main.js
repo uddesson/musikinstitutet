@@ -93,7 +93,7 @@ const ResponseController = {
             break;
             case 'playlists':
 				for (let playlist of response){
-					PlaylistView.displayPlaylist(playlist);
+					PlaylistView.displayPlaylists(playlist);
 				}
 			break;
 		}
@@ -164,7 +164,7 @@ const FetchModel = {
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				AddToPlaylistView.displayPlaylists(response, trackId);
+				AddToPlaylistView.displayPlaylistss(response, trackId);
 			})
 			.catch(error => console.log(error));
         },
@@ -302,6 +302,27 @@ addTrackToPlaylist(playlistId, tracks){
     .then((playlist) => {
         console.log("You've added a track to ", playlist.title);
     });
+    },
+
+    addComment(playlistId, text, user){
+        let comment = {
+            playlist: playlistId,
+            body: text,
+            username: user
+        }
+        
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?${apiKey}`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+            .then((response) => response.json())
+            .then((playlist) => {
+            console.log(playlist);
+          });
     }
 }
 
@@ -352,7 +373,7 @@ const RatingModel = {
 
 const AddToPlaylistView = {
 
-    displayPlaylists: (response, trackId) => {
+    displayPlaylistss: (response, trackId) => {
         let div = document.createElement('div');
         div.classList.add('popup__add-to-playlist');
         let ul = document.createElement('ul');
@@ -551,9 +572,9 @@ const PlaylistView = {
                 if (playlist.tracks[i].artists[0] == undefined){
                    artistName = 'Unknown artist';
                 } else{
-                    artistName = `${playlist.tracks[i].artists[0].name}</p>`;
+                    artistName = `${playlist.tracks[i].artists[0].name}</p></div>`;
                 }
-                let trackTitle = `<p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
+                let trackTitle = `<div><p><span class="text text--bold">${playlist.tracks[i].title}</span> by `;
                 tracklist = tracklist + trackTitle + artistName;
             }
         } else{
@@ -563,30 +584,43 @@ const PlaylistView = {
     },
 
     showComments(comments){
+        let commentList = document.createElement('ul')
+        
         if(comments == ''){
-            console.log('No comments yet');
+            let listElement = document.createElement('li');
+            listElement.innerText = 'No comments yet';
+            commentList.appendChild(listElement);
         } 
         else {
             for (var i = 0; i < comments.length; i++){
-                let comment = comments[i].body;
-                console.log(comment);
+                let comment = `"${comments[i].body}" by ${comments[i].username}`;
+                let listElement = document.createElement('li');
+                let deleteButton = document.createElement('button');
+                deleteButton.innerText = 'x';
+                listElement.innerText = comment;
+                listElement.appendChild(deleteButton);
+                commentList.appendChild(listElement);
+
+                deleteButton.addEventListener('click', function(){
+                    DeleteModel.deleteOne(comment, 'comment');
+                });
             }
         }
+        
+        PlaylistView.container.appendChild(commentList);
+
+        
     },
     
-    displayPlaylist(playlist){
+    displayPlaylists(playlist){
         let rating = RatingModel.calculateRatingAverage(playlist);
-        // let tracklist = PlaylistView.getTrackListFrom(playlist); 
         let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage)
 
         // Create elements below
-        let showSignlePlaylistButton = document.createElement('button');
-		showSignlePlaylistButton.classList.add('dark', 'small');
-        showSignlePlaylistButton.innerHTML = 'Show playlist';
-        
-        // let showCommentsButton = document.createElement('button');
-		// showCommentsButton.classList.add('dark', 'small');
-        // showCommentsButton.innerHTML = 'Show comments';
+        let showSinglePlaylistButton = document.createElement('button');
+        showSinglePlaylistButton.dataset.id = playlist._id;
+		showSinglePlaylistButton.classList.add('dark', 'small');
+        showSinglePlaylistButton.innerHTML = 'Show playlist';
 
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
@@ -596,19 +630,65 @@ const PlaylistView = {
             <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating}</h4>`;
         container.appendChild(playlistDiv);
-
-        // Eventlistener for fetching comments is added to that button
-        // showCommentsButton.addEventListener('click', function(){
-        //     FetchModel.fetchComments(playlist._id);
-        // });
-
-        // playlistDiv.appendChild(showCommentsButton)
         
-        playlistDiv.appendChild(showSignlePlaylistButton);
+        playlistDiv.appendChild(showSinglePlaylistButton);
 
         PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         PlaylistView.containerInner.appendChild(playlistDiv);
+
+
+        showSinglePlaylistButton.addEventListener('click', function(){
+            let id = this.dataset.id;
+            PlaylistView.displaySinglePlaylist(id, rating, playlist)           
+        });
+    },
+
+    displaySinglePlaylist(id, rating, playlist){
+        let showCommentsButton = document.createElement('button');
+		showCommentsButton.classList.add('dark', 'small');
+        showCommentsButton.innerHTML = 'Show all comments';
+        
+        
+        let addCommentButton = document.createElement('button');
+        addCommentButton.innerText = "Add comment";
+        addCommentButton.classList.add('button', 'small', 'light');
+        
+        let newComment = document.createElement('input');
+        newComment.type = 'text';
+        newComment.placeholder = 'New comment';
+
+        let commentBy = document.createElement('input');
+        commentBy.type = 'text';
+        commentBy.placeholder = "Who's commenting?";
+        
+        let tracklist = PlaylistView.getTrackListFrom(playlist); 
+        
+
+        let singlePlaylistContent = `
+        <section class="containerInner container__inner container__tracks list">
+        <h2>${playlist.title}</h2><br>
+        <h4>Created by: ${playlist.createdBy}</h4>
+        <h4>Rating: ${rating}</h4>
+        ${tracklist}</section>`;
+        
+        PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
+        PlaylistView.container.appendChild(newComment);
+        PlaylistView.container.appendChild(commentBy);
+        PlaylistView.container.appendChild(addCommentButton);
+        PlaylistView.container.appendChild(showCommentsButton);
+
+        addCommentButton.addEventListener('click', function(){
+            newComment = newComment.value;
+            commentBy = commentBy.value;
+            PostModel.addComment(playlist._id, newComment, commentBy);
+            
+        })
+
+         // Eventlistener for fetching comments is added to that button
+        showCommentsButton.addEventListener('click', function(){
+            FetchModel.fetchComments(id);
+        });
     }
 }
     
