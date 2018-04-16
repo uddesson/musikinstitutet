@@ -294,12 +294,11 @@ const DeleteModel = {
 const RatingModel = {
     
     calculateRatingAverage(category){
-        
         let ratingSum = 0;
             for (var rating of category.ratings){  
                 ratingSum = ratingSum + rating; 
             }
-        let ratingAverage = ratingSum / category.ratings.length; // Do math, get average!
+        let ratingAverage = ratingSum / category.ratings.length; // Do math, get average of array!
         
         if (isNaN(ratingAverage)){
             return 0;
@@ -311,10 +310,9 @@ const RatingModel = {
     }
 }
 
-
-
 const AddToPlaylistView = {
 
+    // This is triggerd when you want to add a track to a playlist
     displayPlaylistsPopUp: (response, trackId) => {
         let div = document.createElement('div');
         let ul = document.createElement('ul');
@@ -336,11 +334,11 @@ const AddToPlaylistView = {
 		
         createPlaylistButton.addEventListener('click', function(){
             if(createPlaylistButton.classList.contains('showPlaylistForm')){
-                //show create playlist form
+                // Show create playlist form
                 createPlaylistContainer.classList.toggle('hidden');
-                //append the form before the button
+                // Append the form before the button
                 createPlaylistButton.insertAdjacentElement('beforebegin', createPlaylistContainer);
-                //change behavior from displaying form to creating playlist
+                // Change behavior from displaying form to creating playlist
                 createPlaylistButton.classList.toggle('showPlaylistForm');
             } else {
                 let playlistName = document.getElementById('playlistName').value;
@@ -358,10 +356,9 @@ const AddToPlaylistView = {
 
                 PostModel.addPlaylist(playlist);
                 
-                //change behavior from creating playlist to displaying form
+                // Change behavior from creating playlist to displaying form
                 createPlaylistButton.classList.toggle('showPlaylistForm');
             }
-            
         });
 
         for(let playlist of response){
@@ -374,177 +371,173 @@ const AddToPlaylistView = {
         ul.addEventListener('click', function(ul){
             let playlistId = ul.srcElement.id;
             let track = trackId;
-
             PostModel.addTrackToPlaylist(playlistId, track);
         });
 
         div.appendChild(ul);
         div.appendChild(createPlaylistButton);
         ArtistView.containerInner.appendChild(div);
-    }
+    
+    } // Closing displayPlaylistsPopUp()
 }
-
-
-
 
 
 /******************************************************
  *********************** VIEWS ************************
  ******************************************************/
 
-	const ArtistView = {
-		container: document.getElementById('container'),
-		containerInner: document.createElement('section'),
-		
-		displayArtist(artist){
-            let imageSrc = InputController.setPlaceHolderIfUndefined(artist.coverImage);
-            let artistDiv = document.createElement('div');
-			artistDiv.innerHTML = `
-                    <img src="${imageSrc}" alt="${artist.name}" class="image">
-					<h3><a href="${artist.spotifyURL}" target="_blank">${artist.name}</a></h3>`;
-			
-			const genreDiv = document.createElement('div');
-			genreDiv.classList.add('genres');
-			
-			for(let genre of artist.genres){
-				const p = document.createElement('p');
-				const textNode = document.createTextNode(genre);
-				p.appendChild(textNode);
-				genreDiv.appendChild(p);
-			}
-			artistDiv.appendChild(genreDiv);
-            
-            let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = `<i class="fa fa-times" 
-                title="Remove from FED17 Faves"></i>`;
-
-            deleteButton.addEventListener('click', function(){
-                DeleteModel.deleteOne(artist, 'artist');
-            });
-
-            let deleteIcon = document.createElement('div');
-            deleteIcon.classList.add('deleteIcon');
-            deleteIcon.appendChild(deleteButton);
-            artistDiv.appendChild(deleteIcon);
-
-			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
-			ArtistView.container.appendChild(ArtistView.containerInner);
-			ArtistView.containerInner.appendChild(artistDiv);
-		}
-	}
-
-	const AlbumView = {
-		container: document.getElementById('container'),
-		containerInner: document.createElement('section'),
-		
-		displayAlbum(album){
-			let albumArtists = album.artists.map((artist) => artist.name);
-            let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
-            let albumDiv = document.createElement('div');
-            let rating = RatingModel.calculateRatingAverage(album);
-			let ratingInput = createRatingInput();
-            let ratingButton = document.createElement('button');
-			ratingButton.classList.add('ratingButton', 'light', 'small');
-            ratingButton.innerText = "Rate";
-			
-			albumDiv.innerHTML = `
-					<img src="${imageSrc}" alt="${album.title}" class="image">
-					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>
-					<h4>${albumArtists}</h4>`;
-            
-			
-			ratingButton.addEventListener('click', function(){
-				PostModel.rate('album', album._id, ratingInput.value);
-			});
-			
-            let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = `<i class="fa fa-times" 
-                title="Remove from FED17 Faves"></i>`;
-
-            deleteButton.addEventListener('click', function(){
-                DeleteModel.deleteOne(album, 'album');
-            });
-
-            let deleteIcon = document.createElement('div');
-            deleteIcon.classList.add('deleteIcon');
-            deleteIcon.appendChild(deleteButton);
-            albumDiv.appendChild(deleteIcon);
-
-            let ratingDiv = document.createElement('div');
-            ratingDiv.classList.add('rating__div');
-
-            let ratingOutput = document.createElement('p');
-            ratingOutput.innerHTML = `Rating: ${rating} / 10`;
-
-            ratingDiv.appendChild(ratingOutput);
-            ratingDiv.appendChild(ratingInput);
-            ratingDiv.appendChild(ratingButton);
-            albumDiv.appendChild(ratingDiv);
-
-			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
-			AlbumView.container.appendChild(AlbumView.containerInner);
-			AlbumView.containerInner.appendChild(albumDiv);
-		}
-	}
-	
-	const TrackView = {
-		container: document.getElementById('container'),
-		containerInner: document.createElement('section'),
-
-		displayTrack(track){
-			let trackArtists = track.artists.map((artist) => artist.name);
-            let trackDiv = document.createElement('div');
-            let rating = RatingModel.calculateRatingAverage(track);
-			let ratingInput = createRatingInput();
-            let ratingButton = document.createElement('button');
-			ratingButton.classList.add('ratingButton', 'light', 'small');
-            ratingButton.innerText = "Rate";
-			
-			trackDiv.innerHTML = `
-				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
-                <h4>by ${trackArtists}</h4>
-                Rating: ${rating} / 10`;
-			
+const ArtistView = {
+    container: document.getElementById('container'),
+    containerInner: document.createElement('section'),
+    
+    displayArtist(artist){
+        let imageSrc = InputController.setPlaceHolderIfUndefined(artist.coverImage);
+        let artistDiv = document.createElement('div');
+        artistDiv.innerHTML = `<img src="${imageSrc}" 
+                alt="${artist.name}" class="image">
+                <h3><a href="${artist.spotifyURL}" 
+                target="_blank">${artist.name}</a></h3>`;
         
-            ratingButton.addEventListener('click', function(){
-                // skcika in ratingInput.value till API
-                console.log(ratingInput.value);
-                PostModel.rate('track', track._id, ratingInput.value);
-            });
-			
-            //make function/controller
-            //fex one for creating the button + eventlistenr 
-            //and one for delete(function called in eventlistener)  
-            let addButton = document.createElement('button');
-			addButton.classList.add('dark', 'add');
+        const genreDiv = document.createElement('div');
+        genreDiv.classList.add('genres');
+        
+        for(let genre of artist.genres){
+            const p = document.createElement('p');
+            const textNode = document.createTextNode(genre);
+            p.appendChild(textNode);
+            genreDiv.appendChild(p);
+        }
+        
+        artistDiv.appendChild(genreDiv);
+        
+        let deleteButton = document.createElement('button');
+        deleteButton.innerHTML = `<i class="fa fa-times" 
+            title="Remove from FED17 Faves"></i>`;
+
+        deleteButton.addEventListener('click', function(){
+            DeleteModel.deleteOne(artist, 'artist');
+        });
+
+        let deleteIcon = document.createElement('div');
+        deleteIcon.classList.add('deleteIcon');
+        deleteIcon.appendChild(deleteButton);
+        artistDiv.appendChild(deleteIcon);
+
+        ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
+        ArtistView.container.appendChild(ArtistView.containerInner);
+        ArtistView.containerInner.appendChild(artistDiv);
+    }
+}
+
+const AlbumView = {
+    container: document.getElementById('container'),
+    containerInner: document.createElement('section'),
+    
+    displayAlbum(album){
+        let albumArtists = album.artists.map((artist) => artist.name);
+        let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
+        let albumDiv = document.createElement('div');
+        let rating = RatingModel.calculateRatingAverage(album);
+        let ratingInput = createRatingInput();
+        let ratingButton = document.createElement('button');
+        ratingButton.classList.add('ratingButton', 'light', 'small');
+        ratingButton.innerText = "Rate";
+        
+        albumDiv.innerHTML = `
+                <img src="${imageSrc}" alt="${album.title}" class="image">
+                <h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>
+                <h4>${albumArtists}</h4>`;
+        
+        
+        ratingButton.addEventListener('click', function(){
+            PostModel.rate('album', album._id, ratingInput.value);
+        });
+        
+        let deleteButton = document.createElement('button');
+        deleteButton.innerHTML = `<i class="fa fa-times" 
+            title="Remove from FED17 Faves"></i>`;
+
+    deleteButton.addEventListener('click', function(){
+        DeleteModel.deleteOne(album, 'album');
+    });
+
+    let deleteIcon = document.createElement('div');
+    deleteIcon.classList.add('deleteIcon');
+    deleteIcon.appendChild(deleteButton);
+    albumDiv.appendChild(deleteIcon);
+
+    let ratingDiv = document.createElement('div');
+    ratingDiv.classList.add('rating__div');
+
+    let ratingOutput = document.createElement('p');
+    ratingOutput.innerHTML = `Rating: ${rating} / 10`;
+
+    ratingDiv.appendChild(ratingOutput);
+    ratingDiv.appendChild(ratingInput);
+    ratingDiv.appendChild(ratingButton);
+    albumDiv.appendChild(ratingDiv);
+
+        AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+        AlbumView.container.appendChild(AlbumView.containerInner);
+        AlbumView.containerInner.appendChild(albumDiv);
+    }
+}
+	
+const TrackView = {
+    container: document.getElementById('container'),
+    containerInner: document.createElement('section'),
+
+    displayTrack(track){
+        let trackArtists = track.artists.map((artist) => artist.name);
+        let trackDiv = document.createElement('div');
+        let rating = RatingModel.calculateRatingAverage(track);
+        let ratingInput = createRatingInput();
+        let ratingButton = document.createElement('button');
+        ratingButton.classList.add('ratingButton', 'light', 'small');
+        ratingButton.innerText = "Rate";
+        
+        trackDiv.innerHTML = `
+            <h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
+            <h4>by ${trackArtists}</h4>
+            Rating: ${rating} / 10`;
+        
+        // Rating magic that happens when rate-button is clicked
+        ratingButton.addEventListener('click', function(){
+            PostModel.rate('track', track._id, ratingInput.value);
+        });
+        
+        let addButton = document.createElement('button');
+            addButton.classList.add('dark', 'add');
             addButton.innerHTML = `<i class="fa fa-plus" 
             title="Add to playlist"></i>`;
 
-            addButton.addEventListener('click', function(){
-                FetchModel.fetchPlaylistsForAdding(track._id);
-            });
+        addButton.addEventListener('click', function(){
+            FetchModel.fetchPlaylistsForAdding(track._id);
+        });
 
-            let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = `<i class="fa fa-times" 
+        let deleteButton = document.createElement('button');
+        deleteButton.innerHTML = `<i class="fa fa-times" 
             title="Remove from FED17 Faves"></i>`;
 
-            deleteButton.addEventListener('click', function(){
-                DeleteModel.deleteOne(track, 'track');
-            });
+        deleteButton.addEventListener('click', function(){
+            DeleteModel.deleteOne(track, 'track');
+        });
 
-			createRatingInput();
-            let buttonsDiv = document.createElement('div');
-            buttonsDiv.appendChild(ratingInput);
-            buttonsDiv.appendChild(ratingButton);
-            buttonsDiv.appendChild(addButton);
-            buttonsDiv.appendChild(deleteButton);
-            trackDiv.appendChild(buttonsDiv);
-    
-			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
-			TrackView.container.appendChild(TrackView.containerInner);
-			TrackView.containerInner.appendChild(trackDiv);
-		}
+        createRatingInput();
+        
+        let buttonsDiv = document.createElement('div');
+        buttonsDiv.appendChild(ratingInput);
+        buttonsDiv.appendChild(ratingButton);
+        buttonsDiv.appendChild(addButton);
+        buttonsDiv.appendChild(deleteButton);
+
+        trackDiv.appendChild(buttonsDiv);
+
+        TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
+        TrackView.container.appendChild(TrackView.containerInner);
+        TrackView.containerInner.appendChild(trackDiv);
     }
+}
 
 const PlaylistView = {
     container: document.getElementById('playlistContainer'),
@@ -553,6 +546,8 @@ const PlaylistView = {
 
     getTrackListFrom(playlist){
         let tracklist = '';
+
+        // When the playlist has tracks, add each to the tracklist
         if (playlist.tracks.length > 0){
             let artistName = '';
             for (var i = 0; i < playlist.tracks.length; i++){   
@@ -567,16 +562,20 @@ const PlaylistView = {
         } else{
             tracklist = `<p>No tracks yet</p>`;
         }
-        return tracklist; 
+        return tracklist;
     },
 
     showComments(comments){
+        /* For a "refreshing" page effect 
+        we empty the container everytime we call showComments */
         PlaylistView.commentsContainer.innerHTML = '';
+
         let commentList = document.createElement('ul')
-        commentList.id = 'commentsList';
-        commentList.classList.add('comments');
+            commentList.id = 'commentsList';
+            commentList.classList.add('comments');
+
         let commentsHeadline = document.createElement('h3');
-        commentsHeadline.innerText = 'Kommentarer';
+            commentsHeadline.innerText = 'Kommentarer';
         
         if(comments == ''){
             let listElement = document.createElement('li');
@@ -585,14 +584,17 @@ const PlaylistView = {
         } 
         else {
             for (var i = 0; i < comments.length; i++){
-                // console.log(comments[i])
                 let comment = `"${comments[i].body}" by ${comments[i].username}`;
                 let commentId = comments[i]._id;
                 let playlistId = comments[i].playlist;
+
                 let listElement = document.createElement('li');
+
                 let deleteButton = document.createElement('button');
                 deleteButton.classList.add('button', 'large', 'clear');
-                deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
+                deleteButton.innerHTML = `<i class="fa fa-minus-circle" 
+                style="font-size:1.2em;"></i>`;
+
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
                 commentList.appendChild(listElement);
@@ -610,19 +612,18 @@ const PlaylistView = {
         let rating = RatingModel.calculateRatingAverage(playlist);
         let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage);
 
-        // Create elements below
         let showSinglePlaylistButton = document.createElement('button');
-        showSinglePlaylistButton.dataset.id = playlist._id;
-		showSinglePlaylistButton.classList.add('dark', 'small');
-        showSinglePlaylistButton.innerHTML = 'Show playlist';
+            showSinglePlaylistButton.dataset.id = playlist._id;
+		    showSinglePlaylistButton.classList.add('dark', 'small');
+            showSinglePlaylistButton.innerHTML = 'Show playlist';
 
         let playlistDiv = document.createElement('div');
-        playlistDiv.innerHTML = `
-            <img src="${imageSrc}" alt="${playlist.title}" class="image">
-            <h3>${playlist.title}</h3>
-            <h4>Created by: ${playlist.createdBy}</h4>
-            <h4>Tracks: ${playlist.tracks.length}</h4>
-            <h4>Rating: ${rating} / 10</h4>`;
+            playlistDiv.innerHTML = `
+                <img src="${imageSrc}" alt="${playlist.title}" class="image">
+                <h3>${playlist.title}</h3>
+                <h4>Created by: ${playlist.createdBy}</h4>
+                <h4>Tracks: ${playlist.tracks.length}</h4>
+                <h4>Rating: ${rating} / 10</h4>`;
         container.appendChild(playlistDiv);
         
         playlistDiv.appendChild(showSinglePlaylistButton);
@@ -632,6 +633,7 @@ const PlaylistView = {
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         
         showSinglePlaylistButton.addEventListener('click', function(){
+            // Get the id from the clicked playlist
             let id = this.dataset.id;
             PlaylistView.displaySinglePlaylist(id, rating, playlist)           
         });
@@ -647,32 +649,33 @@ const PlaylistView = {
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
-        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlist', 'list');
-        singlePlaylistContent.innerHTML =
-               `<h3>${playlist.title}</h3>
-                <h4><span class="text--bold">Created by:</span> ${playlist.createdBy}</h4>
-                <h4><span class="text--bold">Playlist rating:</span> ${rating} / 10</h4>
-                ${tracklist}</section>`;
+            singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlist', 'list');
+            singlePlaylistContent.innerHTML =
+                `<h3>${playlist.title}</h3>
+                    <h4><span class="text--bold">Created by:</span> ${playlist.createdBy}</h4>
+                    <h4><span class="text--bold">Playlist rating:</span> ${rating} / 10</h4>
+                    ${tracklist}</section>`;
 
         let singlePlaylistActions = document.createElement('section');
-        singlePlaylistActions.classList.add('containerInner', 'container__playlist', 'container__inner--medium');
+            singlePlaylistActions.classList.add('containerInner', 'container__playlist', 'container__inner--medium');
         
         let newComment = document.createElement('input');
-        newComment.type = 'text';
-        newComment.placeholder = 'New comment';
+            newComment.type = 'text';
+            newComment.placeholder = 'New comment';
 		
         let commentBy = document.createElement('input');
-        commentBy.type = 'text';
-        commentBy.placeholder = "Who's commenting?";
+            commentBy.type = 'text';
+            commentBy.placeholder = "Who's commenting?";
 
         let addCommentButton = document.createElement('button');
-        addCommentButton.innerText = "Add comment";
-        addCommentButton.classList.add('button', 'large', 'dark', 'block');
+            addCommentButton.innerText = "Add comment";
+            addCommentButton.classList.add('button', 'large', 'dark', 'block');
 
         let deletePlaylistButton = document.createElement('button');
-        deletePlaylistButton.innerText = "Remove this playlist";
-        deletePlaylistButton.classList.add('button', 'large', 'warning');
+            deletePlaylistButton.innerText = "Remove this playlist";
+            deletePlaylistButton.classList.add('button', 'large', 'warning');
 
+        // Error/Success-messages are to be displayed in this location
         let locationForDisplayingStatus = document.createElement('div');
         
         singlePlaylistActions.appendChild(ratingInput);
@@ -683,6 +686,7 @@ const PlaylistView = {
         singlePlaylistActions.appendChild(locationForDisplayingStatus);
         singlePlaylistActions.appendChild(addCommentButton);
         singlePlaylistActions.appendChild(deletePlaylistButton);
+
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
@@ -694,8 +698,10 @@ const PlaylistView = {
         addCommentButton.addEventListener('click', function(){
             if(InputController.inputIsEmptySpace(newComment.value)
             || InputController.inputIsEmptySpace(commentBy.value)){
+                // Empty values will stop comment from being added
                 StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
             }
+            // If values are set, a new comment can be added
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
@@ -703,7 +709,6 @@ const PlaylistView = {
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
-
 }
 
     
@@ -712,43 +717,40 @@ const SearchView = {
 }
 
 const NavigationView = {
-    /* TO DO:
-    * - Look over these functions and see if the can be ONE instead,
-    * - Or if they all should be replaced by innerHTML somehow
-    * - While on the "contribute page" you can click the search button 
-    * even if the input field has no value
-    */
+
+    // The actions (menu-texts) that choose between in the navbar
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
+
+    // Wrappers that we can use for toggling hidden-class
     postFormsWrapper: document.getElementById('postFormsWrapper'),
     playlistContainer: document.getElementById('playlistContainer'),
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
-            lastActivePage = 'home';
-            /* Clicking home view will refresh the page, 
-            since we want to fetch from */
+            /* Clicking home view will refresh the entire page, 
+            because we want to re-fetch the latest content from the API */
             location.reload();
-    
-            /* When we ADD the class hidden, we hide views
-             or elements that should not be active */
-            NavigationView.postFormsWrapper.classList.add('hidden');
         });
     },  
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
+            // Empty containers to prevent double playlist-views
             NavigationView.playlistContainer.innerHTML = '';
             PlaylistView.containerInner.innerHTML = '';
+
             NavigationView.playlistContainer.classList.remove('hidden');
+            
             FetchModel.fetchAll('playlists');       
             
+            // Hide elements we don't want to show for playlist-views
             ArtistView.container.classList.add('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
 
-        /* If the user tries to search while on the contribute "page",
+        /* If the user tries to search while on the playlist "page",
         we still allow them to do so, and hide the other views */
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
@@ -759,9 +761,9 @@ const NavigationView = {
 
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
+            // Show the forms for posting new content
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
-            // Hide views ("page") or elements that should not be active
             ArtistView.container.classList.add('hidden');
             NavigationView.playlistContainer.classList.add('hidden');
         });
@@ -774,7 +776,8 @@ const NavigationView = {
 }
 
 const PostView = { 
-    
+
+    // Get post-forms and their fields elow
     actions: [
         addArtistAction = document.getElementById('addArtistAction'),
         addTrackAction = document.getElementById('addTrackAction'),
@@ -819,19 +822,19 @@ const PostView = {
             });
         }
 
-        // Eventlistener that triggers add ARTIST
+        // Eventlistener that triggers add artist
         PostView.buttons.addArtistButton.addEventListener('click', function(event){
             event.preventDefault(); // Stop page from refreshing on click
             PostModel.addArtist();
         })
         
-        // Eventlistener that triggers add ALBUM
+        // ... Add album
         PostView.buttons.addAlbumButton.addEventListener('click', function(event){
             event.preventDefault();
             PostModel.addAlbum();
         })
         
-        // Eventlistener that triggers add TRACK
+        // ... Add track
         PostView.buttons.addTrackButton.addEventListener('click', function(event){
             event.preventDefault();
             PostModel.addTrack();
@@ -841,6 +844,7 @@ const PostView = {
 
 //Create a function that creates a rating input field
 function createRatingInput(){
+
     //Create rating select field with 10 options
     let ratingInputDiv = document.createElement('div');
     let ratingInput = document.createElement('select');
@@ -862,7 +866,8 @@ function createRatingInput(){
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
-	feedbackPopup: document.getElementById('feedbackPopup'),
+    feedbackPopup: document.getElementById('feedbackPopup'),
+    
     /* Takes to params, location should be the div where you want to put the error message
     and status should be a string that fits one of the switch-cases */
     showStatusMessage(status = 'Error', location = 'feedbackPopup'){
@@ -915,6 +920,9 @@ const StatusView = {
  ******************************************************/
 
 const SearchController = {
+
+    /* We use a keyup-eventlisteners that checks the search-input 
+    and sends it along to fetchSearched */
     createEventListener: (() => {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.containerInner.innerHTML = "";
@@ -929,6 +937,7 @@ const SearchController = {
             FetchModel.fetchSearched('albums', searchQuery);
             FetchModel.fetchSearched('playlists', searchQuery);
 
+            // Checks for specific genres and makes genre-search available for these
             GenreController.checkIfGenre(searchQuery);
         });
     })()
@@ -958,7 +967,7 @@ const InputController = {
     },
 
     setPlaceHolderIfUndefined(imageSrc){
-        // Returns src for placeholder image
+        // Returns source for a placeholder image
         if (imageSrc === undefined || imageSrc == ''){
             imageSrc = "images/placeholder.jpg";
             return imageSrc; 
@@ -989,7 +998,7 @@ const ResponseController = {
 				}
             break;
             case 'playlists':
-                // Playlists are sorted before displayed
+                // Playlists are sorted before they are displayed
                 ResponseController.sortByRatingHighToLow(response);
                 
 				for (let playlist of response){
@@ -1016,14 +1025,10 @@ const ResponseController = {
 }
 
 
-/* TO DO: If searchquery matches a genre: display a link to that genre, 
-if clicked then fetchGenre, display as search results. artists, albums, tracks.
-also set search input value as the name of the genre*/
 GenreController = { 
     checkIfGenre(searchQuery) {
         switch (searchQuery) {
             case 'jazz':
-                //display jazz + image. eventlistener that triggers displayGenre
                 GenreController.setGenre('jazz');
             break;
             case 'hip hop': 
@@ -1067,9 +1072,6 @@ GenreController = {
         FetchModel.fetchGenre('artists', genre);
         FetchModel.fetchGenre('albums', genre);
         FetchModel.fetchGenre('tracks', genre);
-        
-        //to show user what genre they're on
-        searchInput.value = genre;
     }
 }
 
@@ -1078,14 +1080,15 @@ GenreController = {
  ******************** RUN FUNCTIONS *********************
  *******************************************************/
 
+// Fetch all the stuff!
 FetchModel.fetchAll('artists');
 FetchModel.fetchAll('albums');
 FetchModel.fetchAll('tracks');
 
-
+// Let the user switch between "views" through navbar
 NavigationView.enablePostView();
 NavigationView.enableHomeView();
 NavigationView.enablePlaylistView();
 
-// TO DO: Self invoke
+// Generate eventlisteners for post-forms on postview
 PostView.createEventListeners(); 
