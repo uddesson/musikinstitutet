@@ -54,7 +54,6 @@ const FetchModel = {
     },
     
     fetchComments(id){
-		
         fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
@@ -629,7 +628,7 @@ const PlaylistView = {
         
         playlistDiv.appendChild(showSinglePlaylistButton);
 
-        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__playlists', 'grid');
+        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'grid');
         PlaylistView.containerInner.appendChild(playlistDiv);
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         
@@ -648,15 +647,15 @@ const PlaylistView = {
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
-        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlists', 'list');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlist', 'list');
         singlePlaylistContent.innerHTML =
-               `<h2>${playlist.title}</h2>
-                <h4>Created by: ${playlist.createdBy}</h4>
-                <h4>Playlist rating: ${rating} / 10</h4>
+               `<h3>${playlist.title}</h3>
+                <h4><span class="text--bold">Created by:</span> ${playlist.createdBy}</h4>
+                <h4><span class="text--bold">Playlist rating:</span> ${rating} / 10</h4>
                 ${tracklist}</section>`;
 
         let singlePlaylistActions = document.createElement('section');
-        singlePlaylistActions.classList.add('containerInner', 'container__playlists', 'container__inner--medium');
+        singlePlaylistActions.classList.add('containerInner', 'container__playlist', 'container__inner--medium');
         
         let newComment = document.createElement('input');
         newComment.type = 'text';
@@ -668,7 +667,7 @@ const PlaylistView = {
 
         let addCommentButton = document.createElement('button');
         addCommentButton.innerText = "Add comment";
-        addCommentButton.classList.add('button', 'large', 'dark');
+        addCommentButton.classList.add('button', 'large', 'dark', 'block');
 
         let deletePlaylistButton = document.createElement('button');
         deletePlaylistButton.innerText = "Remove this playlist";
