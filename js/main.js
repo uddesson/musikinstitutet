@@ -81,24 +81,29 @@ const ResponseController = {
 				}
             break;
             case 'playlists':
-                // TO DO: Put sorting into separate function and call before loop
-                response.sort((playlistA, playlistB) => {
-                    let averageForA = RatingModel.calculateRatingAverage(playlistA);
-                    let averageForB = RatingModel.calculateRatingAverage(playlistB);
-
-                    if(averageForA < averageForB){
-                        return 1;
-                    }
-                    if(averageForB < averageForA){
-                        return -1;
-                    }
-                    return 0;
-                })  
+                // Playlists are sorted before displayed
+                ResponseController.sortByRatingHighToLow(response);
+                
 				for (let playlist of response){
 					PlaylistView.displayPlaylists(playlist);
 				}
 			break;
 		}
+    },
+
+    sortByRatingHighToLow(response){
+        response.sort((playlistA, playlistB) => {
+            let averageForA = RatingModel.calculateRatingAverage(playlistA);
+            let averageForB = RatingModel.calculateRatingAverage(playlistB);
+
+            if(averageForA < averageForB){
+                return 1;
+            }
+            if(averageForB < averageForA){
+                return -1;
+            }
+            return 0;
+        })  
     }
 }
 
