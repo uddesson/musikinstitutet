@@ -719,6 +719,7 @@ const PlaylistView = {
     showComments(comments){
         PlaylistView.commentsContainer.innerHTML = '';
         let commentList = document.createElement('ul')
+        commentList.id = 'commentsList';
         
         if(comments == ''){
             let listElement = document.createElement('li');
