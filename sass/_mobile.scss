@@ -355,14 +355,16 @@ button, .button {
  ***************** FEEDBACK ******************
  *********************************************/
 #feedbackPopup {
-	position:fixed;
 	top:60px;
-	left:400px; //FIXA CENTERING HÄR!!!!!
 	height: 190px;
-	width: 400px;
 	background: #fff;
 	box-shadow:5px 5px 12px rgba(0,0,0,.15);
 	z-index:55;
+	position: fixed;
+	left: 50%;
+	transform: translate(-50%, 0);
+	margin: auto;
+	width: 400px;
 }
 .feedback {
 	text-align: center;
