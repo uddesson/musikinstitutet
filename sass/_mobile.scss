@@ -69,6 +69,10 @@ div {
 	word-wrap: break-word;
 }
 
+.container {
+	margin-top:12%;
+}
+
 /*************************************
  ************ TYPORGRAPHY ************
  *************************************/
@@ -86,40 +90,74 @@ a {
 /********************************
  ************ HEADER ************
  ********************************/
+header {
+	display: flex;
+    align-items: center;
+	position:fixed;
+	top:0;
+	width:100%;
+	background: $color__button--dark;
+	padding:10px;
+	color: #f7f7f7;
+	height:50px;
+	
+	nav, .searchInput, .logo {
+		width: calc(100% / 3);
+	}
+	
+}
+nav {
+	h2 {
+		cursor:pointer;
+		font-size: 1em;
+		padding: .5em;
+		text-transform: uppercase;
+		letter-spacing: 1px
+	}
+	ul {
+		display: flex;
+		align-items: center;
+	}
+}
+
+.searchInput {
+	margin:0 auto;
+	width: 100%;
+	max-width:500px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	input[type="text"], button {
+		height:35px;
+//		margin-bottom: 20px;
+	}
+	button {
+		/* Calculate how many pixels to move button 
+		/* to the left to make it fit in the search-input */
+		$width: 50px;
+		$margin: 10px;
+		$placeInsideSearch: $width + $margin;
+		width: $width;
+		margin-left: -#{$placeInsideSearch};
+	}
+}
+
 .logo {
 	width:160px;
 	display:block;
-	position:fixed;
-	top:20px;
-	right:20px;
-	z-index:10;
-}
-
-
-/******************************
- *********** NAV **************
- ******************************/
-
-nav {
-//	background: #376379;
-	background: $color__button--dark;
-	color: #f7f7f7;
-	padding:10px;
-	height: 40px;
-	width:100%;
-	position:fixed;
-	z-index:9;
-		h2 {
-			cursor:pointer;
-			font-size: 1em;
-			padding: .5em;
-			text-transform: uppercase;
-			letter-spacing: 1px
-		}
-	ul li {
-		float: left;
+//	position:fixed;
+//	top:20px;
+//	right:20px;
+	z-index:15;
+	img {
+		width: 160px;
+		position: fixed;
+		top: 20px;
+		right: 20px;
 	}
 }
+
+
 
 /******************************
  ***** INPUT AND BUTTONS ******
@@ -182,32 +220,11 @@ button, .button {
 }
 
 
-.searchInput {
-	margin:0 auto 40px;
-	width:100%;
-	max-width:450px;
-	input[type="text"], button {
-		height:40px;
-		margin-bottom: 20px;
-		margin-top:25vh;
-		position:sticky;
-		top:10px;
-		// z-index:12;
-	}
-	button {
-		margin: auto;
-		display: block;
-	}
-}
-
-
 /****************************************
  ************ GRID/LIST VIEW ************
  ****************************************/
 
 .wrapper {
-	// height:100vh; 
-//	width:100%;
 	display: grid;
 }
 .container__inner{
@@ -395,3 +412,8 @@ button, .button {
  .hidden{
 	 display: none!important;
  }
+//Hide visually but keep in DOM for screenreaders
+.do_not_display {
+	position: absolute;
+	text-indent: -9999px;
+}
