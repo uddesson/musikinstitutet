@@ -209,8 +209,8 @@ addTrackToPlaylist(playlistId, tracks){
     })
     .then((response) => response.json())
     .then((playlist) => {
-        console.log("You've added a track to ", playlist.title);
-		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup); 
+		//DÖLJ POPUP 
     })
 	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
@@ -274,10 +274,18 @@ const DeleteModel = {
             .then((response) => response.json())
             .then((objectToDelete) => {
                 console.log('you deleted', title);
+				StatusView.showStatusMessage(`You deleted ${title}.`, feedbackPopup);
+				
+				setTimeout(function(){ 
+					location.reload(); 
+				}, 3000);
                 //TO DO:this need to be made dynamic as well or update siteo.
-                ArtistView.containerInner.removeChild(`${category}Div`);
+				//ArtistView.containerInner.removeChild(childToRemove);
             })
-			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
+			.catch(error => {   
+				StatusView.showStatusMessage("Error", feedbackPopup)
+				console.log(error);
+			});
         } else {
             return;
         }
@@ -421,7 +429,7 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:2em;"></i>';
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
@@ -562,6 +570,9 @@ const PlaylistView = {
         PlaylistView.commentsContainer.innerHTML = '';
         let commentList = document.createElement('ul')
         commentList.id = 'commentsList';
+        commentList.classList.add('comments');
+        let commentsHeadline = document.createElement('h3');
+        commentsHeadline.innerText = 'Kommentarer';
         
         if(comments == ''){
             let listElement = document.createElement('li');
@@ -576,6 +587,7 @@ const PlaylistView = {
                 let playlistId = comments[i].playlist;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
+                deleteButton.classList.add('button', 'large', 'clear');
                 deleteButton.innerText = 'x';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
@@ -586,7 +598,7 @@ const PlaylistView = {
                 });
             }
         }
-        
+        PlaylistView.commentsContainer.appendChild(commentsHeadline);
         PlaylistView.commentsContainer.appendChild(commentList);    
     },
     
@@ -611,7 +623,7 @@ const PlaylistView = {
         
         playlistDiv.appendChild(showSinglePlaylistButton);
 
-        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__playlists', 'grid');
         PlaylistView.containerInner.appendChild(playlistDiv);
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         
@@ -630,7 +642,7 @@ const PlaylistView = {
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
-        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'list');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlists', 'list');
         singlePlaylistContent.innerHTML =
                `<h2>${playlist.title}</h2>
                 <h4>Created by: ${playlist.createdBy}</h4>
@@ -638,7 +650,7 @@ const PlaylistView = {
                 ${tracklist}</section>`;
 
         let singlePlaylistActions = document.createElement('section');
-        singlePlaylistActions.classList.add('containerInner', 'container__inner');
+        singlePlaylistActions.classList.add('containerInner', 'container__playlists', 'container__inner--medium');
         
         let newComment = document.createElement('input');
         newComment.type = 'text';
@@ -650,19 +662,19 @@ const PlaylistView = {
 
         let addCommentButton = document.createElement('button');
         addCommentButton.innerText = "Add comment";
-        addCommentButton.classList.add('button', 'small', 'dark');
+        addCommentButton.classList.add('button', 'large', 'dark');
 
-        let removePlaylistButton = document.createElement('button');
-        removePlaylistButton.innerText = "Remove this playlist";
-        removePlaylistButton.classList.add('button', 'small', 'light');
+        let deletePlaylistButton = document.createElement('button');
+        deletePlaylistButton.innerText = "Remove this playlist";
+        deletePlaylistButton.classList.add('button', 'large', 'warning');
 
         singlePlaylistActions.appendChild(ratingInput);
         singlePlaylistActions.appendChild(ratingButton);
+        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
         singlePlaylistActions.appendChild(newComment);
         singlePlaylistActions.appendChild(commentBy);
         singlePlaylistActions.appendChild(addCommentButton);
-        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
-        singlePlaylistActions.appendChild(removePlaylistButton);
+        singlePlaylistActions.appendChild(deletePlaylistButton);
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
@@ -676,7 +688,7 @@ const PlaylistView = {
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
-        removePlaylistButton.addEventListener('click', function(){
+        deletePlaylistButton.addEventListener('click', function(){
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
@@ -847,27 +859,39 @@ const StatusView = {
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__empty');
+			StatusView.statusMessage.classList.add('feedback__empty');
             break;
 
             case "Success":
             StatusView.statusMessage.innerText = "Nice, it worked!";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__success');
+			StatusView.statusMessage.classList.add('feedback__success');
             break;
 			
 			case "Error":
 			StatusView.statusMessage.innerText = "Something went wrong :-(";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			StatusView.statusMessage.classList.add('feedback__error');
 			break;
 			
 			case "commentsError":
 			StatusView.statusMessage.innerText = "Something went wrong when loading comments :-(";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			StatusView.statusMessage.classList.add('feedback__error');
 			break;
+				
+			//If none of the feedback messages above, use the text passed as the first parameter in the function
+			default:
+        	StatusView.statusMessage.innerText = status;
         }
-        
+        StatusView.statusMessage.classList.add('feedback');
         location.appendChild(StatusView.statusMessage);
         location.classList.remove('hidden');
+		
+		//Hide popup when clicking outside of it
+		document.addEventListener('click', function(event) {
+		  var isClickInside = feedbackPopup.contains(event.target);
+		  if (!isClickInside){
+			feedbackPopup.classList.add('hidden');
+		  }
+		});
     }
 }
 
