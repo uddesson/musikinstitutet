@@ -2,184 +2,9 @@ let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
-/******************************************************
- ******************** CONTROLLERS *********************
- ******************************************************/
-
- const SearchController = {
-    searchInput: document.getElementById('searchInput'),
-
-    createEventListener: (() => {
-        searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.innerHTML = "";
-            TrackView.containerInner.innerHTML = "";
-            AlbumView.containerInner.innerHTML = "";
-
-            const searchQuery = document.getElementById('searchInput').value;
-
-            FetchModel.fetchSearched('artists', searchQuery);
-            FetchModel.fetchSearched('tracks', searchQuery);
-            FetchModel.fetchSearched('albums', searchQuery);
-
-            GenreController.checkIfGenre(searchQuery);
-        });
-    })()
-}
-
-const InputController = {
-    
-    inputIsEmptySpace(singleInput){
-        if (singleInput.trim() == ''){
-            return true; // The input was just space :(
-        } else {
-            return;
-        }
-    },
-
-    formFieldsAreEmpty(form){
-        for (var field in form) {
-            if (form.hasOwnProperty(field)) {
-                if(form[field] === '' || undefined){
-                    return true;
-                }
-                else if(InputController.inputIsEmptySpace(form[field])){
-                    return true;
-                }
-            }
-        }
-    },
-
-    setPlaceHolderIfUndefined(imageSrc){
-        // Returns src for placeholder image
-        if (imageSrc === undefined){
-            imageSrc = "images/placeholder.jpg";
-            return imageSrc; 
-        }
-        //Returns imagesrc as original argument
-        return imageSrc; 
-    }
-}
-
-
-// Loop out content (artists, albums or tracks) from response object
-const ResponseController = {
-		sortResponseByCategory(category, response) {
-		switch (category) {
-			case 'artists':
-				for (let artist of response) {
-					ArtistView.displayArtist(artist);
-				}
-			break;
-			case 'albums': 
-				for (let album of response){
-					AlbumView.displayAlbum(album);
-				}
-			break;
-			case 'tracks':
-				for (let track of response){
-                    TrackView.displayTrack(track);
-				}
-            break;
-            case 'playlists':
-                // Playlists are sorted before displayed
-                ResponseController.sortByRatingHighToLow(response);
-                
-				for (let playlist of response){
-					PlaylistView.displayPlaylists(playlist);
-				}
-			break;
-		}
-    },
-
-    sortByRatingHighToLow(response){
-        response.sort((playlistA, playlistB) => {
-            let averageForA = RatingModel.calculateRatingAverage(playlistA);
-            let averageForB = RatingModel.calculateRatingAverage(playlistB);
-
-            if(averageForA < averageForB){
-                return 1;
-            }
-            if(averageForB < averageForA){
-                return -1;
-            }
-            return 0;
-        })  
-    }
-}
-
-/* If searchquery matches a genre: display a link to that genre, 
-if clicked then fetchGenre, display as search results. artists, albums, tracks.
-also set search input value as the name of the genre*/
-GenreController = { 
-    checkIfGenre(searchQuery) {
-        switch (searchQuery) {
-            case 'jazz':
-                console.log('jazz');
-                //display jazz + image. eventlistener that triggers displayGenre
-                GenreController.displayGenre('jazz');
-            break;
-            case 'hip hop': 
-                console.log('hip hop');
-                GenreController.displayGenre('hip hop');
-            break;
-            case 'rock':
-                console.log('rock');
-                GenreController.displayGenre('rock');
-            break;
-            case 'folk':
-                console.log('folk');
-                GenreController.displayGenre('folk');
-            break;
-            case 'reggae':
-                console.log('reggae');
-                GenreController.displayGenre('reggae');
-            break;
-            case 'pop':
-                console.log('pop');
-                GenreController.displayGenre('pop');
-            break;
-            case 'rnb':
-                console.log('Rnb');
-                GenreController.displayGenre('rnb');
-            break;
-            case 'dancehall':
-                console.log('dancehall');
-                GenreController.displayGenre('dancehall');
-            break;
-            case 'indie':
-                console.log('indie');
-                GenreController.displayGenre('indie');
-            break;
-            case 'heavy metal':
-                console.log('heavy metal');
-                GenreController.displayGenre('heavy metal');
-            break;
-            case 'electronic':
-                console.log('electronic');
-                GenreController.displayGenre('electronic');
-            break;
-        }
-    },
-    //not really display.. setGenre??
-    displayGenre(genre){
-        ArtistView.containerInner.innerHTML = "";
-        TrackView.containerInner.innerHTML = "";
-        AlbumView.containerInner.innerHTML = "";
-
-        FetchModel.fetchGenre('artists', genre);
-        FetchModel.fetchGenre('albums', genre);
-        FetchModel.fetchGenre('tracks', genre);
-        
-        //to show user what genre they're on
-        searchInput.value = genre;
-    }
-}
-
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
-
 
 
 const FetchModel = {
@@ -220,7 +45,6 @@ const FetchModel = {
     },
     
 	fetchGenre(category, genre){
-        console.log(`${baseUrl}/${category}?genres=${genre}&${apiKey}`);
         return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
@@ -833,6 +657,7 @@ const PlaylistView = {
         })
     }
 }
+
     
 const SearchView = {
     searchInput: document.getElementById('searchInput')
@@ -845,7 +670,7 @@ const NavigationView = {
     * - While on the "contribute page" you can click the search button 
     * even if the input field has no value
     */
-
+    lastActivePage: '',
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
@@ -854,6 +679,7 @@ const NavigationView = {
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'home';
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
             ArtistView.container.classList.remove('hidden');
@@ -861,12 +687,12 @@ const NavigationView = {
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
         });
     },  
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
+            lastActivePage = 'playlists';
             NavigationView.playlistContainer.innerHTML = '';
             PlaylistView.containerInner.innerHTML = '';
             NavigationView.playlistContainer.classList.remove('hidden');
@@ -881,12 +707,13 @@ const NavigationView = {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
         });
     },
 
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'post';
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
@@ -1006,6 +833,182 @@ const StatusView = {
         location.classList.remove('hidden');
     }
 }
+
+
+
+/******************************************************
+ ******************** CONTROLLERS *********************
+ ******************************************************/
+
+const SearchController = {
+    createEventListener: (() => {
+        SearchView.searchInput.addEventListener('keyup', function(){
+            ArtistView.containerInner.innerHTML = "";
+            TrackView.containerInner.innerHTML = "";
+            AlbumView.containerInner.innerHTML = "";
+            PlaylistView.containerInner.innerHTML = "";
+
+            const searchQuery = document.getElementById('searchInput').value;
+
+            FetchModel.fetchSearched('artists', searchQuery);
+            FetchModel.fetchSearched('tracks', searchQuery);
+            FetchModel.fetchSearched('albums', searchQuery);
+            FetchModel.fetchSearched('playlists', searchQuery);
+
+            GenreController.checkIfGenre(searchQuery);
+        });
+    })()
+}
+
+const InputController = {
+    
+    inputIsEmptySpace(singleInput){
+        if (singleInput.trim() == ''){
+            return true; // The input was just space :(
+        } else {
+            return;
+        }
+    },
+
+    formFieldsAreEmpty(form){
+        for (var field in form) {
+            if (form.hasOwnProperty(field)) {
+                if(form[field] === '' || undefined){
+                    return true;
+                }
+                else if(InputController.inputIsEmptySpace(form[field])){
+                    return true;
+                }
+            }
+        }
+    },
+
+    setPlaceHolderIfUndefined(imageSrc){
+        // Returns src for placeholder image
+        if (imageSrc === undefined){
+            imageSrc = "images/placeholder.jpg";
+            return imageSrc; 
+        }
+        //Returns imagesrc as original argument
+        return imageSrc; 
+    }
+}
+
+
+// Loop out content (artists, albums or tracks) from response object
+const ResponseController = {
+		sortResponseByCategory(category, response) {
+		switch (category) {
+			case 'artists':
+				for (let artist of response) {
+					ArtistView.displayArtist(artist);
+				}
+			break;
+			case 'albums': 
+				for (let album of response){
+					AlbumView.displayAlbum(album);
+				}
+			break;
+			case 'tracks':
+				for (let track of response){
+                    TrackView.displayTrack(track);
+				}
+            break;
+            case 'playlists':
+                // Playlists are sorted before displayed
+                ResponseController.sortByRatingHighToLow(response);
+                
+				for (let playlist of response){
+                    PlaylistView.displayPlaylists(playlist);
+				}
+			break;
+		}
+    },
+
+    sortByRatingHighToLow(response){
+        response.sort((playlistA, playlistB) => {
+            let averageForA = RatingModel.calculateRatingAverage(playlistA);
+            let averageForB = RatingModel.calculateRatingAverage(playlistB);
+
+            if(averageForA < averageForB){
+                return 1;
+            }
+            if(averageForB < averageForA){
+                return -1;
+            }
+            return 0;
+        })  
+    }
+}
+
+
+/* If searchquery matches a genre: display a link to that genre, 
+if clicked then fetchGenre, display as search results. artists, albums, tracks.
+also set search input value as the name of the genre*/
+GenreController = { 
+    checkIfGenre(searchQuery) {
+        switch (searchQuery) {
+            case 'jazz':
+                console.log('jazz');
+                //display jazz + image. eventlistener that triggers displayGenre
+                GenreController.setGenre('jazz');
+            break;
+            case 'hip hop': 
+                console.log('hip hop');
+                GenreController.setGenre('hip hop');
+            break;
+            case 'rock':
+                console.log('rock');
+                GenreController.setGenre('rock');
+            break;
+            case 'folk':
+                console.log('folk');
+                GenreController.setGenre('folk');
+            break;
+            case 'reggae':
+                console.log('reggae');
+                GenreController.setGenre('reggae');
+            break;
+            case 'pop':
+                console.log('pop');
+                GenreController.setGenre('pop');
+            break;
+            case 'rnb':
+                console.log('Rnb');
+                GenreController.setGenre('rnb');
+            break;
+            case 'dancehall':
+                console.log('dancehall');
+                GenreController.setGenre('dancehall');
+            break;
+            case 'indie':
+                console.log('indie');
+                GenreController.setGenre('indie');
+            break;
+            case 'heavy metal':
+                console.log('heavy metal');
+                GenreController.setGenre('heavy metal');
+            break;
+            case 'electronic':
+                console.log('electronic');
+                GenreController.setGenre('electronic');
+            break;
+        }
+    },
+    setGenre(genre){
+        ArtistView.containerInner.innerHTML = "";
+        TrackView.containerInner.innerHTML = "";
+        AlbumView.containerInner.innerHTML = "";
+
+        FetchModel.fetchGenre('artists', genre);
+        FetchModel.fetchGenre('albums', genre);
+        FetchModel.fetchGenre('tracks', genre);
+        
+        //to show user what genre they're on
+        searchInput.value = genre;
+    }
+}
+
 
 /********************************************************
  ******************** RUN FUNCTIONS *********************
