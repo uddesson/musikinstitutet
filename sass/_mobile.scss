@@ -134,20 +134,18 @@ nav {
 	button {
 		/* Calculate how many pixels to move button 
 		/* to the left to make it fit in the search-input */
-		$width: 50px;
+		$width: 36px;
 		$margin: 10px;
 		$placeInsideSearch: $width + $margin;
 		width: $width;
 		margin-left: -#{$placeInsideSearch};
+		font-size: 1.4rem;
 	}
 }
 
 .logo {
 	width:160px;
 	display:block;
-//	position:fixed;
-//	top:20px;
-//	right:20px;
 	z-index:15;
 	img {
 		width: 160px;
