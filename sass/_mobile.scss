@@ -69,6 +69,7 @@ body {
 	background-attachment: fixed;
 	padding-bottom:100px;
 }
+
 div {
 	word-wrap: break-word;
 }
@@ -80,18 +81,26 @@ div {
 	margin:180px auto;
 }
 
+
 /*************************************
  ************ TYPORGRAPHY ************
  *************************************/
+
 body {
 	font-family: 'Roboto';
 }
+
 a {
 	text-decoration: none;
 	color: $color__text--dark;
 }
+
 .text--bold{
 	font-weight: bold;
+}
+
+.text--center{
+	text-align: center;
 }
 
 /********************************
@@ -491,9 +500,9 @@ select {
  ***** FUNCTIONAL STYLES ******
  ******************************/
 
- .hidden{
-	 display: none!important;
- }
+.hidden{
+	display: none!important;
+}
 
 //Hide visually but keep in DOM for screenreaders
 .do_not_display {
