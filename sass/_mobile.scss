@@ -179,6 +179,9 @@ button, .button {
 		margin: 10px 0;
 		letter-spacing: .4px;
 	}
+	&.block{
+		display: block;
+	}
 }
 
 
@@ -294,22 +297,33 @@ button, .button {
 /**************************************
  ************* PLAYLISTS **************
  **************************************/
-.container__playlists{
-
-	.comments{	
-		ul{
-			margin-bottom: 50px;	
+ 
+.container__playlist{
+	line-height: 160%;
+	margin-bottom: 60px;
+	&.list > div{
+		padding: 4px;
+		margin: 10px 0 10px 0;
+		p{
+			margin-left: 15px;
 		}
 	}
-	
-	margin:0 auto 100px;
-	input, button {
-		max-width:500px;
-		margin: 10px auto;
-		display:block;
+	h3{
+		font-size: 2em;
+		margin-bottom: 20px;
 	}
-	li button {
-		display:inline-block;
+	.comments{
+		margin-bottom: 20px;
+		li{
+			height: 40px;
+		}
+	}
+	.button{
+		width: 300px;
+		margin: 10px 0 10px 0;
+		&.clear{
+			width: 20px;
+		}
 	}
 }
 
