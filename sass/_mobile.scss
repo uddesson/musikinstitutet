@@ -334,10 +334,10 @@ button, .button {
 /*********************************************
  ***************** FEEDBACK ******************
  *********************************************/
-#errorPopup {
+#feedbackPopup {
 	position:fixed;
 	top:60px;
-	left:400px;
+	left:400px; //FIXA CENTERING HÄR!!!!!
 	height: 190px;
 	width: 400px;
 	background: #fff;

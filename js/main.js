@@ -240,13 +240,13 @@ const FetchModel = {
     },
 
     fetchPlaylistsForAdding(trackId){
-		return fetch(`${baseUrl}/playlist?limit=40&${apiKey}`)
+		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
 			.catch(error => {
-				StatusView.showStatusMessage("Error", errorPopup);
+				StatusView.showStatusMessage("Error", feedbackPopup);
 			});
         }
 };
@@ -268,7 +268,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
 
         if (InputController.formFieldsAreEmpty(artist)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -284,9 +284,9 @@ const PostModel = {
             .then((artist) => {
                 console.log(artist);
             })
-			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
             
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -303,7 +303,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
 
         if (InputController.formFieldsAreEmpty(album)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty")
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus)
         }
 
         else {
@@ -319,9 +319,9 @@ const PostModel = {
                 .then((album) => {
                     console.log(album);
                 })
-				.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
+				.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -335,7 +335,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedTrackStatus');
 
         if (InputController.formFieldsAreEmpty(track)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -351,9 +351,9 @@ const PostModel = {
             .then((postedTrack) => {
                 console.log(postedTrack);
             })
-			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -371,7 +371,7 @@ const PostModel = {
         .then((playlist) => {
             console.log(playlist);
         })
-		.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 },
 
 addTrackToPlaylist(playlistId, tracks){
@@ -386,8 +386,9 @@ addTrackToPlaylist(playlistId, tracks){
     .then((response) => response.json())
     .then((playlist) => {
         console.log("You've added a track to ", playlist.title);
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
     })
-	.catch(error => console.log(error)); //FORTSÄTT HÄR
+	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
 
     addComment(playlistId, text, user){
@@ -408,7 +409,7 @@ addTrackToPlaylist(playlistId, tracks){
             .then((response) => response.json())
             .then((playlist) => {
                 FetchModel.fetchComments(playlistId)
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
           });
     },
 	rate(category, id, rating){
@@ -424,7 +425,7 @@ addTrackToPlaylist(playlistId, tracks){
 		.then((category) => {
 			console.log(category);
 		})
-		.catch(error => console.log(error));
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 	}
 }
 
@@ -445,7 +446,7 @@ const DeleteModel = {
                 //TO DO:this need to be made dynamic as well or update siteo.
                 ArtistView.containerInner.removeChild(`${category}Div`);
             })
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
         } else {
             return;
         }
@@ -463,7 +464,7 @@ const DeleteModel = {
         .then((comment) => {
             FetchModel.fetchComments(playlistID);
         })
-		.catch(error => console.log(error));
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     }
 }
 
@@ -680,7 +681,6 @@ const AddToPlaylistView = {
             addButton.innerText = '+';
 
             addButton.addEventListener('click', function(){
-                console.log('scroll up');
                 FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
@@ -999,12 +999,12 @@ function displayRating(){
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
-	errorPopup: document.getElementById('errorPopup'),
+	feedbackPopup: document.getElementById('feedbackPopup'),
     /* Takes to params, location should be the div where you want to put the error message
     and status should be a string that fits one of the switch-cases */
-    showStatusMessage(status = 'Error', location = 'errorPopup'){
-		if (location === 'errorPopup'){
-			errorPopup.classList.toggle('hidden');
+    showStatusMessage(status = 'Error', location = 'feedbackPopup'){
+		if (location === 'feedbackPopup'){
+			feedbackPopup.classList.toggle('hidden');
 		}
         switch (status) {
             case "Empty":
