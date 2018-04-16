@@ -60,7 +60,7 @@ const FetchModel = {
         .then((comments) => {
             PlaylistView.showComments(comments);
         })
-		.catch(error => StatusView.showStatusMessage("commentsError")); //ÄNDRA ERROR OUTPUT HÄR
+		.catch(error => StatusView.showStatusMessage("commentsError"));
     },
 
     fetchPlaylistsForAdding(trackId){
