@@ -209,8 +209,10 @@ addTrackToPlaylist(playlistId, tracks){
     })
     .then((response) => response.json())
     .then((playlist) => {
-		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup); 
-		//DÖLJ POPUP 
+		//Replace addToPlaylistPopup with feedbackPopup when track is successfully added
+		const addToPlaylistPopup = document.getElementById('addToPlaylistPopup');
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+		addToPlaylistPopup.parentElement.removeChild(addToPlaylistPopup);
     })
 	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
@@ -338,6 +340,7 @@ const AddToPlaylistView = {
 
         createPlaylistButton.innerText = 'Create new playlist';
         div.classList.add('popup__add-to-playlist');
+		div.id = 'addToPlaylistPopup';
         createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
 		
 		//Hide popup when clicking outside of it
