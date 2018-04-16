@@ -2,105 +2,6 @@ let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
-/******************************************************
- ******************** CONTROLLERS *********************
- ******************************************************/
-
- const SearchController = {
-    searchInput: document.getElementById('searchInput'),
-
-    createEventListener: (() => {
-        searchInput.addEventListener('keyup', function(){
-            ArtistView.containerInner.innerHTML = "";
-            TrackView.containerInner.innerHTML = "";
-            AlbumView.containerInner.innerHTML = "";
-
-            const searchQuery = document.getElementById('searchInput').value;
-
-            FetchModel.fetchSearched('artists', searchQuery);
-            FetchModel.fetchSearched('tracks', searchQuery);
-            FetchModel.fetchSearched('albums', searchQuery);
-
-
-            /*
-            TO DO:
-            user should be able to search without f ex ' and still get a result
-
-            be able to search for playlists
-
-            Shows duplicates of search result sometimes?
-
-            check if genre: display as link, if clicked fetchSpecificGenre, display as search results
-            maybe also make input value genre
-            */
-        });
-    })()
-}
-
-const InputController = {
-    
-    inputIsEmptySpace(singleInput){
-        if (singleInput.trim() == ''){
-            return true; // The input was just space :(
-        } else {
-            return;
-        }
-    },
-
-    formFieldsAreEmpty(form){
-        for (var field in form) {
-            if (form.hasOwnProperty(field)) {
-                if(form[field] === '' || undefined){
-                    return true;
-                }
-                else if(InputController.inputIsEmptySpace(form[field])){
-                    return true;
-                }
-            }
-        }
-    },
-
-    setPlaceHolderIfUndefined(imageSrc){
-        // Returns src for placeholder image
-        if (imageSrc === undefined){
-            imageSrc = "images/placeholder.jpg";
-            return imageSrc; 
-        }
-        //Returns imagesrc as original argument
-        return imageSrc; 
-    }
-}
-
-
-// Loop out content (artists, albums or tracks) from response object
-const ResponseController = {
-		sortResponseByCategory(category, response) {
-		switch (category) {
-			case 'artists':
-				for (let artist of response) {
-					ArtistView.displayArtist(artist);
-				}
-			break;
-			case 'albums': 
-				for (let album of response){
-					AlbumView.displayAlbum(album);
-				}
-			break;
-			case 'tracks':
-				for (let track of response){
-                    TrackView.displayTrack(track);
-				}
-            break;
-            case 'playlists':
-				for (let playlist of response){
-					PlaylistView.displayPlaylists(playlist);
-				}
-			break;
-		}
-    }
-}
-
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
@@ -143,7 +44,7 @@ const FetchModel = {
             .catch(error => console.log(error));
     },
     
-	fetchSpecificGenre(category, genre){
+	fetchGenre(category, genre){
         return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
@@ -153,7 +54,7 @@ const FetchModel = {
     },
     
     fetchComments(id){
-        fetch(`${baseUrl}/playlists/${id}/comments?${apiKey}`)
+        fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
             PlaylistView.showComments(comments)
@@ -164,10 +65,10 @@ const FetchModel = {
 		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
-				AddToPlaylistView.displayPlaylistss(response, trackId);
+				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
 			.catch(error => console.log(error));
-        },
+        }
 };
 
 
@@ -311,7 +212,7 @@ addTrackToPlaylist(playlistId, tracks){
             username: user
         }
         
-        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?${apiKey}`,{
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -323,14 +224,28 @@ addTrackToPlaylist(playlistId, tracks){
             .then((playlist) => {
                 FetchModel.fetchComments(playlistId);
           });
-    }
+    },
+	rate(category, id, rating){
+			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ rating: rating })
+		})
+		.then((response) => response.json())
+		.then((category) => {
+			console.log(category);
+		});
+	}
 }
 
 const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
         if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
-            fetch(`${baseUrl}/${category}s/${objectToDelete._id}?${apiKey}`, {
+            fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
                 headers: {
                         'Accept': 'application/json',
@@ -342,11 +257,24 @@ const DeleteModel = {
                 console.log('you deleted', objectToDelete.title);
                 //TO DO:this need to be made dynamic as well or update siteo.
                 ArtistView.containerInner.removeChild(`${category}Div`);
-                
             });
         } else {
-                return;
-            }
+            return;
+        }
+    },
+
+    deleteComment(commentID, playlistID){
+        fetch(`https://folksa.ga/api/comments/${commentID}?key=flat_eric`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then((response) => response.json())
+        .then((comment) => {
+            FetchModel.fetchComments(playlistID);
+        });
     }
 }
 
@@ -360,11 +288,11 @@ const RatingModel = {
         let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
         
         if (isNaN(ratingAverage)){
-            return 'No rating yet';
+            return 0;
         }
         else{
             ratingAverage = Math.floor(ratingAverage);
-            return `${ratingAverage} / 10`;
+            return ratingAverage;
         }
     }
 }
@@ -373,7 +301,7 @@ const RatingModel = {
 
 const AddToPlaylistView = {
 
-    displayPlaylistss: (response, trackId) => {
+    displayPlaylistsPopUp: (response, trackId) => {
         let div = document.createElement('div');
         div.classList.add('popup__add-to-playlist');
         let ul = document.createElement('ul');
@@ -387,7 +315,7 @@ const AddToPlaylistView = {
 		  var isClickInside = div.contains(event.target);
 		  if (!isClickInside){
 			console.log('Clicked outside div')
-			div.classList.toggle('hidden');
+			div.classList.add('hidden');
 		  }
 		});
 		
@@ -502,12 +430,23 @@ const AddToPlaylistView = {
 			let albumArtists = album.artists.map((artist) => artist.name);
             let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
+			let ratingInput = createRatingInput();
+            let ratingButton = document.createElement('button');
+            ratingButton.innerText = "Rate";
+			
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
 					<h4>${albumArtists}</h4>
 					<p>Genres: ${album.genres}</p>`;
             
+			
+			ratingButton.addEventListener('click', function(){
+				// skcika in ratingInput.value till API
+				console.log(ratingInput.value);
+				PostModel.rate('album', album._id, ratingInput.value);
+			});
+			
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener) 
@@ -519,6 +458,8 @@ const AddToPlaylistView = {
             });
 
             let buttonDiv = document.createElement('div');
+            buttonDiv.appendChild(ratingInput);
+            buttonDiv.appendChild(ratingButton);
             buttonDiv.appendChild(deleteButton);
             albumDiv.appendChild(buttonDiv);
             
@@ -534,12 +475,22 @@ const AddToPlaylistView = {
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
-			
 			let trackDiv = document.createElement('div');
+			let ratingInput = createRatingInput();
+            let ratingButton = document.createElement('button');
+            ratingButton.innerText = "Rate";
+			
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
                 <h4>by ${trackArtists}</h4>`;
-                
+			
+        
+            ratingButton.addEventListener('click', function(){
+                // skcika in ratingInput.value till API
+                console.log(ratingInput.value);
+                PostModel.rate('track', track._id, ratingInput.value);
+            });
+			
             //make function/controller
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
@@ -547,7 +498,6 @@ const AddToPlaylistView = {
             addButton.innerText = '+';
 
             addButton.addEventListener('click', function(){
-                console.log('scroll up');
                 FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
@@ -558,7 +508,10 @@ const AddToPlaylistView = {
                 DeleteModel.deleteOne(track, 'track');
             });
 
+			createRatingInput();
             let buttonsDiv = document.createElement('div');
+            buttonsDiv.appendChild(ratingInput);
+            buttonsDiv.appendChild(ratingButton);
             buttonsDiv.appendChild(addButton);
             buttonsDiv.appendChild(deleteButton);
             trackDiv.appendChild(buttonsDiv);
@@ -566,7 +519,7 @@ const AddToPlaylistView = {
 			TrackView.containerInner.classList.add('containerInner', 'container__inner', 'container__tracks', 'list');
 			TrackView.container.appendChild(TrackView.containerInner);
 			TrackView.containerInner.appendChild(trackDiv);
-		},
+		}
     }
 
 const PlaylistView = {
@@ -596,6 +549,7 @@ const PlaylistView = {
     showComments(comments){
         PlaylistView.commentsContainer.innerHTML = '';
         let commentList = document.createElement('ul')
+        commentList.id = 'commentsList';
         
         if(comments == ''){
             let listElement = document.createElement('li');
@@ -604,7 +558,10 @@ const PlaylistView = {
         } 
         else {
             for (var i = 0; i < comments.length; i++){
+                // console.log(comments[i])
                 let comment = `"${comments[i].body}" by ${comments[i].username}`;
+                let commentId = comments[i]._id;
+                let playlistId = comments[i].playlist;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
                 deleteButton.innerText = 'x';
@@ -613,7 +570,7 @@ const PlaylistView = {
                 commentList.appendChild(listElement);
 
                 deleteButton.addEventListener('click', function(){
-                    DeleteModel.deleteOne(comment, 'comment');
+                    DeleteModel.deleteComment(commentId, playlistId);
                 });
             }
         }
@@ -623,7 +580,7 @@ const PlaylistView = {
     
     displayPlaylists(playlist){
         let rating = RatingModel.calculateRatingAverage(playlist);
-        let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage)
+        let imageSrc = InputController.setPlaceHolderIfUndefined(playlist.coverImage);
 
         // Create elements below
         let showSinglePlaylistButton = document.createElement('button');
@@ -637,7 +594,7 @@ const PlaylistView = {
             <h3>${playlist.title}</h3><br>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
-            <h4>Rating: ${rating}</h4>`;
+            <h4>Rating: ${rating} / 10</h4>`;
         container.appendChild(playlistDiv);
         
         playlistDiv.appendChild(showSinglePlaylistButton);
@@ -653,22 +610,28 @@ const PlaylistView = {
     },
 
     displaySinglePlaylist(id, rating, playlist){
-        // Fetch comments for single playlist, since these should be displayed as well
         FetchModel.fetchComments(id);
-
+        PlaylistView.container.innerHTML = '';
+		let ratingInput = createRatingInput();
+        let ratingButton = document.createElement('button');
+        ratingButton.innerText = "Rate";
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
-        let singlePlaylistContent = `
-            <section class="containerInner container__inner container__tracks list">
-                <h2>${playlist.title}</h2><br>
+        
+        let singlePlaylistContent = document.createElement('section');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'list');
+        singlePlaylistContent.innerHTML =
+               `<h2>${playlist.title}</h2>
                 <h4>Created by: ${playlist.createdBy}</h4>
-                <h4>Rating: ${rating}</h4>
-                ${tracklist}
-            </section>`;
+                <h4>Playlist rating: ${rating} / 10</h4>
+                ${tracklist}</section>`;
+
+        let singlePlaylistActions = document.createElement('section');
+        singlePlaylistActions.classList.add('containerInner', 'container__inner');
         
         let newComment = document.createElement('input');
         newComment.type = 'text';
         newComment.placeholder = 'New comment';
-
+		
         let commentBy = document.createElement('input');
         commentBy.type = 'text';
         commentBy.placeholder = "Who's commenting?";
@@ -677,19 +640,37 @@ const PlaylistView = {
         addCommentButton.innerText = "Add comment";
         addCommentButton.classList.add('button', 'small', 'dark');
 
-        PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
-        PlaylistView.container.appendChild(newComment);
-        PlaylistView.container.appendChild(commentBy);
-        PlaylistView.container.appendChild(addCommentButton);
-        PlaylistView.container.appendChild(PlaylistView.commentsContainer);
+        let removePlaylistButton = document.createElement('button');
+        removePlaylistButton.innerText = "Remove this playlist";
+        removePlaylistButton.classList.add('button', 'small', 'light');
 
+        singlePlaylistActions.appendChild(ratingInput);
+        singlePlaylistActions.appendChild(ratingButton);
+        singlePlaylistActions.appendChild(newComment);
+        singlePlaylistActions.appendChild(commentBy);
+        singlePlaylistActions.appendChild(addCommentButton);
+        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
+        singlePlaylistActions.appendChild(removePlaylistButton);
+        PlaylistView.container.appendChild(singlePlaylistContent);
+        PlaylistView.container.appendChild(singlePlaylistActions);
+
+        ratingButton.addEventListener('click', function(){
+            // skcika in ratingInput.value till API
+            console.log(ratingInput.value);
+            PostModel.rate('playlist', playlist._id, ratingInput.value);
+        });
+        
         addCommentButton.addEventListener('click', function(){
-            newComment = newComment.value;
-            commentBy = commentBy.value;
-            PostModel.addComment(playlist._id, newComment, commentBy);
+            PostModel.addComment(playlist._id, newComment.value, commentBy.value);
+        })
+
+        removePlaylistButton.addEventListener('click', function(){
+            DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
+
 }
+
     
 const SearchView = {
     searchInput: document.getElementById('searchInput')
@@ -702,7 +683,7 @@ const NavigationView = {
     * - While on the "contribute page" you can click the search button 
     * even if the input field has no value
     */
-
+    lastActivePage: '',
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
@@ -711,6 +692,7 @@ const NavigationView = {
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'home';
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
             ArtistView.container.classList.remove('hidden');
@@ -718,13 +700,14 @@ const NavigationView = {
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
         });
     },  
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
+            lastActivePage = 'playlists';
             NavigationView.playlistContainer.innerHTML = '';
+            PlaylistView.containerInner.innerHTML = '';
             NavigationView.playlistContainer.classList.remove('hidden');
             FetchModel.fetchAll('playlists');       
             
@@ -733,15 +716,17 @@ const NavigationView = {
         });
 
         /* If the user tries to search while on the contribute "page",
-        we still allow them to do so, and hide the post-view */
+        we still allow them to do so, and hide the other views */
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
         });
     },
 
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'post';
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
@@ -753,9 +738,8 @@ const NavigationView = {
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
         });
-    },
+    }
 }
-
 
 const PostView = { 
     
@@ -823,6 +807,24 @@ const PostView = {
     }
 }
 
+//Create a function that creates a rating input field
+function createRatingInput(){
+	//Create rating select field with 10 options
+	let ratingInput = document.createElement('select');
+
+	for(let i = 1; i <= 10; i++){
+		let number = document.createElement('option');
+		number.innerText = i;
+		number.value = i;
+		ratingInput.appendChild(number);
+	}
+	return ratingInput;
+}
+
+function displayRating(){
+	
+}
+
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
@@ -844,6 +846,171 @@ const StatusView = {
         location.classList.remove('hidden');
     }
 }
+
+
+
+/******************************************************
+ ******************** CONTROLLERS *********************
+ ******************************************************/
+
+const SearchController = {
+    createEventListener: (() => {
+        SearchView.searchInput.addEventListener('keyup', function(){
+            ArtistView.containerInner.innerHTML = "";
+            TrackView.containerInner.innerHTML = "";
+            AlbumView.containerInner.innerHTML = "";
+            PlaylistView.containerInner.innerHTML = "";
+
+            const searchQuery = document.getElementById('searchInput').value;
+
+            FetchModel.fetchSearched('artists', searchQuery);
+            FetchModel.fetchSearched('tracks', searchQuery);
+            FetchModel.fetchSearched('albums', searchQuery);
+            FetchModel.fetchSearched('playlists', searchQuery);
+
+            GenreController.checkIfGenre(searchQuery);
+        });
+    })()
+}
+
+const InputController = {
+    
+    inputIsEmptySpace(singleInput){
+        if (singleInput.trim() == ''){
+            return true; // The input was just space :(
+        } else {
+            return;
+        }
+    },
+
+    formFieldsAreEmpty(form){
+        for (var field in form) {
+            if (form.hasOwnProperty(field)) {
+                if(form[field] === '' || undefined){
+                    return true;
+                }
+                else if(InputController.inputIsEmptySpace(form[field])){
+                    return true;
+                }
+            }
+        }
+    },
+
+    setPlaceHolderIfUndefined(imageSrc){
+        // Returns src for placeholder image
+        if (imageSrc === undefined || imageSrc == ''){
+            imageSrc = "images/placeholder.jpg";
+            return imageSrc; 
+        }
+        //Returns imagesrc as original argument
+        return imageSrc; 
+    }
+}
+
+
+// Loop out content (artists, albums or tracks) from response object
+const ResponseController = {
+		sortResponseByCategory(category, response) {
+		switch (category) {
+			case 'artists':
+				for (let artist of response) {
+					ArtistView.displayArtist(artist);
+				}
+			break;
+			case 'albums': 
+				for (let album of response){
+					AlbumView.displayAlbum(album);
+				}
+			break;
+			case 'tracks':
+				for (let track of response){
+                    TrackView.displayTrack(track);
+				}
+            break;
+            case 'playlists':
+                // Playlists are sorted before displayed
+                ResponseController.sortByRatingHighToLow(response);
+                
+				for (let playlist of response){
+                    PlaylistView.displayPlaylists(playlist);
+				}
+			break;
+		}
+    },
+
+    sortByRatingHighToLow(response){
+        response.sort((playlistA, playlistB) => {
+            let averageForA = RatingModel.calculateRatingAverage(playlistA);
+            let averageForB = RatingModel.calculateRatingAverage(playlistB);
+
+            if(averageForA < averageForB){
+                return 1;
+            }
+            if(averageForB < averageForA){
+                return -1;
+            }
+            return 0;
+        })  
+    }
+}
+
+
+/* If searchquery matches a genre: display a link to that genre, 
+if clicked then fetchGenre, display as search results. artists, albums, tracks.
+also set search input value as the name of the genre*/
+GenreController = { 
+    checkIfGenre(searchQuery) {
+        switch (searchQuery) {
+            case 'jazz':
+                //display jazz + image. eventlistener that triggers displayGenre
+                GenreController.setGenre('jazz');
+            break;
+            case 'hip hop': 
+                GenreController.setGenre('hip hop');
+            break;
+            case 'rock':
+                GenreController.setGenre('rock');
+            break;
+            case 'folk':
+                GenreController.setGenre('folk');
+            break;
+            case 'reggae':
+                GenreController.setGenre('reggae');
+            break;
+            case 'pop':
+                GenreController.setGenre('pop');
+            break;
+            case 'rnb':
+                GenreController.setGenre('rnb');
+            break;
+            case 'dancehall':
+                GenreController.setGenre('dancehall');
+            break;
+            case 'indie':
+                GenreController.setGenre('indie');
+            break;
+            case 'heavy metal':
+                GenreController.setGenre('heavy metal');
+            break;
+            case 'electronic':
+                GenreController.setGenre('electronic');
+            break;
+        }
+    },
+    setGenre(genre){
+        ArtistView.containerInner.innerHTML = "";
+        TrackView.containerInner.innerHTML = "";
+        AlbumView.containerInner.innerHTML = "";
+
+        FetchModel.fetchGenre('artists', genre);
+        FetchModel.fetchGenre('albums', genre);
+        FetchModel.fetchGenre('tracks', genre);
+        
+        //to show user what genre they're on
+        searchInput.value = genre;
+    }
+}
+
 
 /********************************************************
  ******************** RUN FUNCTIONS *********************
