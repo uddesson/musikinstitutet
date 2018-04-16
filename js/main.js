@@ -673,23 +673,29 @@ const PlaylistView = {
         deletePlaylistButton.innerText = "Remove this playlist";
         deletePlaylistButton.classList.add('button', 'large', 'warning');
 
+        let locationForDisplayingStatus = document.createElement('div');
+        
         singlePlaylistActions.appendChild(ratingInput);
         singlePlaylistActions.appendChild(ratingButton);
         singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
         singlePlaylistActions.appendChild(newComment);
         singlePlaylistActions.appendChild(commentBy);
+        singlePlaylistActions.appendChild(locationForDisplayingStatus);
         singlePlaylistActions.appendChild(addCommentButton);
         singlePlaylistActions.appendChild(deletePlaylistButton);
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
         ratingButton.addEventListener('click', function(){
-            // skcika in ratingInput.value till API
-            console.log(ratingInput.value);
             PostModel.rate('playlist', playlist._id, ratingInput.value);
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus);
         });
         
         addCommentButton.addEventListener('click', function(){
+            if(InputController.inputIsEmptySpace(newComment.value)
+            || InputController.inputIsEmptySpace(commentBy.value)){
+                StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
+            }
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
@@ -868,7 +874,7 @@ const StatusView = {
             break;
 
             case "Success":
-            StatusView.statusMessage.innerText = "Nice, it worked!";
+            StatusView.statusMessage.innerText = "Nice, you just contributed to FED17-Faves!";
 			StatusView.statusMessage.classList.add('feedback__success');
             break;
 			
