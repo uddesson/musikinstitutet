@@ -1,4 +1,4 @@
-let apiKey = `key=flat_eric`;
+let apiKey = `key=flat_eri`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
@@ -183,7 +183,7 @@ GenreController = {
 
 
 const FetchModel = {
-
+	container: document.getElementById('container'),
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -194,7 +194,7 @@ const FetchModel = {
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
 			})
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
         },
 
 	fetchOne(category, id){
@@ -233,8 +233,9 @@ const FetchModel = {
         fetch(`${baseUrl}/playlists/${id}/comments?${apiKey}`)
         .then((response) => response.json())
         .then((comments) => {
-            PlaylistView.showComments(comments)
-        });
+            PlaylistView.showComments(comments);
+        })
+		.catch(error => console.log(error));
     },
 
     fetchPlaylistsForAdding(trackId){
@@ -279,7 +280,8 @@ const PostModel = {
             .then((response) => response.json())
             .then((artist) => {
                 console.log(artist);
-            });
+            })
+			.catch(error => console.log(error));
             
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
@@ -363,7 +365,8 @@ const PostModel = {
         .then((response) => response.json())
         .then((playlist) => {
             console.log(playlist);
-        });
+        })
+		.catch(error => console.log(error));
 },
 
 addTrackToPlaylist(playlistId, tracks){
@@ -378,7 +381,8 @@ addTrackToPlaylist(playlistId, tracks){
     .then((response) => response.json())
     .then((playlist) => {
         console.log("You've added a track to ", playlist.title);
-    });
+    })
+	.catch(error => console.log(error));
     },
 
     addComment(playlistId, text, user){
@@ -398,11 +402,12 @@ addTrackToPlaylist(playlistId, tracks){
             })
             .then((response) => response.json())
             .then((playlist) => {
-                FetchModel.fetchComments(playlistId);
+                FetchModel.fetchComments(playlistId)
+			.catch(error => console.log(error));
           });
     },
 	rate(category, id, rating){
-			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+		fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -413,7 +418,8 @@ addTrackToPlaylist(playlistId, tracks){
 		.then((response) => response.json())
 		.then((category) => {
 			console.log(category);
-		});
+		})
+		.catch(error => console.log(error));
 	}
 }
 
@@ -433,7 +439,8 @@ const DeleteModel = {
                 console.log('you deleted', objectToDelete.title);
                 //TO DO:this need to be made dynamic as well or update siteo.
                 ArtistView.containerInner.removeChild(`${category}Div`);
-            });
+            })
+			.catch(error => console.log(error));
         } else {
             return;
         }
@@ -450,7 +457,8 @@ const DeleteModel = {
         .then((response) => response.json())
         .then((comment) => {
             FetchModel.fetchComments(playlistID);
-        });
+        })
+		.catch(error => console.log(error));
     }
 }
 
@@ -490,7 +498,6 @@ const AddToPlaylistView = {
 		document.addEventListener('click', function(event) {
 		  var isClickInside = div.contains(event.target);
 		  if (!isClickInside){
-			console.log('Clicked outside div')
 			div.classList.add('hidden');
 		  }
 		});
@@ -997,11 +1004,18 @@ const StatusView = {
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__empty');
             break;
 
             case "Success":
             StatusView.statusMessage.innerText = "Nice, it worked!";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__success');
             break;
+			
+			case "Error":
+			StatusView.statusMessage.innerText = "Something went wrong :-(";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			break;
         }
         
         location.appendChild(StatusView.statusMessage);
