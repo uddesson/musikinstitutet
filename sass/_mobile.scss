@@ -220,6 +220,20 @@ button, .button {
 	}
 }
 
+.deleteIcon {
+	top: 10px; 
+	right: 10px; 
+	position: absolute;
+	button {
+		background: #fff;
+		height:26px;
+		width:26px;
+		border-radius: 13px;
+	}
+	.fa {
+		font-size:1.7em;
+	}
+}
 
 /****************************************
  ************ GRID/LIST VIEW ************
