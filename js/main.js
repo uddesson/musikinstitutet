@@ -14,12 +14,14 @@ const baseUrl = `https://folksa.ga/api`;
             ArtistView.containerInner.innerHTML = "";
             TrackView.containerInner.innerHTML = "";
             AlbumView.containerInner.innerHTML = "";
+            PlaylistView.containerInner.innerHTML = "";
 
             const searchQuery = document.getElementById('searchInput').value;
 
             FetchModel.fetchSearched('artists', searchQuery);
             FetchModel.fetchSearched('tracks', searchQuery);
             FetchModel.fetchSearched('albums', searchQuery);
+            FetchModel.fetchSearched('playlists', searchQuery);
 
             GenreController.checkIfGenre(searchQuery);
         });
@@ -85,7 +87,7 @@ const ResponseController = {
                 ResponseController.sortByRatingHighToLow(response);
                 
 				for (let playlist of response){
-					PlaylistView.displayPlaylists(playlist);
+                    PlaylistView.displayPlaylists(playlist);
 				}
 			break;
 		}
@@ -220,7 +222,6 @@ const FetchModel = {
     },
     
 	fetchGenre(category, genre){
-        console.log(`${baseUrl}/${category}?genres=${genre}&${apiKey}`);
         return fetch(`${baseUrl}/${category}?genres=${genre}&${apiKey}`)
             .then(response => response.json())
             .then((response) => {
@@ -833,6 +834,7 @@ const PlaylistView = {
         })
     }
 }
+
     
 const SearchView = {
     searchInput: document.getElementById('searchInput')
@@ -845,7 +847,7 @@ const NavigationView = {
     * - While on the "contribute page" you can click the search button 
     * even if the input field has no value
     */
-
+    lastActivePage: '',
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
@@ -854,6 +856,7 @@ const NavigationView = {
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'home';
             /* When we REMOVE the class hidden, we show views
              and elements that should be active */
             ArtistView.container.classList.remove('hidden');
@@ -861,12 +864,12 @@ const NavigationView = {
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
         });
     },  
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
+            lastActivePage = 'playlists';
             NavigationView.playlistContainer.innerHTML = '';
             PlaylistView.containerInner.innerHTML = '';
             NavigationView.playlistContainer.classList.remove('hidden');
@@ -881,12 +884,13 @@ const NavigationView = {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
         });
     },
 
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
+            lastActivePage = 'post';
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
