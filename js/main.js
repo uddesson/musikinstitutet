@@ -238,21 +238,25 @@ addTrackToPlaylist(playlistId, tracks){
           });
     },
 
-	rate(category, id, rating){
-		fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ rating: rating })
-		})
-		.then((response) => response.json())
-		.then((category) => {
-			console.log(category);
-		})
-		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
-	}
+	rate(category, id, rating){ 
+        if (rating > 0) {
+            fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rating: rating })
+            })
+            .then((response) => response.json())
+            .then((category) => {
+                StatusView.showStatusMessage(`You rated this a ${rating} out of 10!`, feedbackPopup);
+            })
+            .catch(error);
+        } else {
+            alert('Choose a rating between 1 and 10!');
+        }
+    }
 }
 
 const DeleteModel = {
@@ -310,12 +314,13 @@ const DeleteModel = {
 
 const RatingModel = {
     
-    calculateRatingAverage(playlist){
+    calculateRatingAverage(category){
+        
         let ratingSum = 0;
-            for (var rating of playlist.ratings){  
+            for (var rating of category.ratings){  
                 ratingSum = ratingSum + rating; 
             }
-        let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
+        let ratingAverage = ratingSum / category.ratings.length; // Do math, get average!
         
         if (isNaN(ratingAverage)){
             return 0;
@@ -458,20 +463,19 @@ const AddToPlaylistView = {
 			let albumArtists = album.artists.map((artist) => artist.name);
             let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
+            let rating = RatingModel.calculateRatingAverage(album);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
             ratingButton.innerText = "Rate";
 			
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
-					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
+					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>
 					<h4>${albumArtists}</h4>
-					<p>Genres: ${album.genres}</p>`;
+                    Rating: ${rating} / 10`;
             
 			
 			ratingButton.addEventListener('click', function(){
-				// skcika in ratingInput.value till API
-				console.log(ratingInput.value);
 				PostModel.rate('album', album._id, ratingInput.value);
 			});
 			
@@ -500,14 +504,16 @@ const AddToPlaylistView = {
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
-			let trackDiv = document.createElement('div');
+            let trackDiv = document.createElement('div');
+            let rating = RatingModel.calculateRatingAverage(track);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
             ratingButton.innerText = "Rate";
 			
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
-                <h4>by ${trackArtists}</h4>`;
+                <h4>by ${trackArtists}</h4>
+                Rating: ${rating} / 10`;
 			
         
             ratingButton.addEventListener('click', function(){
@@ -842,7 +848,9 @@ const PostView = {
 //Create a function that creates a rating input field
 function createRatingInput(){
 	//Create rating select field with 10 options
-	let ratingInput = document.createElement('select');
+    let ratingInput = document.createElement('select');
+    const defaultOption = document.createElement('option');
+    ratingInput.appendChild(defaultOption);
 
 	for(let i = 1; i <= 10; i++){
 		let number = document.createElement('option');
@@ -852,11 +860,6 @@ function createRatingInput(){
 	}
 	return ratingInput;
 }
-
-function displayRating(){
-	
-}
-
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
@@ -893,8 +896,8 @@ const StatusView = {
         	StatusView.statusMessage.innerText = status;
         }
         StatusView.statusMessage.classList.add('feedback');
-        location.appendChild(StatusView.statusMessage);
         location.classList.remove('hidden');
+        location.appendChild(StatusView.statusMessage);
 		
 		//Hide popup when clicking outside of it
 		document.addEventListener('click', function(event) {
