@@ -8,7 +8,7 @@ const baseUrl = `https://folksa.ga/api`;
 
 
 const FetchModel = {
-
+	container: document.getElementById('container'),
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -19,14 +19,14 @@ const FetchModel = {
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
 			})
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
         },
 
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchSearched(category, searchQuery){
@@ -41,7 +41,7 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchGenre(category, genre){
@@ -50,15 +50,17 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
     fetchComments(id){
+		
         fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
-            PlaylistView.showComments(comments)
-        });
+            PlaylistView.showComments(comments);
+        })
+		.catch(error => StatusView.showStatusMessage("commentsError"));
     },
 
     fetchPlaylistsForAdding(trackId){
@@ -67,7 +69,9 @@ const FetchModel = {
 			.then((response) => {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
-			.catch(error => console.log(error));
+			.catch(error => {
+				StatusView.showStatusMessage("Error", feedbackPopup);
+			});
         }
 };
 
@@ -88,7 +92,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
 
         if (InputController.formFieldsAreEmpty(artist)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -103,9 +107,10 @@ const PostModel = {
             .then((response) => response.json())
             .then((artist) => {
                 console.log(artist);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
             
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -122,7 +127,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
 
         if (InputController.formFieldsAreEmpty(album)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty")
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus)
         }
 
         else {
@@ -138,8 +143,9 @@ const PostModel = {
                 .then((album) => {
                     console.log(album);
                 })
+				.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -153,7 +159,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedTrackStatus');
 
         if (InputController.formFieldsAreEmpty(track)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -168,9 +174,10 @@ const PostModel = {
             .then((response) => response.json())
             .then((postedTrack) => {
                 console.log(postedTrack);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -187,7 +194,8 @@ const PostModel = {
         .then((response) => response.json())
         .then((playlist) => {
             console.log(playlist);
-        });
+        })
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 },
 
 addTrackToPlaylist(playlistId, tracks){
@@ -202,7 +210,9 @@ addTrackToPlaylist(playlistId, tracks){
     .then((response) => response.json())
     .then((playlist) => {
         console.log("You've added a track to ", playlist.title);
-    });
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+    })
+	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
 
     addComment(playlistId, text, user){
@@ -222,12 +232,13 @@ addTrackToPlaylist(playlistId, tracks){
             })
             .then((response) => response.json())
             .then((playlist) => {
-                FetchModel.fetchComments(playlistId);
+                FetchModel.fetchComments(playlistId)
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
           });
     },
 
 	rate(category, id, rating){
-			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+		fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -238,20 +249,21 @@ addTrackToPlaylist(playlistId, tracks){
 		.then((response) => response.json())
 		.then((category) => {
 			console.log(category);
-		});
+		})
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 	}
 }
 
 const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
-		let title = 'title';
+		let title = objectToDelete.title;
         
-        if(category == 'artists')
+        if(category == 'artist')
             {
-			    title = 'name';
+			    title = objectToDelete.name;
             }
-        if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
+        if (confirm(`Do you want to Delete ${title}?`)){
             fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
                 headers: {
@@ -261,10 +273,11 @@ const DeleteModel = {
                 })
             .then((response) => response.json())
             .then((objectToDelete) => {
-                console.log('you deleted', objectToDelete.title);
+                console.log('you deleted', title);
                 //TO DO:this need to be made dynamic as well or update siteo.
                 ArtistView.containerInner.removeChild(`${category}Div`);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
         } else {
             return;
         }
@@ -281,7 +294,8 @@ const DeleteModel = {
         .then((response) => response.json())
         .then((comment) => {
             FetchModel.fetchComments(playlistID);
-        });
+        })
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     }
 }
 
@@ -823,18 +837,33 @@ function displayRating(){
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
-
+	feedbackPopup: document.getElementById('feedbackPopup'),
     /* Takes to params, location should be the div where you want to put the error message
     and status should be a string that fits one of the switch-cases */
-    showStatusMessage(location, status){
+    showStatusMessage(status = 'Error', location = 'feedbackPopup'){
+		if (location === 'feedbackPopup'){
+			feedbackPopup.classList.toggle('hidden');
+		}
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__empty');
             break;
 
             case "Success":
             StatusView.statusMessage.innerText = "Nice, it worked!";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__success');
             break;
+			
+			case "Error":
+			StatusView.statusMessage.innerText = "Something went wrong :-(";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			break;
+			
+			case "commentsError":
+			StatusView.statusMessage.innerText = "Something went wrong when loading comments :-(";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			break;
         }
         
         location.appendChild(StatusView.statusMessage);

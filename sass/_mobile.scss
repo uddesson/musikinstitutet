@@ -338,9 +338,27 @@ button, .button {
 	}
 }
 
-/*************************************
- ******** ADD TO PLAYLIST-POPUP ***************
- *************************************/
+/*********************************************
+ ***************** FEEDBACK ******************
+ *********************************************/
+#feedbackPopup {
+	position:fixed;
+	top:60px;
+	left:400px; //FIXA CENTERING HÄR!!!!!
+	height: 190px;
+	width: 400px;
+	background: #fff;
+	box-shadow:5px 5px 12px rgba(0,0,0,.15);
+	z-index:55;
+}
+.feedback {
+	text-align: center;
+	margin:80px auto;
+}
+
+/**********************************************
+ ********** ADD TO PLAYLIST-POPUP *************
+ **********************************************/
 
 .popup__add-to-playlist {
 	// div.style.background = "white";
