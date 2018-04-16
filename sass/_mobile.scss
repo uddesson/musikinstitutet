@@ -49,6 +49,13 @@ button, .button {
 	border:none;
 }
 
+.fa{
+	color: lighten($color__text--light, 30%);
+	&:hover{
+		color: $color__highlight--strong;
+	}
+}
+
 /********************************
  ************ GENERAL ************
  ********************************/
@@ -152,6 +159,13 @@ button, .button {
 			text-decoration: underline;
 		}
 	}
+	&.warning {
+		color: white;
+		background: $color__highlight--light;
+		&:hover{
+			background: $color__highlight--strong;
+		}
+	}
 	&.large {
 		height: 45px;
 		font-size: 1rem;
@@ -207,12 +221,17 @@ button, .button {
     	justify-content: space-between;
 	}
 }
+
+.container__inner--medium{
+	max-width: 780px;
+	margin:auto;
+}
+
 .container__artist{
 	text-align: center;
 	align-items: center;
 	img {
 		border-radius: 50%;
-		margin-bottom: 1rem;
 	}
 }
 .grid {
@@ -253,12 +272,13 @@ button, .button {
     height: 240px;
 	background: #cccccc;
 	background-size: 56%;
+	margin-bottom: 1rem;
  }
 
 
 .genres {
 	height: 35px;
-	
+	margin-bottom: 10px;
 	p {
 		text-align: center;
 		font-size: .7em;
@@ -274,30 +294,14 @@ button, .button {
 /**************************************
  ************* PLAYLISTS **************
  **************************************/
-.container__playlists {
-	h3 {
-		font-size: 2rem;
-	}
-	h4 {
-		font-size: .8rem;
-		text-transform: uppercase;
-		letter-spacing: .5px;
-		margin-bottom: .8rem;
-	}
-	p {
-		background: #fff;
-		border-radius: 5px;
-		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
-		padding: 1rem;
-	}
-	.text--bold {
-		text-transform: capitalize;
+.container__playlists{
+
+	.comments{	
+		ul{
+			margin-bottom: 50px;	
+		}
 	}
 	
-}
-
-//CREATE A CLASS FOR STYLING LATER ON
-#playlistContainer {
 	margin:0 auto 100px;
 	input, button {
 		max-width:500px;
@@ -338,21 +342,33 @@ button, .button {
 	}
 }
 
-/*************************************
- ******** ADD TO PLAYLIST-POPUP ***************
- *************************************/
+/*******************************************************
+ ***************** POPUPS / FEEDBACK  ******************
+ *******************************************************/
+#feedbackPopup, .popup__add-to-playlist {
+	position: fixed;
+	top:60px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	margin: auto;
+	width: 500px;
+	background: #fff;
+	box-shadow:5px 5px 12px rgba(0,0,0,.15);
+	border-radius: $border-radius__small;
+}
+
+#feedbackPopup {
+	height: 190px;
+	z-index:14;
+}
+.feedback {
+	text-align: center;
+	margin:80px auto;
+}
 
 .popup__add-to-playlist {
-	// div.style.background = "white";
-	// div.style.width = "400px";
-	// div.style.position = "absolute";
-	// div.style.top = "50px";
-	width:500px;
 	padding:50px;
-	position: fixed;
-    top: 50px;
-    left: 410px;
-    z-index: 30;
+    z-index: 13;
     max-height: 600px;
 	overflow: scroll;
 

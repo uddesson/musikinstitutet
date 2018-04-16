@@ -8,7 +8,7 @@ const baseUrl = `https://folksa.ga/api`;
 
 
 const FetchModel = {
-
+	container: document.getElementById('container'),
 	fetchAll(category){
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
@@ -19,14 +19,14 @@ const FetchModel = {
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
 			})
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
         },
 
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchSearched(category, searchQuery){
@@ -41,7 +41,7 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchGenre(category, genre){
@@ -50,15 +50,17 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
     fetchComments(id){
+		
         fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
-            PlaylistView.showComments(comments)
-        });
+            PlaylistView.showComments(comments);
+        })
+		.catch(error => StatusView.showStatusMessage("commentsError"));
     },
 
     fetchPlaylistsForAdding(trackId){
@@ -67,7 +69,9 @@ const FetchModel = {
 			.then((response) => {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
-			.catch(error => console.log(error));
+			.catch(error => {
+				StatusView.showStatusMessage("Error", feedbackPopup);
+			});
         }
 };
 
@@ -88,7 +92,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
 
         if (InputController.formFieldsAreEmpty(artist)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -103,9 +107,10 @@ const PostModel = {
             .then((response) => response.json())
             .then((artist) => {
                 console.log(artist);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
             
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -122,7 +127,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
 
         if (InputController.formFieldsAreEmpty(album)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty")
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus)
         }
 
         else {
@@ -138,8 +143,9 @@ const PostModel = {
                 .then((album) => {
                     console.log(album);
                 })
+				.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -153,7 +159,7 @@ const PostModel = {
         let locationForDisplayingStatus = document.getElementById('addedTrackStatus');
 
         if (InputController.formFieldsAreEmpty(track)){
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Empty");
+            StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
 
         else {
@@ -168,9 +174,10 @@ const PostModel = {
             .then((response) => response.json())
             .then((postedTrack) => {
                 console.log(postedTrack);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 
-            StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
+            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -187,7 +194,8 @@ const PostModel = {
         .then((response) => response.json())
         .then((playlist) => {
             console.log(playlist);
-        });
+        })
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 },
 
 addTrackToPlaylist(playlistId, tracks){
@@ -201,8 +209,12 @@ addTrackToPlaylist(playlistId, tracks){
     })
     .then((response) => response.json())
     .then((playlist) => {
-        console.log("You've added a track to ", playlist.title);
-    });
+		//Replace addToPlaylistPopup with feedbackPopup when track is successfully added
+		const addToPlaylistPopup = document.getElementById('addToPlaylistPopup');
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+		addToPlaylistPopup.parentElement.removeChild(addToPlaylistPopup);
+    })
+	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
 
     addComment(playlistId, text, user){
@@ -222,12 +234,13 @@ addTrackToPlaylist(playlistId, tracks){
             })
             .then((response) => response.json())
             .then((playlist) => {
-                FetchModel.fetchComments(playlistId);
+                FetchModel.fetchComments(playlistId)
+			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
           });
     },
 
 	rate(category, id, rating){
-			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+		fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -238,20 +251,21 @@ addTrackToPlaylist(playlistId, tracks){
 		.then((response) => response.json())
 		.then((category) => {
 			console.log(category);
-		});
+		})
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 	}
 }
 
 const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
-		let title = 'title';
+		let title = objectToDelete.title;
         
-        if(category == 'artists')
+        if(category == 'artist')
             {
-			    title = 'name';
+			    title = objectToDelete.name;
             }
-        if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
+        if (confirm(`Do you want to Delete ${title}?`)){
             fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
                 headers: {
@@ -261,10 +275,19 @@ const DeleteModel = {
                 })
             .then((response) => response.json())
             .then((objectToDelete) => {
-                console.log('you deleted', objectToDelete.title);
+                console.log('you deleted', title);
+				StatusView.showStatusMessage(`You deleted ${title}.`, feedbackPopup);
+				
+				setTimeout(function(){ 
+					location.reload(); 
+				}, 3000);
                 //TO DO:this need to be made dynamic as well or update siteo.
-                ArtistView.containerInner.removeChild(`${category}Div`);
-            });
+				//ArtistView.containerInner.removeChild(childToRemove);
+            })
+			.catch(error => {   
+				StatusView.showStatusMessage("Error", feedbackPopup)
+				console.log(error);
+			});
         } else {
             return;
         }
@@ -281,7 +304,8 @@ const DeleteModel = {
         .then((response) => response.json())
         .then((comment) => {
             FetchModel.fetchComments(playlistID);
-        });
+        })
+		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     }
 }
 
@@ -316,6 +340,7 @@ const AddToPlaylistView = {
 
         createPlaylistButton.innerText = 'Create new playlist';
         div.classList.add('popup__add-to-playlist');
+		div.id = 'addToPlaylistPopup';
         createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
 		
 		//Hide popup when clicking outside of it
@@ -407,13 +432,16 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+                title="Remove from FED17 Faves" 
+                style="font-size:1.7em;"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
             });
 
             let buttonDiv = document.createElement('div');
+            buttonDiv.style = "top: 10px; right: 10px; position: absolute;"
             buttonDiv.appendChild(deleteButton);
             artistDiv.appendChild(buttonDiv);
 
@@ -548,6 +576,9 @@ const PlaylistView = {
         PlaylistView.commentsContainer.innerHTML = '';
         let commentList = document.createElement('ul')
         commentList.id = 'commentsList';
+        commentList.classList.add('comments');
+        let commentsHeadline = document.createElement('h3');
+        commentsHeadline.innerText = 'Kommentarer';
         
         if(comments == ''){
             let listElement = document.createElement('li');
@@ -562,7 +593,8 @@ const PlaylistView = {
                 let playlistId = comments[i].playlist;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
-                deleteButton.innerText = 'x';
+                deleteButton.classList.add('button', 'large', 'clear');
+                deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
                 commentList.appendChild(listElement);
@@ -572,7 +604,7 @@ const PlaylistView = {
                 });
             }
         }
-        
+        PlaylistView.commentsContainer.appendChild(commentsHeadline);
         PlaylistView.commentsContainer.appendChild(commentList);    
     },
     
@@ -589,7 +621,7 @@ const PlaylistView = {
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
             <img src="${imageSrc}" alt="${playlist.title}" class="image">
-            <h3>${playlist.title}</h3><br>
+            <h3>${playlist.title}</h3>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating} / 10</h4>`;
@@ -597,7 +629,7 @@ const PlaylistView = {
         
         playlistDiv.appendChild(showSinglePlaylistButton);
 
-        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__playlists', 'grid');
         PlaylistView.containerInner.appendChild(playlistDiv);
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         
@@ -616,7 +648,7 @@ const PlaylistView = {
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
-        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'list');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlists', 'list');
         singlePlaylistContent.innerHTML =
                `<h2>${playlist.title}</h2>
                 <h4>Created by: ${playlist.createdBy}</h4>
@@ -624,7 +656,7 @@ const PlaylistView = {
                 ${tracklist}</section>`;
 
         let singlePlaylistActions = document.createElement('section');
-        singlePlaylistActions.classList.add('containerInner', 'container__inner');
+        singlePlaylistActions.classList.add('containerInner', 'container__playlists', 'container__inner--medium');
         
         let newComment = document.createElement('input');
         newComment.type = 'text';
@@ -636,19 +668,19 @@ const PlaylistView = {
 
         let addCommentButton = document.createElement('button');
         addCommentButton.innerText = "Add comment";
-        addCommentButton.classList.add('button', 'small', 'dark');
+        addCommentButton.classList.add('button', 'large', 'dark');
 
-        let removePlaylistButton = document.createElement('button');
-        removePlaylistButton.innerText = "Remove this playlist";
-        removePlaylistButton.classList.add('button', 'small', 'light');
+        let deletePlaylistButton = document.createElement('button');
+        deletePlaylistButton.innerText = "Remove this playlist";
+        deletePlaylistButton.classList.add('button', 'large', 'warning');
 
         singlePlaylistActions.appendChild(ratingInput);
         singlePlaylistActions.appendChild(ratingButton);
+        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
         singlePlaylistActions.appendChild(newComment);
         singlePlaylistActions.appendChild(commentBy);
         singlePlaylistActions.appendChild(addCommentButton);
-        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
-        singlePlaylistActions.appendChild(removePlaylistButton);
+        singlePlaylistActions.appendChild(deletePlaylistButton);
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
@@ -662,7 +694,7 @@ const PlaylistView = {
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
-        removePlaylistButton.addEventListener('click', function(){
+        deletePlaylistButton.addEventListener('click', function(){
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
@@ -823,22 +855,49 @@ function displayRating(){
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
-
+	feedbackPopup: document.getElementById('feedbackPopup'),
     /* Takes to params, location should be the div where you want to put the error message
     and status should be a string that fits one of the switch-cases */
-    showStatusMessage(location, status){
+    showStatusMessage(status = 'Error', location = 'feedbackPopup'){
+		if (location === 'feedbackPopup'){
+			feedbackPopup.classList.toggle('hidden');
+		}
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
+			StatusView.statusMessage.classList.add('feedback__empty');
             break;
 
             case "Success":
             StatusView.statusMessage.innerText = "Nice, it worked!";
+			StatusView.statusMessage.classList.add('feedback__success');
             break;
+			
+			case "Error":
+			StatusView.statusMessage.innerText = "Something went wrong :-(";
+			StatusView.statusMessage.classList.add('feedback__error');
+			break;
+			
+			case "commentsError":
+			StatusView.statusMessage.innerText = "Something went wrong when loading comments :-(";
+			StatusView.statusMessage.classList.add('feedback__error');
+			break;
+				
+			//If none of the feedback messages above, use the text passed as the first parameter in the function
+			default:
+        	StatusView.statusMessage.innerText = status;
         }
-        
+        StatusView.statusMessage.classList.add('feedback');
         location.appendChild(StatusView.statusMessage);
         location.classList.remove('hidden');
+		
+		//Hide popup when clicking outside of it
+		document.addEventListener('click', function(event) {
+		  var isClickInside = feedbackPopup.contains(event.target);
+		  if (!isClickInside){
+			feedbackPopup.classList.add('hidden');
+		  }
+		});
     }
 }
 
