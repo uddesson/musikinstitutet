@@ -1,4 +1,4 @@
-let apiKey = `key=flat_eri`;
+let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
 
@@ -194,14 +194,14 @@ const FetchModel = {
 			.then((response) => {
 				ResponseController.sortResponseByCategory(category, response);
 			})
-			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
         },
 
 	fetchOne(category, id){
 		return fetch(`${baseUrl}/${category}/${id}?${apiKey}`)
 			.then(response => response.json())
 			.then(response => console.log(response))
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchSearched(category, searchQuery){
@@ -216,7 +216,7 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
 	fetchGenre(category, genre){
@@ -226,25 +226,28 @@ const FetchModel = {
             .then((response) => {
                 ResponseController.sortResponseByCategory(category, response);
             })
-            .catch(error => console.log(error));
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
     },
     
     fetchComments(id){
+		
         fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
             PlaylistView.showComments(comments);
         })
-		.catch(error => console.log(error));
+		.catch(error => StatusView.showStatusMessage("commentsError")); //ÄNDRA ERROR OUTPUT HÄR
     },
 
     fetchPlaylistsForAdding(trackId){
-		return fetch(`${baseUrl}/playlists?limit=40&${apiKey}`)
+		return fetch(`${baseUrl}/playlist?limit=40&${apiKey}`)
             .then(response => response.json())
 			.then((response) => {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
-			.catch(error => console.log(error));
+			.catch(error => {
+				StatusView.showStatusMessage("Error", errorPopup);
+			});
         }
 };
 
@@ -281,7 +284,7 @@ const PostModel = {
             .then((artist) => {
                 console.log(artist);
             })
-			.catch(error => console.log(error));
+			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
             
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
@@ -316,6 +319,7 @@ const PostModel = {
                 .then((album) => {
                     console.log(album);
                 })
+				.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
 
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
@@ -346,7 +350,8 @@ const PostModel = {
             .then((response) => response.json())
             .then((postedTrack) => {
                 console.log(postedTrack);
-            });
+            })
+			.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
 
             StatusView.showStatusMessage(locationForDisplayingStatus, "Success")
         }
@@ -366,7 +371,7 @@ const PostModel = {
         .then((playlist) => {
             console.log(playlist);
         })
-		.catch(error => console.log(error));
+		.catch(error => StatusView.showStatusMessage(FetchModel.container, "Error"));
 },
 
 addTrackToPlaylist(playlistId, tracks){
@@ -382,7 +387,7 @@ addTrackToPlaylist(playlistId, tracks){
     .then((playlist) => {
         console.log("You've added a track to ", playlist.title);
     })
-	.catch(error => console.log(error));
+	.catch(error => console.log(error)); //FORTSÄTT HÄR
     },
 
     addComment(playlistId, text, user){
@@ -994,10 +999,13 @@ function displayRating(){
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
-
+	errorPopup: document.getElementById('errorPopup'),
     /* Takes to params, location should be the div where you want to put the error message
     and status should be a string that fits one of the switch-cases */
-    showStatusMessage(location, status){
+    showStatusMessage(status = 'Error', location = 'errorPopup'){
+		if (location === 'errorPopup'){
+			errorPopup.classList.toggle('hidden');
+		}
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
@@ -1011,6 +1019,11 @@ const StatusView = {
 			
 			case "Error":
 			StatusView.statusMessage.innerText = "Something went wrong :-(";
+			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			break;
+			
+			case "commentsError":
+			StatusView.statusMessage.innerText = "Something went wrong when loading comments :-(";
 			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
 			break;
         }
