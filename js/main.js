@@ -429,13 +429,14 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:2em;"></i>';
+            deleteButton.innerHTML = '<i class="fa fa-minus" style="font-size:1.7em;"></i>';
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
             });
 
             let buttonDiv = document.createElement('div');
+            buttonDiv.style = "top: 10px; right: 10px; position: absolute;"
             buttonDiv.appendChild(deleteButton);
             artistDiv.appendChild(buttonDiv);
 
@@ -588,7 +589,7 @@ const PlaylistView = {
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
                 deleteButton.classList.add('button', 'large', 'clear');
-                deleteButton.innerText = 'x';
+                deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
                 commentList.appendChild(listElement);
