@@ -238,21 +238,25 @@ addTrackToPlaylist(playlistId, tracks){
           });
     },
 
-	rate(category, id, rating){
-		fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ rating: rating })
-		})
-		.then((response) => response.json())
-		.then((category) => {
-			console.log(category);
-		})
-		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
-	}
+	rate(category, id, rating){ 
+        if (rating > 0) {
+            fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rating: rating })
+            })
+            .then((response) => response.json())
+            .then((category) => {
+                StatusView.showStatusMessage(`You rated this a ${rating} out of 10!`, feedbackPopup);
+            })
+            .catch(error);
+        } else {
+            alert('Choose a rating between 1 and 10!');
+        }
+    }
 }
 
 const DeleteModel = {
@@ -310,12 +314,13 @@ const DeleteModel = {
 
 const RatingModel = {
     
-    calculateRatingAverage(playlist){
+    calculateRatingAverage(category){
+        
         let ratingSum = 0;
-            for (var rating of playlist.ratings){  
+            for (var rating of category.ratings){  
                 ratingSum = ratingSum + rating; 
             }
-        let ratingAverage = ratingSum / playlist.ratings.length; // Do math, get average!
+        let ratingAverage = ratingSum / category.ratings.length; // Do math, get average!
         
         if (isNaN(ratingAverage)){
             return 0;
@@ -432,17 +437,16 @@ const AddToPlaylistView = {
             
             let deleteButton = document.createElement('button');
             deleteButton.innerHTML = `<i class="fa fa-times" 
-                title="Remove from FED17 Faves" 
-                style="font-size:1.7em;"></i>`;
+                title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
             });
 
-            let buttonDiv = document.createElement('div');
-            buttonDiv.style = "top: 10px; right: 10px; position: absolute;"
-            buttonDiv.appendChild(deleteButton);
-            artistDiv.appendChild(buttonDiv);
+            let deleteIcon = document.createElement('div');
+            deleteIcon.classList.add('deleteIcon');
+            deleteIcon.appendChild(deleteButton);
+            artistDiv.appendChild(deleteIcon);
 
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
@@ -458,36 +462,45 @@ const AddToPlaylistView = {
 			let albumArtists = album.artists.map((artist) => artist.name);
             let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
+            let rating = RatingModel.calculateRatingAverage(album);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
             ratingButton.innerText = "Rate";
 			
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
-					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3><br>
-					<h4>${albumArtists}</h4>
-					<p>Genres: ${album.genres}</p>`;
+					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>
+					<h4>${albumArtists}</h4>`;
             
 			
 			ratingButton.addEventListener('click', function(){
-				// skcika in ratingInput.value till API
-				console.log(ratingInput.value);
 				PostModel.rate('album', album._id, ratingInput.value);
 			});
 			
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+                title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(album, 'album');
             });
 
-            let buttonDiv = document.createElement('div');
-            buttonDiv.appendChild(ratingInput);
-            buttonDiv.appendChild(ratingButton);
-            buttonDiv.appendChild(deleteButton);
-            albumDiv.appendChild(buttonDiv);
-            
+            let deleteIcon = document.createElement('div');
+            deleteIcon.classList.add('deleteIcon');
+            deleteIcon.appendChild(deleteButton);
+            albumDiv.appendChild(deleteIcon);
+
+            let ratingDiv = document.createElement('div');
+            ratingDiv.classList.add('rating__div');
+
+            let ratingOutput = document.createElement('p');
+            ratingOutput.innerHTML = `Rating: ${rating} / 10`;
+
+            ratingDiv.appendChild(ratingOutput);
+            ratingDiv.appendChild(ratingInput);
+            ratingDiv.appendChild(ratingButton);
+            albumDiv.appendChild(ratingDiv);
+
 			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
@@ -500,14 +513,16 @@ const AddToPlaylistView = {
 
 		displayTrack(track){
 			let trackArtists = track.artists.map((artist) => artist.name);
-			let trackDiv = document.createElement('div');
+            let trackDiv = document.createElement('div');
+            let rating = RatingModel.calculateRatingAverage(track);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
             ratingButton.innerText = "Rate";
 			
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
-                <h4>by ${trackArtists}</h4>`;
+                <h4>by ${trackArtists}</h4>
+                Rating: ${rating} / 10`;
 			
         
             ratingButton.addEventListener('click', function(){
@@ -520,14 +535,16 @@ const AddToPlaylistView = {
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
             let addButton = document.createElement('button');
-            addButton.innerText = '+';
+            addButton.innerHTML = `<i class="fa fa-plus" 
+            title="Remove from FED17 Faves"></i>`;
 
             addButton.addEventListener('click', function(){
                 FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+            title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(track, 'track');
@@ -753,7 +770,7 @@ const NavigationView = {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.remove('hidden');
+            NavigationView.playlistContainer.classList.add('hidden');
         });
     },
 
@@ -841,22 +858,21 @@ const PostView = {
 
 //Create a function that creates a rating input field
 function createRatingInput(){
-	//Create rating select field with 10 options
-	let ratingInput = document.createElement('select');
+    //Create rating select field with 10 options
+    let ratingInputDiv = document.createElement('div');
+    let ratingInput = document.createElement('select');
+    const defaultOption = document.createElement('option');
+    ratingInput.appendChild(defaultOption);
 
 	for(let i = 1; i <= 10; i++){
 		let number = document.createElement('option');
 		number.innerText = i;
 		number.value = i;
 		ratingInput.appendChild(number);
-	}
+    }
+    ratingInputDiv.appendChild(ratingInput)
 	return ratingInput;
 }
-
-function displayRating(){
-	
-}
-
 
 const StatusView = {
     statusMessage: document.getElementById('statusMessage'),
@@ -893,8 +909,8 @@ const StatusView = {
         	StatusView.statusMessage.innerText = status;
         }
         StatusView.statusMessage.classList.add('feedback');
-        location.appendChild(StatusView.statusMessage);
         location.classList.remove('hidden');
+        location.appendChild(StatusView.statusMessage);
 		
 		//Hide popup when clicking outside of it
 		document.addEventListener('click', function(event) {
