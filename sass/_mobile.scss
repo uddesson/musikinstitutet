@@ -298,7 +298,10 @@ button, .button {
 	input, button {
 		max-width:500px;
 		margin: 10px auto;
-		display: block;
+		display:block;
+	}
+	li button {
+		display:inline-block;
 	}
 }
 
