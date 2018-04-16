@@ -549,6 +549,9 @@ const PlaylistView = {
         PlaylistView.commentsContainer.innerHTML = '';
         let commentList = document.createElement('ul')
         commentList.id = 'commentsList';
+        commentList.classList.add('comments');
+        let commentsHeadline = document.createElement('h3');
+        commentsHeadline.innerText = 'Kommentarer';
         
         if(comments == ''){
             let listElement = document.createElement('li');
@@ -563,6 +566,7 @@ const PlaylistView = {
                 let playlistId = comments[i].playlist;
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
+                deleteButton.classList.add('button', 'large', 'clear');
                 deleteButton.innerText = 'x';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
@@ -573,7 +577,7 @@ const PlaylistView = {
                 });
             }
         }
-        
+        PlaylistView.commentsContainer.appendChild(commentsHeadline);
         PlaylistView.commentsContainer.appendChild(commentList);    
     },
     
@@ -598,7 +602,7 @@ const PlaylistView = {
         
         playlistDiv.appendChild(showSinglePlaylistButton);
 
-        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
+        PlaylistView.containerInner.classList.add('containerInner', 'container__inner', 'container__playlists', 'grid');
         PlaylistView.containerInner.appendChild(playlistDiv);
         PlaylistView.container.appendChild(PlaylistView.containerInner);
         
@@ -617,7 +621,7 @@ const PlaylistView = {
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
-        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'list');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'container__playlists', 'list');
         singlePlaylistContent.innerHTML =
                `<h2>${playlist.title}</h2>
                 <h4>Created by: ${playlist.createdBy}</h4>
@@ -625,7 +629,7 @@ const PlaylistView = {
                 ${tracklist}</section>`;
 
         let singlePlaylistActions = document.createElement('section');
-        singlePlaylistActions.classList.add('containerInner', 'container__inner');
+        singlePlaylistActions.classList.add('containerInner', 'container__playlists', 'container__inner--medium');
         
         let newComment = document.createElement('input');
         newComment.type = 'text';
@@ -637,19 +641,19 @@ const PlaylistView = {
 
         let addCommentButton = document.createElement('button');
         addCommentButton.innerText = "Add comment";
-        addCommentButton.classList.add('button', 'small', 'dark');
+        addCommentButton.classList.add('button', 'large', 'dark');
 
-        let removePlaylistButton = document.createElement('button');
-        removePlaylistButton.innerText = "Remove this playlist";
-        removePlaylistButton.classList.add('button', 'small', 'light');
+        let deletePlaylistButton = document.createElement('button');
+        deletePlaylistButton.innerText = "Remove this playlist";
+        deletePlaylistButton.classList.add('button', 'large', 'warning');
 
         singlePlaylistActions.appendChild(ratingInput);
         singlePlaylistActions.appendChild(ratingButton);
+        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
         singlePlaylistActions.appendChild(newComment);
         singlePlaylistActions.appendChild(commentBy);
         singlePlaylistActions.appendChild(addCommentButton);
-        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
-        singlePlaylistActions.appendChild(removePlaylistButton);
+        singlePlaylistActions.appendChild(deletePlaylistButton);
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
@@ -663,7 +667,7 @@ const PlaylistView = {
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
-        removePlaylistButton.addEventListener('click', function(){
+        deletePlaylistButton.addEventListener('click', function(){
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
