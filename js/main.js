@@ -429,7 +429,9 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = '<i class="fa fa-minus" style="font-size:1.7em;"></i>';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+                title="Remove from FED17 Faves" 
+                style="font-size:1.7em;"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
@@ -616,7 +618,7 @@ const PlaylistView = {
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
             <img src="${imageSrc}" alt="${playlist.title}" class="image">
-            <h3>${playlist.title}</h3><br>
+            <h3>${playlist.title}</h3>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating} / 10</h4>`;
