@@ -50,6 +50,8 @@ button, .button {
 }
 
 .fa{
+	font-size: 1.1rem;
+    vertical-align: middle;
 	color: lighten($color__text--light, 30%);
 	&:hover{
 		color: $color__highlight--strong;
@@ -233,9 +235,6 @@ button, .button {
 		width:26px;
 		border-radius: 13px;
 	}
-	.fa {
-		font-size:1.7em;
-	}
 }
 
 /****************************************
@@ -253,16 +252,16 @@ button, .button {
 		border-radius: $border-radius__small;
 		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
 		display: flex;
-    	justify-content: space-between;
+		justify-content: space-between;
 	}
 }
 
-.container__inner--medium{
+.container__inner--medium {
 	max-width: 780px;
 	margin:auto;
 }
 
-.container__artist{
+.container__artist {
 	text-align: center;
 	align-items: center;
 	img {
@@ -293,8 +292,10 @@ button, .button {
 	&>div {
 		width:100%;
 		flex-direction: row;
+		align-items: center;
 	}
 }
+
 /***** IMAGES *****/
 .grid > div:not(.popup__add-to-playlist) {
     position: relative;
@@ -327,10 +328,31 @@ button, .button {
 }
 
 /**************************************
+ *************** TRACKS ***************
+ **************************************/
+.container__tracks {
+	button {
+		margin: 0;
+		padding: 8px 10px;
+	}
+	.add {
+		margin:0 0 0 30px;
+		.fa {
+			color:#fff;
+		}
+		.fa:hover {
+			color: inherit;
+		}
+	} 
+}
+	
+
+
+/**************************************
  ************* PLAYLISTS **************
  **************************************/
  
-.container__playlist{
+.container__playlist {
 	line-height: 160%;
 	margin-bottom: 60px;
 	&.list > div{
@@ -350,10 +372,10 @@ button, .button {
 			height: 40px;
 		}
 	}
-	.button{
+	.button {
 		width: 300px;
 		margin: 10px 0 10px 0;
-		&.clear{
+		&.clear {
 			width: 20px;
 		}
 	}
@@ -366,7 +388,6 @@ button, .button {
 #postFormsWrapper{
 	width: 100%;
 	max-width:550px;
-	margin:80px auto;
 	h2 {
 		margin: 0 0 20px;
 		cursor:pointer;
