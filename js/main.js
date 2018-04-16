@@ -1,25 +1,25 @@
 let apiKey = `key=flat_eric`;
 const baseUrl = `https://folksa.ga/api`; 
 
-
 /*******************************************************
  *********************** MODELS ************************
  *******************************************************/
 
-
 const FetchModel = {
-	container: document.getElementById('container'),
+    
 	fetchAll(category){
+        // We want to use our api-key plus this for category albums
         if(category == 'albums'){
             apiKey += '&populateArtists=true';
         }
-        //limit 12 now to get a better view when testing, fetch more when launching?
+
+        // Fetching the 12 latest of any category
 		return fetch(`${baseUrl}/${category}?limit=12&${apiKey}&sort=desc`)
             .then(response => response.json())
 			.then((response) => {
-				ResponseController.sortResponseByCategory(category, response);
-			})
-			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
+                ResponseController.sortResponseByCategory(category, response); 
+            }) 
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
         },
 
 	fetchOne(category, id){
@@ -30,12 +30,11 @@ const FetchModel = {
     },
     
 	fetchSearched(category, searchQuery){
-		let title = 'title';
-        
-        if(category == 'artists')
-            {
+        // Path differs for artists, we need to replace title with name
+        let title = 'title';
+        if(category == 'artists'){
 			    title = 'name';
-            }
+        }
         return fetch(`${baseUrl}/${category}?&${title}=${searchQuery}&${apiKey}&sort=desc`)
             .then(response => response.json())
             .then((response) => {
@@ -68,13 +67,9 @@ const FetchModel = {
 			.then((response) => {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
-			.catch(error => {
-				StatusView.showStatusMessage("Error", feedbackPopup);
-			});
-        }
+			.catch(error => { StatusView.showStatusMessage("Error", feedbackPopup); });
+    }
 };
-
-
 
 const PostModel = {
 
@@ -88,12 +83,13 @@ const PostModel = {
             coverImage: PostView.artistForm.image.value
         }
 
+        /* When adding to the api you recive 
+        success/error-notifactions, this is were they're shown */
         let locationForDisplayingStatus = document.getElementById('addedArtistStatus');
 
         if (InputController.formFieldsAreEmpty(artist)){
             StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
-        }
-
+        } 
         else {
             fetch(`${baseUrl}/artists?${apiKey}`,{
                 method: 'POST',
@@ -104,12 +100,9 @@ const PostModel = {
                 body: JSON.stringify(artist)
             })
             .then((response) => response.json())
-            .then((artist) => {
-                console.log(artist);
-            })
-			.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
-            
-            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
+            .catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
+        
+        StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -125,10 +118,10 @@ const PostModel = {
 
         let locationForDisplayingStatus = document.getElementById('addedAlbumStatus');
 
+        // Don't post anything if form fields are empty
         if (InputController.formFieldsAreEmpty(album)){
             StatusView.showStatusMessage("Empty", locationForDisplayingStatus)
         }
-
         else {
             fetch(`${baseUrl}/albums?${apiKey}`,{
                 method: 'POST',
@@ -139,12 +132,9 @@ const PostModel = {
                 body: JSON.stringify(album),
                 })
                 .then((response) => response.json())
-                .then((album) => {
-                    console.log(album);
-                })
 				.catch(error => StatusView.showStatusMessage("Error", FetchModel.container));
-
-            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
+            
+        StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
@@ -160,7 +150,6 @@ const PostModel = {
         if (InputController.formFieldsAreEmpty(track)){
             StatusView.showStatusMessage("Empty", locationForDisplayingStatus);
         }
-
         else {
             fetch(`${baseUrl}/tracks?${apiKey}`,{
                 method: 'POST',
@@ -171,17 +160,13 @@ const PostModel = {
                 body: JSON.stringify(track),
             })
             .then((response) => response.json())
-            .then((postedTrack) => {
-                console.log(postedTrack);
-            })
 			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 
-            StatusView.showStatusMessage("Success", locationForDisplayingStatus)
+        StatusView.showStatusMessage("Success", locationForDisplayingStatus)
         }
     },
 
     addPlaylist(playlist){
-        
         fetch(`https://folksa.ga/api/playlists?${apiKey}`,{
             method: 'POST',
             headers: {
@@ -191,29 +176,25 @@ const PostModel = {
             body: JSON.stringify(playlist)
         })
         .then((response) => response.json())
-        .then((playlist) => {
-            console.log(playlist);
-        })
 		.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
 },
 
 addTrackToPlaylist(playlistId, tracks){
     fetch(`https://folksa.ga/api/playlists/${playlistId}/tracks?${apiKey}`,{
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ tracks: tracks })
-    })
-    .then((response) => response.json())
-    .then((playlist) => {
-		//Replace addToPlaylistPopup with feedbackPopup when track is successfully added
-		const addToPlaylistPopup = document.getElementById('addToPlaylistPopup');
-		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
-		addToPlaylistPopup.parentElement.removeChild(addToPlaylistPopup);
-    })
-	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tracks: tracks })
+        })
+        .then((response) => response.json())
+        .then((playlist) => {
+            const addToPlaylistPopup = document.getElementById('addToPlaylistPopup');
+            StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+            addToPlaylistPopup.parentElement.removeChild(addToPlaylistPopup);
+        })
+        .catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
 
     addComment(playlistId, text, user){
@@ -239,6 +220,7 @@ addTrackToPlaylist(playlistId, tracks){
     },
 
 	rate(category, id, rating){ 
+        // Don't post ratings to api unless they're actually more than 0
         if (rating > 0) {
             fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
                 method: 'POST',
@@ -260,14 +242,12 @@ addTrackToPlaylist(playlistId, tracks){
 }
 
 const DeleteModel = {
-    //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
 		let title = objectToDelete.title;
         
-        if(category == 'artist')
-            {
-			    title = objectToDelete.name;
-            }
+        if(category == 'artist'){
+			title = objectToDelete.name;
+        }
         if (confirm(`Do you want to Delete ${title}?`)){
             fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
@@ -280,18 +260,17 @@ const DeleteModel = {
             .then((objectToDelete) => {
                 console.log('you deleted', title);
 				StatusView.showStatusMessage(`You deleted ${title}.`, feedbackPopup);
-				
+                
+                // Wait 3 seconds before page is refreshed
 				setTimeout(function(){ 
 					location.reload(); 
 				}, 3000);
-                //TO DO:this need to be made dynamic as well or update siteo.
-				//ArtistView.containerInner.removeChild(childToRemove);
             })
 			.catch(error => {   
-				StatusView.showStatusMessage("Error", feedbackPopup)
-				console.log(error);
+                StatusView.showStatusMessage("Error", feedbackPopup)
 			});
-        } else {
+        } 
+        else{
             return;
         }
     },
