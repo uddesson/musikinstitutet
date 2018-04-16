@@ -689,9 +689,10 @@ const NavigationView = {
 
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
-            /* When we REMOVE the class hidden, we show views
-             and elements that should be active */
-            ArtistView.container.classList.remove('hidden');
+            lastActivePage = 'home';
+            /* Clicking home view will refresh the page, 
+            since we want to fetch from */
+            location.reload();
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
