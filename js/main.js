@@ -440,6 +440,7 @@ const AlbumView = {
         let rating = RatingModel.calculateRatingAverage(album);
         let ratingInput = createRatingInput();
         let ratingButton = document.createElement('button');
+        ratingButton.classList.add('ratingButton', 'light', 'small');
         ratingButton.innerText = "Rate";
         
         albumDiv.innerHTML = `
@@ -456,32 +457,32 @@ const AlbumView = {
         deleteButton.innerHTML = `<i class="fa fa-times" 
             title="Remove from FED17 Faves"></i>`;
 
-        deleteButton.addEventListener('click', function(){
-            DeleteModel.deleteOne(album, 'album');
-        });
+    deleteButton.addEventListener('click', function(){
+        DeleteModel.deleteOne(album, 'album');
+    });
 
-        let deleteIcon = document.createElement('div');
-        deleteIcon.classList.add('deleteIcon');
-        deleteIcon.appendChild(deleteButton);
-        albumDiv.appendChild(deleteIcon);
+    let deleteIcon = document.createElement('div');
+    deleteIcon.classList.add('deleteIcon');
+    deleteIcon.appendChild(deleteButton);
+    albumDiv.appendChild(deleteIcon);
 
-        let ratingDiv = document.createElement('div');
-        ratingDiv.classList.add('rating__div');
+    let ratingDiv = document.createElement('div');
+    ratingDiv.classList.add('rating__div');
 
-        let ratingOutput = document.createElement('p');
-        ratingOutput.innerHTML = `Rating: ${rating} / 10`;
+    let ratingOutput = document.createElement('p');
+    ratingOutput.innerHTML = `Rating: ${rating} / 10`;
 
-        ratingDiv.appendChild(ratingOutput);
-        ratingDiv.appendChild(ratingInput);
-        ratingDiv.appendChild(ratingButton);
-        albumDiv.appendChild(ratingDiv);
+    ratingDiv.appendChild(ratingOutput);
+    ratingDiv.appendChild(ratingInput);
+    ratingDiv.appendChild(ratingButton);
+    albumDiv.appendChild(ratingDiv);
 
         AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
         AlbumView.container.appendChild(AlbumView.containerInner);
         AlbumView.containerInner.appendChild(albumDiv);
     }
 }
-
+	
 const TrackView = {
     container: document.getElementById('container'),
     containerInner: document.createElement('section'),
@@ -492,21 +493,23 @@ const TrackView = {
         let rating = RatingModel.calculateRatingAverage(track);
         let ratingInput = createRatingInput();
         let ratingButton = document.createElement('button');
-            ratingButton.innerText = "Add rating";
+        ratingButton.classList.add('ratingButton', 'light', 'small');
+        ratingButton.innerText = "Rate";
         
-        trackDiv.innerHTML = `<h3><a href="${track.spotifyURL}" 
-            target="_blank">${track.title}</a></h3><br>
+        trackDiv.innerHTML = `
+            <h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
             <h4>by ${trackArtists}</h4>
             Rating: ${rating} / 10`;
         
-        // Rating magic happens when rate-button is clicked
+        // Rating magic that happens when rate-button is clicked
         ratingButton.addEventListener('click', function(){
             PostModel.rate('track', track._id, ratingInput.value);
         });
-          
+        
         let addButton = document.createElement('button');
+            addButton.classList.add('dark', 'add');
             addButton.innerHTML = `<i class="fa fa-plus" 
-            title="Remove from FED17 Faves"></i>`;
+            title="Add to playlist"></i>`;
 
         addButton.addEventListener('click', function(){
             FetchModel.fetchPlaylistsForAdding(track._id);
@@ -641,7 +644,8 @@ const PlaylistView = {
         PlaylistView.container.innerHTML = '';
 		let ratingInput = createRatingInput();
         let ratingButton = document.createElement('button');
-            ratingButton.innerText = "Rate";
+        ratingButton.innerText = "Rate";
+		ratingButton.classList.add('ratingButton', 'light', 'small');
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
@@ -845,6 +849,9 @@ function createRatingInput(){
     let ratingInputDiv = document.createElement('div');
     let ratingInput = document.createElement('select');
     const defaultOption = document.createElement('option');
+	defaultOption.innerHTML = `—`;
+	defaultOption.setAttribute("selected", "");
+	defaultOption.setAttribute("disabled", "");
     ratingInput.appendChild(defaultOption);
 
 	for(let i = 1; i <= 10; i++){
