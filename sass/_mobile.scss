@@ -58,11 +58,12 @@ button, .button {
 	}
 }
 
+
 /********************************
  ************ GENERAL ************
  ********************************/
+
 body {
-	//background: radial-gradient(#eef0ed, #c9dbda);
 	background: radial-gradient(#fff, #c9dbda);
 	background-size: cover;
 	background-attachment: fixed;
@@ -135,7 +136,6 @@ nav {
 	align-items: center;
 	input[type="text"], button {
 		height:35px;
-//		margin-bottom: 20px;
 	}
 	button {
 		/* Calculate how many pixels to move button 
@@ -162,7 +162,6 @@ nav {
 }
 
 
-
 /******************************
  ***** INPUT AND BUTTONS ******
  ******************************/
@@ -180,6 +179,7 @@ input[type=text], input[type=number] {
     text-indent: 8px;
 	margin: 6px 0;
 }
+
 button, .button {
 	font-family: inherit;
 	border-radius: $border-radius__small;
@@ -240,7 +240,7 @@ button, .button {
 	}
 }
 
-//Rating input
+// Rating input
 select {
 	font-size: .8em;
 	-webkit-appearance: none;
@@ -251,9 +251,11 @@ select {
 		content: '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
 	}
 }
+
 .ratingButton {
 	border-radius: 0 $border-radius__small $border-radius__small 0;
 }
+
 
 /****************************************
  ************ GRID/LIST VIEW ************
@@ -262,6 +264,7 @@ select {
 .wrapper {
 	display: grid;
 }
+
 .container__inner{
 	max-width: 1200px;
 	margin:0 auto 100px;
@@ -286,12 +289,14 @@ select {
 		border-radius: 50%;
 	}
 }
+
 .grid {
 	width:100%;
 	display: grid;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
+
 .grid>div, .list>div {
 	margin:10px;
 	padding:20px;
@@ -327,8 +332,7 @@ select {
 	background: #cccccc;
 	background-size: 56%;
 	margin-bottom: 1rem;
- }
-
+}
 
 .genres {
 	height: 35px;
@@ -345,10 +349,12 @@ select {
 	}
 }
 
+
 /**************************************
  *************** TRACKS ***************
  **************************************/
-.container__tracks {
+
+ .container__tracks {
 	button {
 		margin: 0;
 		padding: 8px 10px;
@@ -363,7 +369,6 @@ select {
 		}
 	} 
 }
-	
 
 
 /**************************************
@@ -399,10 +404,11 @@ select {
 	}
 }
 
+
 /*********************************
  ************* FORM **************
  ********************************/
-//CREATE A CLASS FOR STYLING LATER ON
+
 #postFormsWrapper{
 	width: 100%;
 	max-width:550px;
@@ -430,6 +436,7 @@ select {
 /*******************************************************
  ***************** POPUPS / FEEDBACK  ******************
  *******************************************************/
+
 #feedbackPopup, .popup__add-to-playlist {
 	position: fixed;
 	top:70px;
@@ -477,8 +484,8 @@ select {
 		background: #f7f7f7;
 		padding: 2em;
 	}
-
 }
+
 
 /******************************
  ***** FUNCTIONAL STYLES ******
@@ -487,6 +494,7 @@ select {
  .hidden{
 	 display: none!important;
  }
+
 //Hide visually but keep in DOM for screenreaders
 .do_not_display {
 	position: absolute;
