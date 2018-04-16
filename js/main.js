@@ -535,8 +535,9 @@ const AddToPlaylistView = {
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
             let addButton = document.createElement('button');
+			addButton.classList.add('dark', 'add');
             addButton.innerHTML = `<i class="fa fa-plus" 
-            title="Remove from FED17 Faves"></i>`;
+            title="Add to playlist"></i>`;
 
             addButton.addEventListener('click', function(){
                 FetchModel.fetchPlaylistsForAdding(track._id);
