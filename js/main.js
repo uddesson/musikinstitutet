@@ -225,6 +225,7 @@ addTrackToPlaylist(playlistId, tracks){
                 FetchModel.fetchComments(playlistId);
           });
     },
+
 	rate(category, id, rating){
 			fetch(`${baseUrl}/${category}s/${id}/vote?${apiKey}`, {
 			method: 'POST',
@@ -244,6 +245,12 @@ addTrackToPlaylist(playlistId, tracks){
 const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
+		let title = 'title';
+        
+        if(category == 'artists')
+            {
+			    title = 'name';
+            }
         if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
             fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
@@ -303,24 +310,23 @@ const AddToPlaylistView = {
 
     displayPlaylistsPopUp: (response, trackId) => {
         let div = document.createElement('div');
-        div.classList.add('popup__add-to-playlist');
         let ul = document.createElement('ul');
         let createPlaylistButton = document.createElement('button');
-        createPlaylistButton.innerText = 'Create new playlist';
-        createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
+
+        createPlaylistButton.innerText = 'Create new playlist';
+        div.classList.add('popup__add-to-playlist');
+        createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
 		
 		//Hide popup when clicking outside of it
 		document.addEventListener('click', function(event) {
 		  var isClickInside = div.contains(event.target);
 		  if (!isClickInside){
-			console.log('Clicked outside div')
 			div.classList.add('hidden');
 		  }
 		});
 		
         createPlaylistButton.addEventListener('click', function(){
-
             if(createPlaylistButton.classList.contains('showPlaylistForm')){
                 //show create playlist form
                 createPlaylistContainer.classList.toggle('hidden');
@@ -346,7 +352,6 @@ const AddToPlaylistView = {
                 
                 //change behavior from creating playlist to displaying form
                 createPlaylistButton.classList.toggle('showPlaylistForm');
-
             }
             
         });
@@ -361,7 +366,6 @@ const AddToPlaylistView = {
         ul.addEventListener('click', function(ul){
             let playlistId = ul.srcElement.id;
             let track = trackId;
-            console.log(ul.srcElement.id);
 
             PostModel.addTrackToPlaylist(playlistId, track);
         });
@@ -402,9 +406,6 @@ const AddToPlaylistView = {
 			}
 			artistDiv.appendChild(genreDiv);
             
-            //make function/controller
-            //fex one for creating the button + eventlistenr 
-            //and one for delete(function called in eventlistener)
             let deleteButton = document.createElement('button');
             deleteButton.innerText = 'x';
 
@@ -447,9 +448,6 @@ const AddToPlaylistView = {
 				PostModel.rate('album', album._id, ratingInput.value);
 			});
 			
-            //make function/controller
-            //fex one for creating the button + eventlistenr 
-            //and one for delete(function called in eventlistener) 
             let deleteButton = document.createElement('button');
             deleteButton.innerText = 'x';
 
@@ -683,7 +681,6 @@ const NavigationView = {
     * - While on the "contribute page" you can click the search button 
     * even if the input field has no value
     */
-    lastActivePage: '',
     homeMenuAction: document.getElementById('home'),
     contributeMenuAction: document.getElementById('contribute'),
     playlistsMenuAction: document.getElementById('playlists'),
@@ -693,9 +690,9 @@ const NavigationView = {
     enableHomeView(){
         NavigationView.homeMenuAction.addEventListener('click', function(){
             lastActivePage = 'home';
-            /* When we REMOVE the class hidden, we show views
-             and elements that should be active */
-            ArtistView.container.classList.remove('hidden');
+            /* Clicking home view will refresh the page, 
+            since we want to fetch from */
+            location.reload();
     
             /* When we ADD the class hidden, we hide views
              or elements that should not be active */
@@ -705,7 +702,6 @@ const NavigationView = {
     
     enablePlaylistView(){
         NavigationView.playlistsMenuAction.addEventListener('click', function(){
-            lastActivePage = 'playlists';
             NavigationView.playlistContainer.innerHTML = '';
             PlaylistView.containerInner.innerHTML = '';
             NavigationView.playlistContainer.classList.remove('hidden');
@@ -726,7 +722,6 @@ const NavigationView = {
 
     enablePostView(){
         NavigationView.contributeMenuAction.addEventListener('click', function(){
-            lastActivePage = 'post';
             NavigationView.postFormsWrapper.classList.remove('hidden');
 
             // Hide views ("page") or elements that should not be active
@@ -955,7 +950,7 @@ const ResponseController = {
 }
 
 
-/* If searchquery matches a genre: display a link to that genre, 
+/* TO DO: If searchquery matches a genre: display a link to that genre, 
 if clicked then fetchGenre, display as search results. artists, albums, tracks.
 also set search input value as the name of the genre*/
 GenreController = { 
@@ -997,6 +992,7 @@ GenreController = {
             break;
         }
     },
+
     setGenre(genre){
         ArtistView.containerInner.innerHTML = "";
         TrackView.containerInner.innerHTML = "";
