@@ -245,13 +245,13 @@ addTrackToPlaylist(playlistId, tracks){
 const DeleteModel = {
     //TO DO: make switch statement, if artist: title=name
     deleteOne(objectToDelete, category){
-		let title = 'title';
+		let title = objectToDelete.title;
         
-        if(category == 'artists')
+        if(category == 'artist')
             {
-			    title = 'name';
+			    title = objectToDelete.name;
             }
-        if (confirm(`Do you want to Delete ${objectToDelete.title}?`)){
+        if (confirm(`Do you want to Delete ${title}?`)){
             fetch(`${baseUrl}/${category}s/${objectToDelete._id}?key=flat_eric`, {
                 method: 'DELETE',
                 headers: {
@@ -261,9 +261,10 @@ const DeleteModel = {
                 })
             .then((response) => response.json())
             .then((objectToDelete) => {
-                console.log('you deleted', objectToDelete.title);
+                console.log('you deleted', title);
                 //TO DO:this need to be made dynamic as well or update siteo.
-                ArtistView.containerInner.removeChild(`${category}Div`);
+                console.log(`${category}Div`);
+                //.containerInner.removeChild(`${category}Div`);
             });
         } else {
             return;
