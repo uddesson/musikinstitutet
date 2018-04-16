@@ -755,7 +755,7 @@ const NavigationView = {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
-            NavigationView.playlistContainer.classList.add('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
         });
     },
 
@@ -771,6 +771,7 @@ const NavigationView = {
         SearchView.searchInput.addEventListener('keyup', function(){
             ArtistView.container.classList.remove('hidden');
             NavigationView.postFormsWrapper.classList.add('hidden');
+            NavigationView.playlistContainer.classList.remove('hidden');
         });
     }
 }
