@@ -488,7 +488,7 @@ const AddToPlaylistView = {
             ratingButton.addEventListener('click', function(){
                 // skcika in ratingInput.value till API
                 console.log(ratingInput.value);
-                PostModel.rate('album', album._id, ratingInput.value);
+                PostModel.rate('track', track._id, ratingInput.value);
             });
 			
             //make function/controller
@@ -613,6 +613,8 @@ const PlaylistView = {
         FetchModel.fetchComments(id);
         PlaylistView.container.innerHTML = '';
 		let ratingInput = createRatingInput();
+        let ratingButton = document.createElement('button');
+        ratingButton.innerText = "Rate";
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
@@ -643,6 +645,7 @@ const PlaylistView = {
         removePlaylistButton.classList.add('button', 'small', 'light');
 
         singlePlaylistActions.appendChild(ratingInput);
+        singlePlaylistActions.appendChild(ratingButton);
         singlePlaylistActions.appendChild(newComment);
         singlePlaylistActions.appendChild(commentBy);
         singlePlaylistActions.appendChild(addCommentButton);
@@ -651,8 +654,10 @@ const PlaylistView = {
         PlaylistView.container.appendChild(singlePlaylistContent);
         PlaylistView.container.appendChild(singlePlaylistActions);
 
-        ratingInput.addEventListener('change', function(){
-			PostModel.rate('playlist', playlist._id, ratingInput.value);
+        ratingButton.addEventListener('click', function(){
+            // skcika in ratingInput.value till API
+            console.log(ratingInput.value);
+            PostModel.rate('playlist', playlist._id, ratingInput.value);
         });
         
         addCommentButton.addEventListener('click', function(){
@@ -892,8 +897,8 @@ const InputController = {
     },
 
     setPlaceHolderIfUndefined(imageSrc){
-        // Returns source for placeholder image if there is no valid image url
-        if (imageSrc === undefined || imageSrc == ''){
+        // Returns src for placeholder image
+        if (imageSrc === undefined){
             imageSrc = "images/placeholder.jpg";
             return imageSrc; 
         }
