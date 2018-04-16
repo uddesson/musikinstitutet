@@ -351,41 +351,33 @@ button, .button {
 	}
 }
 
-/*********************************************
- ***************** FEEDBACK ******************
- *********************************************/
-#feedbackPopup {
-	top:60px;
-	height: 190px;
-	background: #fff;
-	box-shadow:5px 5px 12px rgba(0,0,0,.15);
-	z-index:55;
+/*******************************************************
+ ***************** POPUPS / FEEDBACK  ******************
+ *******************************************************/
+#feedbackPopup, .popup__add-to-playlist {
 	position: fixed;
+	top:60px;
 	left: 50%;
 	transform: translate(-50%, 0);
 	margin: auto;
-	width: 400px;
+	width: 500px;
+	background: #fff;
+	box-shadow:5px 5px 12px rgba(0,0,0,.15);
+	border-radius: $border-radius__small;
+}
+
+#feedbackPopup {
+	height: 190px;
+	z-index:14;
 }
 .feedback {
 	text-align: center;
 	margin:80px auto;
 }
 
-/**********************************************
- ********** ADD TO PLAYLIST-POPUP *************
- **********************************************/
-
 .popup__add-to-playlist {
-	// div.style.background = "white";
-	// div.style.width = "400px";
-	// div.style.position = "absolute";
-	// div.style.top = "50px";
-	width:500px;
 	padding:50px;
-	position: fixed;
-    top: 50px;
-    left: 410px;
-    z-index: 30;
+    z-index: 13;
     max-height: 600px;
 	overflow: scroll;
 
