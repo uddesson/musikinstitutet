@@ -50,7 +50,7 @@ button, .button {
 }
 
 .fa{
-	color: lighten($color__text--light, 40%);
+	color: lighten($color__text--light, 30%);
 	&:hover{
 		color: $color__highlight--strong;
 	}
@@ -160,6 +160,7 @@ button, .button {
 		}
 	}
 	&.warning {
+		color: white;
 		background: $color__highlight--light;
 		&:hover{
 			background: $color__highlight--strong;
@@ -294,23 +295,13 @@ button, .button {
  ************* PLAYLISTS **************
  **************************************/
 .container__playlists{
-	input{
-		width: 100%;
-	}
 
 	.comments{	
 		ul{
 			margin-bottom: 50px;	
 		}
 	}
-}
-
-
-
-
-
-//CREATE A CLASS FOR STYLING LATER ON
-#playlistContainer {
+	
 	margin:0 auto 100px;
 	input, button {
 		max-width:500px;

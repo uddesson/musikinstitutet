@@ -429,13 +429,16 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:2em;"></i>';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+                title="Remove from FED17 Faves" 
+                style="font-size:1.7em;"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
             });
 
             let buttonDiv = document.createElement('div');
+            buttonDiv.style = "top: 10px; right: 10px; position: absolute;"
             buttonDiv.appendChild(deleteButton);
             artistDiv.appendChild(buttonDiv);
 
@@ -588,7 +591,7 @@ const PlaylistView = {
                 let listElement = document.createElement('li');
                 let deleteButton = document.createElement('button');
                 deleteButton.classList.add('button', 'large', 'clear');
-                deleteButton.innerText = 'x';
+                deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
                 listElement.innerText = comment;
                 listElement.appendChild(deleteButton);
                 commentList.appendChild(listElement);
@@ -615,7 +618,7 @@ const PlaylistView = {
         let playlistDiv = document.createElement('div');
         playlistDiv.innerHTML = `
             <img src="${imageSrc}" alt="${playlist.title}" class="image">
-            <h3>${playlist.title}</h3><br>
+            <h3>${playlist.title}</h3>
             <h4>Created by: ${playlist.createdBy}</h4>
             <h4>Tracks: ${playlist.tracks.length}</h4>
             <h4>Rating: ${rating} / 10</h4>`;
