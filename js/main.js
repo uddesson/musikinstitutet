@@ -444,6 +444,7 @@ const AddToPlaylistView = {
             let rating = RatingModel.calculateRatingAverage(album);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
+			ratingButton.classList.add('ratingButton', 'light', 'small');
             ratingButton.innerText = "Rate";
 			
 			albumDiv.innerHTML = `
@@ -496,6 +497,7 @@ const AddToPlaylistView = {
             let rating = RatingModel.calculateRatingAverage(track);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
+			ratingButton.classList.add('ratingButton', 'light', 'small');
             ratingButton.innerText = "Rate";
 			
 			trackDiv.innerHTML = `
@@ -641,6 +643,7 @@ const PlaylistView = {
 		let ratingInput = createRatingInput();
         let ratingButton = document.createElement('button');
         ratingButton.innerText = "Rate";
+		ratingButton.classList.add('ratingButton', 'light', 'small');
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
@@ -842,6 +845,9 @@ function createRatingInput(){
     let ratingInputDiv = document.createElement('div');
     let ratingInput = document.createElement('select');
     const defaultOption = document.createElement('option');
+	defaultOption.innerHTML = `—`;
+	defaultOption.setAttribute("selected", "");
+	defaultOption.setAttribute("disabled", "");
     ratingInput.appendChild(defaultOption);
 
 	for(let i = 1; i <= 10; i++){

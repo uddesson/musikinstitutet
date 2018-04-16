@@ -66,6 +66,7 @@ body {
 	background: radial-gradient(#fff, #c9dbda);
 	background-size: cover;
 	background-attachment: fixed;
+	padding-bottom:100px;
 }
 div {
 	word-wrap: break-word;
@@ -165,16 +166,18 @@ nav {
 /******************************
  ***** INPUT AND BUTTONS ******
  ******************************/
-
-input[type=text], input[type=number] {
-	width:100%;
-	height: 40px;
-	border-radius: $border-radius__small;
+input[type=text], input[type=number], select {
 	border: 1px solid #e0e0e0;
-    text-indent: 8px;
-	font-size: 1em;
     padding: 0.3em 0;
 	font-family: inherit;
+}
+
+input[type=text], input[type=number] {
+	border-radius: $border-radius__small;
+	font-size: 1em;
+	height: 40px;
+	width:100%;
+    text-indent: 8px;
 	margin: 6px 0;
 }
 button, .button {
@@ -235,6 +238,21 @@ button, .button {
 		width:26px;
 		border-radius: 13px;
 	}
+}
+
+//Rating input
+select {
+	font-size: .8em;
+	-webkit-appearance: none;
+	-webkit-border-radius: 5px 0 0 5px;
+	border-radius: 5px 0 0 5px;
+    padding: 5px 10px 7px;
+	&:after {
+		content: '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
+	}
+}
+.ratingButton {
+	border-radius: 0 $border-radius__small $border-radius__small 0;
 }
 
 /****************************************
@@ -362,9 +380,9 @@ button, .button {
 			margin-left: 15px;
 		}
 	}
-	h3{
-		font-size: 2em;
-		margin-bottom: 20px;
+	h3 {
+		font-size: 1.5em;
+   		margin: 70px 0 20px;
 	}
 	.comments{
 		margin-bottom: 20px;
