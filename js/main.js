@@ -431,6 +431,8 @@ const AddToPlaylistView = {
             let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
             let albumDiv = document.createElement('div');
 			let ratingInput = createRatingInput();
+            let ratingButton = document.createElement('button');
+            ratingButton.innerText = "Rate";
 			
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
@@ -439,7 +441,7 @@ const AddToPlaylistView = {
 					<p>Genres: ${album.genres}</p>`;
             
 			
-			ratingInput.addEventListener('change', function(){
+			ratingButton.addEventListener('click', function(){
 				// skcika in ratingInput.value till API
 				console.log(ratingInput.value);
 				PostModel.rate('album', album._id, ratingInput.value);
@@ -456,7 +458,8 @@ const AddToPlaylistView = {
             });
 
             let buttonDiv = document.createElement('div');
-			buttonDiv.appendChild(ratingInput);
+            buttonDiv.appendChild(ratingInput);
+            buttonDiv.appendChild(ratingButton);
             buttonDiv.appendChild(deleteButton);
             albumDiv.appendChild(buttonDiv);
             
@@ -474,16 +477,19 @@ const AddToPlaylistView = {
 			let trackArtists = track.artists.map((artist) => artist.name);
 			let trackDiv = document.createElement('div');
 			let ratingInput = createRatingInput();
+            let ratingButton = document.createElement('button');
+            ratingButton.innerText = "Rate";
 			
 			trackDiv.innerHTML = `
 				<h3><a href="${track.spotifyURL}" target="_blank">${track.title}</a></h3><br>
                 <h4>by ${trackArtists}</h4>`;
 			
-			ratingInput.addEventListener('change', function(){
-				// skcika in ratingInput.value till API
-				console.log(ratingInput.value);
-				PostModel.rate('track', track._id, ratingInput.value);
-			});
+        
+            ratingButton.addEventListener('click', function(){
+                // skcika in ratingInput.value till API
+                console.log(ratingInput.value);
+                PostModel.rate('album', album._id, ratingInput.value);
+            });
 			
             //make function/controller
             //fex one for creating the button + eventlistenr 
@@ -492,7 +498,6 @@ const AddToPlaylistView = {
             addButton.innerText = '+';
 
             addButton.addEventListener('click', function(){
-                console.log('scroll up');
                 FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
@@ -505,7 +510,8 @@ const AddToPlaylistView = {
 
 			createRatingInput();
             let buttonsDiv = document.createElement('div');
-			buttonsDiv.appendChild(ratingInput);
+            buttonsDiv.appendChild(ratingInput);
+            buttonsDiv.appendChild(ratingButton);
             buttonsDiv.appendChild(addButton);
             buttonsDiv.appendChild(deleteButton);
             trackDiv.appendChild(buttonsDiv);
@@ -617,11 +623,12 @@ const PlaylistView = {
                 ${tracklist}
             </section>`;
 		
-		ratingInput.addEventListener('change', function(){
-			// skcika in ratingInput.value till API
-			console.log(ratingInput.value);
-			PostModel.rate('playlist', playlist._id, ratingInput.value);
-		});
+		
+        ratingButton.addEventListener('click', function(){
+            // skcika in ratingInput.value till API
+            console.log(ratingInput.value);
+            PostModel.rate('album', album._id, ratingInput.value);
+        });
 		
 		
         let newComment = document.createElement('input');
@@ -949,48 +956,37 @@ GenreController = {
     checkIfGenre(searchQuery) {
         switch (searchQuery) {
             case 'jazz':
-                console.log('jazz');
                 //display jazz + image. eventlistener that triggers displayGenre
                 GenreController.setGenre('jazz');
             break;
             case 'hip hop': 
-                console.log('hip hop');
                 GenreController.setGenre('hip hop');
             break;
             case 'rock':
-                console.log('rock');
                 GenreController.setGenre('rock');
             break;
             case 'folk':
-                console.log('folk');
                 GenreController.setGenre('folk');
             break;
             case 'reggae':
-                console.log('reggae');
                 GenreController.setGenre('reggae');
             break;
             case 'pop':
-                console.log('pop');
                 GenreController.setGenre('pop');
             break;
             case 'rnb':
-                console.log('Rnb');
                 GenreController.setGenre('rnb');
             break;
             case 'dancehall':
-                console.log('dancehall');
                 GenreController.setGenre('dancehall');
             break;
             case 'indie':
-                console.log('indie');
                 GenreController.setGenre('indie');
             break;
             case 'heavy metal':
-                console.log('heavy metal');
                 GenreController.setGenre('heavy metal');
             break;
             case 'electronic':
-                console.log('electronic');
                 GenreController.setGenre('electronic');
             break;
         }
