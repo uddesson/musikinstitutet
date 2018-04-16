@@ -69,8 +69,11 @@ div {
 	word-wrap: break-word;
 }
 
-.container {
-	margin-top:12%;
+.container, #playlistContainer {
+	margin-top:150px;
+}
+#postFormsWrapper {
+	margin:180px auto;
 }
 
 /*************************************
