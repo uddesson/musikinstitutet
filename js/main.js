@@ -610,27 +610,22 @@ const PlaylistView = {
     },
 
     displaySinglePlaylist(id, rating, playlist){
-        // Fetch comments for single playlist, since these should be displayed as well
         FetchModel.fetchComments(id);
+        PlaylistView.container.innerHTML = '';
 		let ratingInput = createRatingInput();
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
-		
-        let singlePlaylistContent = `
-            <section class="containerInner container__inner container__tracks list">
-                <h2>${playlist.title}</h2><br>
+        
+        let singlePlaylistContent = document.createElement('section');
+        singlePlaylistContent.classList.add('containerInner', 'container__inner', 'list');
+        singlePlaylistContent.innerHTML =
+               `<h2>${playlist.title}</h2>
                 <h4>Created by: ${playlist.createdBy}</h4>
-                <h4>Rating: ${rating}</h4>
-                ${tracklist}
-            </section>`;
-		
-		
-        ratingButton.addEventListener('click', function(){
-            // skcika in ratingInput.value till API
-            console.log(ratingInput.value);
-            PostModel.rate('album', album._id, ratingInput.value);
-        });
-		
-		
+                <h4>Playlist rating: ${rating} / 10</h4>
+                ${tracklist}</section>`;
+
+        let singlePlaylistActions = document.createElement('section');
+        singlePlaylistActions.classList.add('containerInner', 'container__inner');
+        
         let newComment = document.createElement('input');
         newComment.type = 'text';
         newComment.placeholder = 'New comment';
@@ -647,14 +642,19 @@ const PlaylistView = {
         removePlaylistButton.innerText = "Remove this playlist";
         removePlaylistButton.classList.add('button', 'small', 'light');
 
-        PlaylistView.container.innerHTML = `${singlePlaylistContent}`;
-		PlaylistView.container.appendChild(ratingInput);
-        PlaylistView.container.appendChild(newComment);
-        PlaylistView.container.appendChild(commentBy);
-        PlaylistView.container.appendChild(addCommentButton);
-        PlaylistView.container.appendChild(PlaylistView.commentsContainer);
-        PlaylistView.container.appendChild(removePlaylistButton);
+        singlePlaylistActions.appendChild(ratingInput);
+        singlePlaylistActions.appendChild(newComment);
+        singlePlaylistActions.appendChild(commentBy);
+        singlePlaylistActions.appendChild(addCommentButton);
+        singlePlaylistActions.appendChild(PlaylistView.commentsContainer);
+        singlePlaylistActions.appendChild(removePlaylistButton);
+        PlaylistView.container.appendChild(singlePlaylistContent);
+        PlaylistView.container.appendChild(singlePlaylistActions);
 
+        ratingInput.addEventListener('change', function(){
+			PostModel.rate('playlist', playlist._id, ratingInput.value);
+        });
+        
         addCommentButton.addEventListener('click', function(){
             PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
@@ -663,6 +663,7 @@ const PlaylistView = {
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
+
 }
 
     
