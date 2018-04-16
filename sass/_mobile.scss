@@ -340,11 +340,6 @@ button, .button {
 			width: 20px;
 		}
 	}
-	.feedback{
-		margin: 20px 0 20px 0;
-		padding: 10px 0 10px 0;
-		text-align: left;
-	}
 }
 
 /*********************************
@@ -381,7 +376,7 @@ button, .button {
  *******************************************************/
 #feedbackPopup, .popup__add-to-playlist {
 	position: fixed;
-	top:60px;
+	top:70px;
 	left: 50%;
 	transform: translate(-50%, 0);
 	margin: auto;
@@ -391,13 +386,20 @@ button, .button {
 	border-radius: $border-radius__small;
 }
 
+.feedback {
+	margin:20px auto;
+	padding: 0 0 10px;
+}
+
 #feedbackPopup {
 	height: 190px;
 	z-index:14;
-}
-.feedback {
-	text-align: center;
-	margin:80px auto;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	.feedback {
+		text-align: center;
+	}
 }
 
 .popup__add-to-playlist {
