@@ -209,8 +209,8 @@ addTrackToPlaylist(playlistId, tracks){
     })
     .then((response) => response.json())
     .then((playlist) => {
-        console.log("You've added a track to ", playlist.title);
-		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup);
+		StatusView.showStatusMessage(`You've added a track to ${playlist.title}`, feedbackPopup); 
+		//DÖLJ POPUP 
     })
 	.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
     },
@@ -274,10 +274,18 @@ const DeleteModel = {
             .then((response) => response.json())
             .then((objectToDelete) => {
                 console.log('you deleted', title);
+				StatusView.showStatusMessage(`You deleted ${title}.`, feedbackPopup);
+				
+				setTimeout(function(){ 
+					location.reload(); 
+				}, 3000);
                 //TO DO:this need to be made dynamic as well or update siteo.
-                ArtistView.containerInner.removeChild(`${category}Div`);
+				//ArtistView.containerInner.removeChild(childToRemove);
             })
-			.catch(error => StatusView.showStatusMessage("Error", feedbackPopup));
+			.catch(error => {   
+				StatusView.showStatusMessage("Error", feedbackPopup)
+				console.log(error);
+			});
         } else {
             return;
         }
@@ -852,27 +860,39 @@ const StatusView = {
         switch (status) {
             case "Empty":
             StatusView.statusMessage.innerText = "Oops, you haven't filled out the fields correctly.";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__empty');
+			StatusView.statusMessage.classList.add('feedback__empty');
             break;
 
             case "Success":
             StatusView.statusMessage.innerText = "Nice, it worked!";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__success');
+			StatusView.statusMessage.classList.add('feedback__success');
             break;
 			
 			case "Error":
 			StatusView.statusMessage.innerText = "Something went wrong :-(";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			StatusView.statusMessage.classList.add('feedback__error');
 			break;
 			
 			case "commentsError":
 			StatusView.statusMessage.innerText = "Something went wrong when loading comments :-(";
-			StatusView.statusMessage.classList.add('feedback', 'feedback__error');
+			StatusView.statusMessage.classList.add('feedback__error');
 			break;
+				
+			//If none of the feedback messages above, use the text passed as the first parameter in the function
+			default:
+        	StatusView.statusMessage.innerText = status;
         }
-        
+        StatusView.statusMessage.classList.add('feedback');
         location.appendChild(StatusView.statusMessage);
         location.classList.remove('hidden');
+		
+		//Hide popup when clicking outside of it
+		document.addEventListener('click', function(event) {
+		  var isClickInside = feedbackPopup.contains(event.target);
+		  if (!isClickInside){
+			feedbackPopup.classList.add('hidden');
+		  }
+		});
     }
 }
 
