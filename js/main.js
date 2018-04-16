@@ -1072,9 +1072,6 @@ GenreController = {
         FetchModel.fetchGenre('artists', genre);
         FetchModel.fetchGenre('albums', genre);
         FetchModel.fetchGenre('tracks', genre);
-        
-        //to show user what genre they're on
-        searchInput.value = genre;
     }
 }
 
