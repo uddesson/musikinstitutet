@@ -421,7 +421,7 @@ const AddToPlaylistView = {
 			artistDiv.appendChild(genreDiv);
             
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = '<i class="fa fa-minus-circle" style="font-size:2em;"></i>';
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');

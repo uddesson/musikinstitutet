@@ -49,6 +49,13 @@ button, .button {
 	border:none;
 }
 
+.fa{
+	color: lighten($color__text--light, 40%);
+	&:hover{
+		color: $color__highlight--strong;
+	}
+}
+
 /********************************
  ************ GENERAL ************
  ********************************/
@@ -270,7 +277,7 @@ button, .button {
 
 .genres {
 	height: 35px;
-	
+	margin-bottom: 10px;
 	p {
 		text-align: center;
 		font-size: .7em;
