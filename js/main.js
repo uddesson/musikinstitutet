@@ -444,6 +444,7 @@ const AddToPlaylistView = {
             let rating = RatingModel.calculateRatingAverage(album);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
+			ratingButton.classList.add('ratingButton', 'light', 'small');
             ratingButton.innerText = "Rate";
 			
 			albumDiv.innerHTML = `
@@ -496,6 +497,7 @@ const AddToPlaylistView = {
             let rating = RatingModel.calculateRatingAverage(track);
 			let ratingInput = createRatingInput();
             let ratingButton = document.createElement('button');
+			ratingButton.classList.add('ratingButton', 'light', 'small');
             ratingButton.innerText = "Rate";
 			
 			trackDiv.innerHTML = `
@@ -514,8 +516,9 @@ const AddToPlaylistView = {
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
             let addButton = document.createElement('button');
+			addButton.classList.add('dark', 'add');
             addButton.innerHTML = `<i class="fa fa-plus" 
-            title="Remove from FED17 Faves"></i>`;
+            title="Add to playlist"></i>`;
 
             addButton.addEventListener('click', function(){
                 FetchModel.fetchPlaylistsForAdding(track._id);
@@ -640,6 +643,7 @@ const PlaylistView = {
 		let ratingInput = createRatingInput();
         let ratingButton = document.createElement('button');
         ratingButton.innerText = "Rate";
+		ratingButton.classList.add('ratingButton', 'light', 'small');
         let tracklist = PlaylistView.getTrackListFrom(playlist); 
         
         let singlePlaylistContent = document.createElement('section');
@@ -841,6 +845,9 @@ function createRatingInput(){
     let ratingInputDiv = document.createElement('div');
     let ratingInput = document.createElement('select');
     const defaultOption = document.createElement('option');
+	defaultOption.innerHTML = `—`;
+	defaultOption.setAttribute("selected", "");
+	defaultOption.setAttribute("disabled", "");
     ratingInput.appendChild(defaultOption);
 
 	for(let i = 1; i <= 10; i++){

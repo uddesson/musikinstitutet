@@ -50,6 +50,8 @@ button, .button {
 }
 
 .fa{
+	font-size: 1.1rem;
+    vertical-align: middle;
 	color: lighten($color__text--light, 30%);
 	&:hover{
 		color: $color__highlight--strong;
@@ -64,13 +66,17 @@ body {
 	background: radial-gradient(#fff, #c9dbda);
 	background-size: cover;
 	background-attachment: fixed;
+	padding-bottom:100px;
 }
 div {
 	word-wrap: break-word;
 }
 
-.container {
-	margin-top:12%;
+.container, #playlistContainer {
+	margin-top:150px;
+}
+#postFormsWrapper {
+	margin:180px auto;
 }
 
 /*************************************
@@ -160,16 +166,18 @@ nav {
 /******************************
  ***** INPUT AND BUTTONS ******
  ******************************/
-
-input[type=text], input[type=number] {
-	width:100%;
-	height: 40px;
-	border-radius: $border-radius__small;
+input[type=text], input[type=number], select {
 	border: 1px solid #e0e0e0;
-    text-indent: 8px;
-	font-size: 1em;
     padding: 0.3em 0;
 	font-family: inherit;
+}
+
+input[type=text], input[type=number] {
+	border-radius: $border-radius__small;
+	font-size: 1em;
+	height: 40px;
+	width:100%;
+    text-indent: 8px;
 	margin: 6px 0;
 }
 button, .button {
@@ -230,9 +238,21 @@ button, .button {
 		width:26px;
 		border-radius: 13px;
 	}
-	.fa {
-		font-size:1.7em;
+}
+
+//Rating input
+select {
+	font-size: .8em;
+	-webkit-appearance: none;
+	-webkit-border-radius: 5px 0 0 5px;
+	border-radius: 5px 0 0 5px;
+    padding: 5px 10px 7px;
+	&:after {
+		content: '<i class="fa fa-minus-circle" style="font-size:1.2em;"></i>';
 	}
+}
+.ratingButton {
+	border-radius: 0 $border-radius__small $border-radius__small 0;
 }
 
 /****************************************
@@ -250,16 +270,16 @@ button, .button {
 		border-radius: $border-radius__small;
 		box-shadow: 5px 5px 0px rgba(0,0,0,.2);
 		display: flex;
-    	justify-content: space-between;
+		justify-content: space-between;
 	}
 }
 
-.container__inner--medium{
+.container__inner--medium {
 	max-width: 780px;
 	margin:auto;
 }
 
-.container__artist{
+.container__artist {
 	text-align: center;
 	align-items: center;
 	img {
@@ -290,8 +310,10 @@ button, .button {
 	&>div {
 		width:100%;
 		flex-direction: row;
+		align-items: center;
 	}
 }
+
 /***** IMAGES *****/
 .grid > div:not(.popup__add-to-playlist) {
     position: relative;
@@ -324,10 +346,31 @@ button, .button {
 }
 
 /**************************************
+ *************** TRACKS ***************
+ **************************************/
+.container__tracks {
+	button {
+		margin: 0;
+		padding: 8px 10px;
+	}
+	.add {
+		margin:0 0 0 30px;
+		.fa {
+			color:#fff;
+		}
+		.fa:hover {
+			color: inherit;
+		}
+	} 
+}
+	
+
+
+/**************************************
  ************* PLAYLISTS **************
  **************************************/
  
-.container__playlist{
+.container__playlist {
 	line-height: 160%;
 	margin-bottom: 60px;
 	&.list > div{
@@ -337,9 +380,9 @@ button, .button {
 			margin-left: 15px;
 		}
 	}
-	h3{
-		font-size: 2em;
-		margin-bottom: 20px;
+	h3 {
+		font-size: 1.5em;
+   		margin: 70px 0 20px;
 	}
 	.comments{
 		margin-bottom: 20px;
@@ -347,10 +390,10 @@ button, .button {
 			height: 40px;
 		}
 	}
-	.button{
+	.button {
 		width: 300px;
 		margin: 10px 0 10px 0;
-		&.clear{
+		&.clear {
 			width: 20px;
 		}
 	}
@@ -363,7 +406,6 @@ button, .button {
 #postFormsWrapper{
 	width: 100%;
 	max-width:550px;
-	margin:80px auto;
 	h2 {
 		margin: 0 0 20px;
 		cursor:pointer;
