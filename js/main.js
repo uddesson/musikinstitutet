@@ -437,17 +437,16 @@ const AddToPlaylistView = {
             
             let deleteButton = document.createElement('button');
             deleteButton.innerHTML = `<i class="fa fa-times" 
-                title="Remove from FED17 Faves" 
-                style="font-size:1.7em;"></i>`;
+                title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(artist, 'artist');
             });
 
-            let buttonDiv = document.createElement('div');
-            buttonDiv.style = "top: 10px; right: 10px; position: absolute;"
-            buttonDiv.appendChild(deleteButton);
-            artistDiv.appendChild(buttonDiv);
+            let deleteIcon = document.createElement('div');
+            deleteIcon.classList.add('deleteIcon');
+            deleteIcon.appendChild(deleteButton);
+            artistDiv.appendChild(deleteIcon);
 
 			ArtistView.containerInner.classList.add('containerInner', 'container__inner', 'container__artist', 'grid');
 			ArtistView.container.appendChild(ArtistView.containerInner);
@@ -471,8 +470,7 @@ const AddToPlaylistView = {
 			albumDiv.innerHTML = `
 					<img src="${imageSrc}" alt="${album.title}" class="image">
 					<h3><a href="${album.spotifyURL}" target="_blank">${album.title}</a></h3>
-					<h4>${albumArtists}</h4>
-                    Rating: ${rating} / 10`;
+					<h4>${albumArtists}</h4>`;
             
 			
 			ratingButton.addEventListener('click', function(){
@@ -480,18 +478,29 @@ const AddToPlaylistView = {
 			});
 			
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+                title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(album, 'album');
             });
 
-            let buttonDiv = document.createElement('div');
-            buttonDiv.appendChild(ratingInput);
-            buttonDiv.appendChild(ratingButton);
-            buttonDiv.appendChild(deleteButton);
-            albumDiv.appendChild(buttonDiv);
-            
+            let deleteIcon = document.createElement('div');
+            deleteIcon.classList.add('deleteIcon');
+            deleteIcon.appendChild(deleteButton);
+            albumDiv.appendChild(deleteIcon);
+
+            let ratingDiv = document.createElement('div');
+            ratingDiv.classList.add('rating__div');
+
+            let ratingOutput = document.createElement('p');
+            ratingOutput.innerHTML = `Rating: ${rating} / 10`;
+
+            ratingDiv.appendChild(ratingOutput);
+            ratingDiv.appendChild(ratingInput);
+            ratingDiv.appendChild(ratingButton);
+            albumDiv.appendChild(ratingDiv);
+
 			AlbumView.containerInner.classList.add('containerInner', 'container__inner', 'container__albums', 'grid');
 			AlbumView.container.appendChild(AlbumView.containerInner);
 			AlbumView.containerInner.appendChild(albumDiv);
@@ -526,14 +535,16 @@ const AddToPlaylistView = {
             //fex one for creating the button + eventlistenr 
             //and one for delete(function called in eventlistener)  
             let addButton = document.createElement('button');
-            addButton.innerText = '+';
+            addButton.innerHTML = `<i class="fa fa-plus" 
+            title="Remove from FED17 Faves"></i>`;
 
             addButton.addEventListener('click', function(){
                 FetchModel.fetchPlaylistsForAdding(track._id);
             });
 
             let deleteButton = document.createElement('button');
-            deleteButton.innerText = 'x';
+            deleteButton.innerHTML = `<i class="fa fa-times" 
+            title="Remove from FED17 Faves"></i>`;
 
             deleteButton.addEventListener('click', function(){
                 DeleteModel.deleteOne(track, 'track');
@@ -847,7 +858,8 @@ const PostView = {
 
 //Create a function that creates a rating input field
 function createRatingInput(){
-	//Create rating select field with 10 options
+    //Create rating select field with 10 options
+    let ratingInputDiv = document.createElement('div');
     let ratingInput = document.createElement('select');
     const defaultOption = document.createElement('option');
     ratingInput.appendChild(defaultOption);
@@ -857,7 +869,8 @@ function createRatingInput(){
 		number.innerText = i;
 		number.value = i;
 		ratingInput.appendChild(number);
-	}
+    }
+    ratingInputDiv.appendChild(ratingInput)
 	return ratingInput;
 }
 
