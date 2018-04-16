@@ -230,7 +230,7 @@ const FetchModel = {
     },
     
     fetchComments(id){
-        fetch(`${baseUrl}/playlists/${id}/comments?${apiKey}`)
+        fetch(`${baseUrl}/playlists/${id}/comments?key=flat_eric`)
         .then((response) => response.json())
         .then((comments) => {
             PlaylistView.showComments(comments)
@@ -244,7 +244,7 @@ const FetchModel = {
 				AddToPlaylistView.displayPlaylistsPopUp(response, trackId);
 			})
 			.catch(error => console.log(error));
-        },
+        }
 };
 
 
@@ -388,7 +388,7 @@ addTrackToPlaylist(playlistId, tracks){
             username: user
         }
         
-        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?${apiKey}`,{
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -824,13 +824,10 @@ const PlaylistView = {
         PlaylistView.container.appendChild(removePlaylistButton);
 
         addCommentButton.addEventListener('click', function(){
-            newComment = newComment.value;
-            commentBy = commentBy.value;
-            PostModel.addComment(playlist._id, newComment, commentBy);
+            PostModel.addComment(playlist._id, newComment.value, commentBy.value);
         })
 
         removePlaylistButton.addEventListener('click', function(){
-            // console.log(playlist, playlist)
             DeleteModel.deleteOne(playlist, 'playlist');
         })
     }
