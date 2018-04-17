@@ -715,7 +715,6 @@ const PlaylistView = {
 
         ratingButton.addEventListener('click', function(){
             PostModel.rate('playlist', playlist._id, ratingInput.value);
-            StatusView.showStatusMessage("Success", locationForDisplayingStatus);
         });
         
         addCommentButton.addEventListener('click', function(){
