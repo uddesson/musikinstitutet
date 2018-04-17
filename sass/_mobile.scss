@@ -77,10 +77,10 @@ div {
 }
 
 .container, #playlistContainer {
-	margin-top:150px;
+	margin-top:120px;
 }
 #postFormsWrapper {
-	margin:180px auto;
+	margin:150px auto;
 }
 
 
@@ -337,17 +337,14 @@ select {
 }
 
 .list {
-	max-width: 780px;
-	margin:auto;
+	max-with:100%;
 	&>div {
-		width:100%;
-		-webkit-box-orient: horizontal;
-		-webkit-box-direction: normal;
-		    -ms-flex-direction: row;
-		        flex-direction: row;
-		-webkit-box-align: center;
-		    -ms-flex-align: center;
-		        align-items: center;
+		-webkit-box-orient: vertical;
+		    -ms-flex-direction: column;
+		        flex-direction: column;
+		-webkit-box-align: left;
+		    -ms-flex-align: left;
+		        align-items: left;
 	}
 }
 
@@ -484,6 +481,9 @@ select {
 	        box-shadow:5px 5px 12px rgba(0,0,0,.15);
 			box-shadow:5px 5px 12px rgba(0,0,0,.15);
 	border-radius: $border-radius__small;
+	h3 {
+		margin:20px auto;
+	}
 }
 
 .feedback {
@@ -511,9 +511,8 @@ select {
 .popup__add-to-playlist {
 	padding:50px;
     z-index: 13;
-    max-height: 600px;
-	overflow: scroll;
-
+    height:auto;
+	overflow: visible;
 	li {
 		padding: .5em 0 .5em;
 		cursor:pointer;

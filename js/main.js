@@ -340,10 +340,15 @@ const AddToPlaylistView = {
         let ul = document.createElement('ul');
         let createPlaylistButton = document.createElement('button');
         const createPlaylistContainer = document.getElementById('createPlaylistContainer');
-
+		
         createPlaylistButton.innerText = 'Create new playlist';
         div.classList.add('popup__add-to-playlist');
 		div.id = 'addToPlaylistPopup';
+		
+		let h3 = document.createElement('h3');
+		h3.innerText = "Add track to playlist";
+		div.appendChild(h3);
+		
         createPlaylistButton.classList.add('dark', 'large', 'showPlaylistForm');
 		
 		//Hide popup when clicking outside of it
