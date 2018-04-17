@@ -307,6 +307,28 @@ const RatingModel = {
             ratingAverage = Math.floor(ratingAverage);
             return ratingAverage;
         }
+    },
+
+    createRatingInput(){
+
+        //Create rating select field with 10 options
+        let ratingInputDiv = document.createElement('div');
+        let ratingInput = document.createElement('select');
+        const defaultOption = document.createElement('option');
+
+        defaultOption.innerHTML = `—`;
+        defaultOption.setAttribute("selected", "");
+        defaultOption.setAttribute("disabled", "");
+        ratingInput.appendChild(defaultOption);
+
+        for(let i = 1; i <= 10; i++){
+            let number = document.createElement('option');
+            number.innerText = i;
+            number.value = i;
+            ratingInput.appendChild(number);
+        }
+        ratingInputDiv.appendChild(ratingInput)
+        return ratingInput;
     }
 }
 
@@ -438,7 +460,7 @@ const AlbumView = {
         let imageSrc = InputController.setPlaceHolderIfUndefined(album.coverImage);
         let albumDiv = document.createElement('div');
         let rating = RatingModel.calculateRatingAverage(album);
-        let ratingInput = createRatingInput();
+        let ratingInput = RatingModel.createRatingInput();
         let ratingButton = document.createElement('button');
         ratingButton.classList.add('ratingButton', 'light', 'small');
         ratingButton.innerText = "Rate";
@@ -491,7 +513,7 @@ const TrackView = {
         let trackArtists = track.artists.map((artist) => artist.name);
         let trackDiv = document.createElement('div');
         let rating = RatingModel.calculateRatingAverage(track);
-        let ratingInput = createRatingInput();
+        let ratingInput = RatingModel.createRatingInput();
         let ratingButton = document.createElement('button');
         ratingButton.classList.add('ratingButton', 'light', 'small');
         ratingButton.innerText = "Rate";
@@ -511,6 +533,7 @@ const TrackView = {
             addButton.innerHTML = `<i class="fa fa-plus" 
             title="Add to playlist"></i>`;
 
+        // Add track to an existing playlist
         addButton.addEventListener('click', function(){
             FetchModel.fetchPlaylistsForAdding(track._id);
         });
@@ -523,7 +546,7 @@ const TrackView = {
             DeleteModel.deleteOne(track, 'track');
         });
 
-        createRatingInput();
+        RatingModel.createRatingInput();
         
         let buttonsDiv = document.createElement('div');
         buttonsDiv.appendChild(ratingInput);
@@ -642,7 +665,7 @@ const PlaylistView = {
     displaySinglePlaylist(id, rating, playlist){
         FetchModel.fetchComments(id);
         PlaylistView.container.innerHTML = '';
-		let ratingInput = createRatingInput();
+		let ratingInput = RatingModel.createRatingInput();
         let ratingButton = document.createElement('button');
         ratingButton.innerText = "Rate";
 		ratingButton.classList.add('ratingButton', 'light', 'small');
@@ -841,28 +864,6 @@ const PostView = {
             PostModel.addTrack();
         })
     }
-}
-
-//Create a function that creates a rating input field
-function createRatingInput(){
-
-    //Create rating select field with 10 options
-    let ratingInputDiv = document.createElement('div');
-    let ratingInput = document.createElement('select');
-    const defaultOption = document.createElement('option');
-	defaultOption.innerHTML = `—`;
-	defaultOption.setAttribute("selected", "");
-	defaultOption.setAttribute("disabled", "");
-    ratingInput.appendChild(defaultOption);
-
-	for(let i = 1; i <= 10; i++){
-		let number = document.createElement('option');
-		number.innerText = i;
-		number.value = i;
-		ratingInput.appendChild(number);
-    }
-    ratingInputDiv.appendChild(ratingInput)
-	return ratingInput;
 }
 
 const StatusView = {
