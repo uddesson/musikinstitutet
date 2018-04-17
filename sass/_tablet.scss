@@ -1,0 +1,43 @@
+header {
+	flex-direction: column;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: flex-start;
+	height:auto;
+	nav, .searchInput {
+		width: 70%;
+	}
+	.searchInput {
+		max-width:500px;
+	}
+	nav h2 {
+		font-size: .9rem;
+	}
+	.logo {
+		width:20%;
+		img {
+			width:130px;
+		}
+	}
+}
+
+
+.list {
+	max-width: 780px;
+	margin:auto;
+	&>div {
+		width:100%;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		    -ms-flex-direction: row;
+		        flex-direction: row;
+		-webkit-box-align: center;
+		    -ms-flex-align: center;
+		        align-items: center;
+	}
+}
+
+.popup__add-to-playlist {
+    max-height: 600px;
+	overflow: scroll;
+}
