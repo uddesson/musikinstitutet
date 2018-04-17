@@ -1,3 +1,15 @@
 .container__inner {
 	margin-top:63px;
 }
+
+header {
+	height:70px;
+	flex-direction: row;
+	align-items: center;
+	nav, .searchInput, .logo {
+		width: calc(100% / 3);
+	}
+	.logo img {
+		width:160px;
+	}
+}

@@ -110,49 +110,46 @@ a {
  ********************************/
 header {
 	display: flex;
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-		align-items: center;
-    	align-items: center;
-	position:fixed;
+	flex-direction: column;
+	box-sizing: border-box;
 	top:0;
 	width:100%;
 	background: $color__button--dark;
 	padding:10px;
 	color: #f7f7f7;
-	height:50px;
+	height:auto;
 	
-	nav, .searchInput, .logo {
-		width: calc(100% / 3);
+	nav, .searchInput {
+		width: 70%;
 	}
-	
+	.logo {
+		width:20%;
+	}
 }
 nav {
 	h2 {
 		cursor:pointer;
-		font-size: 1em;
+		font-size: .8rem;
 		padding: .5em;
 		text-transform: uppercase;
-		letter-spacing: 1px
+		letter-spacing: 1px;
 	}
 	ul {
 		display: flex;
 		align-items: center;
-			-webkit-box-align: center;
-		    -ms-flex-align: center;
-		    align-items: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
 	}
 }
 
 .searchInput {
-	margin:0 auto;
-	width: 100%;
-	max-width:500px;
+	margin:0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 	input[type="text"], button {
-		height:35px;
+		height:28px;
 	}
 	button {
 		/* Calculate how many pixels to move button 
@@ -167,11 +164,10 @@ nav {
 }
 
 .logo {
-	width:160px;
 	display:block;
 	z-index:15;
 	img {
-		width: 160px;
+		width:90px;
 		position: fixed;
 		top: 20px;
 		right: 20px;
@@ -363,7 +359,7 @@ select {
 
 .grid > div > img { 
 	-o-object-fit: cover; 
-		object-fit: cover;
+	object-fit: cover;
     width: 100%;
     height: 240px;
 	background: #cccccc;
@@ -372,7 +368,7 @@ select {
 }
 
 .genres {
-	height: 35px;
+	height: 45px;
 	margin-bottom: 10px;
 	p {
 		text-align: center;
