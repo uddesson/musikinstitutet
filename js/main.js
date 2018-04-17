@@ -973,8 +973,10 @@ const InputController = {
     },
 
     setPlaceHolderIfUndefined(imageSrc){
+        let timBuckleyImage = 'https://img.discogs.com/D7eDvyQrOJIJlDX-ieliD0QmAG4=/500x500/smart/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/A-71872-1426020311-7115.jpeg.jpg'
         // Returns source for a placeholder image
-        if (imageSrc === undefined || imageSrc == ''){
+        if (imageSrc === undefined || imageSrc == ''
+        || imageSrc == timBuckleyImage){
             imageSrc = "images/placeholder.jpg";
             return imageSrc; 
         }
